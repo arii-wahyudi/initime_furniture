@@ -1,0 +1,138 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: rgba(165, 124, 95, 0.1);
+}
+
+.bg-nav {
+  backdrop-filter: blur(10px);
+}
+
+.bg-title {
+  background: rgba(165, 124, 95, 0.2);
+}
+#pop-menu {
+  background: #f6f2ef;
+}
+.carousel-inner {
+  background: linear-gradient(to right, #000000, #434343);
+}
+
+.bg-card-category {
+  background: linear-gradient(315deg, #000000, #434343);
+  border: 1px solid #f2e8d7;
+  color: #fff;
+}
+
+/* Mengecilkan ikon panah */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 1rem; /* Defaultnya sekitar 2.5rem */
+  height: 1rem;
+  border: 1px solid white; /* Menambahkan border putih */
+  border-radius: 50%;
+}
+
+/* Jika ingin mempersempit area klik tombol (opsional) */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 10%; /* Defaultnya 15%, diubah jadi 5% agar lebih ramping ke samping */
+}
+
+.capt-title {
+  font-size: 24px;
+}
+.capt-desc {
+  font-size: 11px;
+}
+
+.card-category {
+  height: 150px;
+  overflow: hidden;
+  border: 1px solid #fff;
+}
+.card-category .card-img {
+  height: 150px;
+}
+
+.wa-floating-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #25d366;
+  color: white;
+  padding: 24px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  transition: all 0.3s ease-in-out;
+  animation: pulse-green 2s infinite;
+}
+
+.wa-floating-btn:hover {
+  background-color: #128c7e;
+  color: white;
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.wa-floating-btn i {
+  font-size: 42px;
+}
+
+.dropdown-menu-custom {
+  min-width: 190px; 
+  border: none;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+/* Responsif: Jadi bulat di layar kecil/HP */
+@media (max-width: 576px) {
+  .wa-floating-btn {
+    padding: 15px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* ===== DESKTOP STYLE ===== */
+@media (min-width: 992px) {
+  .capt-title {
+    font-size: 50px;
+  }
+  .capt-desc {
+    font-size: 15px;
+  }
+  /* Mengecilkan ikon panah */
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    padding: 16px;
+  }
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 6%;
+  }
+}
+
+@keyframes pulse-green {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}

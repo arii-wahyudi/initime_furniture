@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp Floating Button</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      /* CSS Custom untuk Tombol WhatsApp */
+      .wa-floating-btn {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: #25d366;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .wa-floating-btn:hover {
+        background-color: #128c7e;
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .wa-floating-btn i {
+        font-size: 24px;
+        margin-right: 10px;
+      }
+
+      /* Custom styling untuk menyesuaikan tema Anda sebelumnya */
+      .form-control:focus-within {
+        border-color: #a57c5f; /* Warna kecokelatan sesuai CSS Anda */
+        box-shadow: 0 0 0 0.25rem rgba(165, 124, 95, 0.25);
+      }
+
+      .btn-search-custom {
+        background-color: #a57c5f;
+        color: white;
+        border: none;
+      }
+
+      .btn-search-custom:hover {
+        background-color: #8a654d;
+        color: white;
+      }
+
+      /* Responsif: Jadi bulat di layar kecil/HP */
+      @media (max-width: 576px) {
+        .wa-floating-btn span {
+          display: none;
+        }
+        .wa-floating-btn i {
+          margin-right: 0;
+        }
+        .wa-floating-btn {
+          padding: 15px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          bottom: 20px;
+          right: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="container mt-3">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="input-group shadow-sm">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fas fa-search text-muted"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control border-start-0"
+              placeholder="Cari produk atau jasa..."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-8 offset-md-2 text-center">
+          <h1>Halaman Utama</h1>
+          <p class="lead">
+            Scroll ke bawah untuk melihat tombol WhatsApp tetap di posisinya.
+          </p>
+          <div
+            style="
+              height: 1500px;
+              background: linear-gradient(#fff, #e9ecef);
+              border: 1px dashed #ccc;
+            "
+            class="my-4 pt-5"
+          >
+            Isi konten website Anda di sini...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a
+      href="https://wa.me/628123456789?text=Halo,%20saya%20ingin%20bertanya"
+      class="wa-floating-btn"
+      target="_blank"
+    >
+      <i class="fab fa-whatsapp"></i>
+      <span>Chat CS Kami</span>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
