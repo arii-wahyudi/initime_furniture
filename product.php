@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>INTIME FURNITURE</title>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
 
     <!-- Bootstrap CSS CDN -->
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -52,7 +53,7 @@
     <!-- NAVBAR SECTION END -->
 
     <!-- CATEGORY SECTION START -->
-    <div class="container-lg mt-4">
+    <div class="container-lg mt-4" >
         <div class="row g-2">
             <div class="col-6 col-md-4">
                 <div class="card card-category shadow bg-card-category">
@@ -190,7 +191,7 @@
                 </div>
             </div>
 
-            <div class="col-6 col-lg-3 g-3">
+            <div class="col-6 col-lg-3 g-3" >
                 <div class="card shadow">
                     <div class="card-body m-0 p-0">
                         <img src="assets/img/prod2.jpg" alt="" class="w-100" />
@@ -296,6 +297,14 @@
 
     <!-- Custom JS -->
     <script src="assets/js/main.js" defer></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+</script>
+
 </body>
 
 </html>
