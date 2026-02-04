@@ -7,9 +7,11 @@
   <title>INTIME FURNITURE</title>
 
   <!-- Bootstrap CSS CDN -->
+   <script src="https://unpkg.com/scrollreveal"></script>
+   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
   <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
-  <script src="https://unpkg.com/scrollreveal"></script>
+ 
 
   <script
     src="https://kit.fontawesome.com/0722d0c4d5.js"
@@ -134,14 +136,14 @@
   <!-- CAROUSEL SECTION END -->
 
   <!-- CATEGORY SECTION START -->
-  <div class="container-lg mb-5">
+  <div class="container-lg mb-5" >
     <div class="d-flex align-items-center justify-content-center">
       <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
         Kategori Produk
       </h5>
     </div>
 
-    <div class="row g-2">
+    <div class="row g-2" data-aos="fade-up">
       <div class="col-6 col-md-3">
         <div class="card card-category shadow bg-card-category">
           <img
@@ -198,14 +200,14 @@
   <!-- CATEGORY SECTION END -->
 
   <!-- ABOUT US SECTION START -->
-  <div class="container-lg mb-5">
-    <div class="d-flex align-items-center justify-content-center pt-5">
-      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
+  <div class="container-lg mb-5" > 
+    <div class="d-flex align-items-center justify-content-center pt-5" >
+      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill" >
         Tentang Kami
       </h5>
     </div>
 
-    <div class="row mt-3">
+    <div class="row mt-3" data-aos="fade-up">
       <div class="col-lg-6 d-flex justify-content-center align-items-center">
         <div class="ratio ratio-16x9">
           <img
@@ -286,7 +288,7 @@
       </h5>
     </div>
 
-    <div class="row mt-3">
+    <div class="row mt-3" data-aos="fade-up">
       <div class="col-6 col-lg-3 g-3">
         <div class="card shadow">
           <div class="card-body m-0 p-0">
@@ -358,7 +360,7 @@
     </div>
 
     <div class="row mt-3">
-      <div class="col-md-4 mb-4">
+      <div class="col-md-4 mb-4" data-aos="fade-up">
         <div class="card shadow bg-title p-3">
           <p class="fst-italic">
             "Produk berkualitas tinggi dan layanan pelanggan yang luar biasa!"
@@ -367,7 +369,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 mb-4">
+      <div class="col-md-4 mb-4" data-aos="fade-up">
         <div class="card shadow bg-title p-3">
           <p class="fst-italic">
             "Desain modern dan nyaman. Sangat merekomendasikan!"
@@ -376,7 +378,7 @@
         </div>
       </div>
 
-      <div class="col-md-4 mb-4">
+      <div class="col-md-4 mb-4" data-aos="fade-up">
         <div class="card shadow bg-title p-3">
           <p class="fst-italic">
             "Kualitas produk sangat baik dan pengiriman cepat."
@@ -493,7 +495,7 @@
   <div class="bg-dark text-light" data-bs-theme="dark">
     <div class="row g-0 p-4">
       <div class="col-lg-4">
-        <h1 class="fw-bold">INTIME FURNITURE</h1>
+        <h2 class="fw-bold">INTIME FURNITURE</h2>
         <p>Solusi Kebutuhan Furniture Anda</p>
         <div
           class="p-2 bg-dark-subtle shadow text-light d-flex justify-content-center align-items-center rounded"
@@ -545,6 +547,13 @@
 
   <!-- ScrollReveal -->
   <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+</script>
 
   <!-- Custom JS -->
   <script src="assets/js/main.js" defer></script>

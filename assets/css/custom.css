@@ -54,6 +54,26 @@ body {
   height: 150px;
 }
 
+.card-category {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.card-category:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.card-category img {
+  transition: 0.3s ease;
+}
+
+.card-category:hover img {
+  transform: scale(1.05);
+  opacity: 0.7;
+}
+
+
 .wa-floating-btn {
   position: fixed;
   bottom: 25px;
