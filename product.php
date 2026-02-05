@@ -1,57 +1,11 @@
-<!doctype html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>INTIME FURNITURE</title>
-    <link rel="icon" type="image/x-icon" href="assets/img/logo.ico">
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-
-    <!-- Bootstrap CSS CDN -->
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-
-    <script src="https://unpkg.com/scrollreveal"></script>
-
-    <script
-        src="https://kit.fontawesome.com/0722d0c4d5.js"
-        crossorigin="anonymous"></script>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/custom.css" />
-
-</head>
+<?php
+$title = "Produk Kami - Intime Furniture";
+include 'partials/header.php';
+?>
 
 <body>
-    <!-- NAVBAR SECTION START -->
-    <nav
-        class="navbar bg-nav sticky-top navbar-expand-lg"
-        data-bs-theme="light">
-        <div class="container-lg">
-            <a class="navbar-brand" href="index.php"><b>INTIME FURNITURE</b></a>
-            <div class="navbarMenu d-none d-lg-block ms-auto text-dark">
-                <a class="nav-link d-inline" href="index.php">Dashboard</a>
-                <a class="nav-link d-inline ps-4" href="about_us.php">Tentang Kami</a>
-                <a class="nav-link d-inline ps-4" href="product.php">Produk</a>
-            </div>
-            <button class="btn btn-outline-dark d-lg-none" id="btn-bar">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <button class="btn btn-outline-dark d-lg-none d-none" id="btn-times">
-                <i class="fa-solid fa-times"></i>
-            </button>
-        </div>
-        <div
-            class="d-lg-none d-none w-50 bg-opacity-100 position-absolute top-100 end-0 p-3 shadow-lg rounded-bottom"
-            id="pop-menu">
-            <div class="menu ">
-                <a class="nav-link fs-6 mb-3" href="index.php">Dashboard</a>
-                <a class="nav-link fs-6 mb-3" href="about_us.php">Tentang Kami</a>
-                <a class="nav-link fs-6" href="product.php">Produk</a>
-            </div>
-        </div>
-    </nav>
-    <!-- NAVBAR SECTION END -->
+    <!-- NAVBAR SECTION -->
+    <?php include 'partials/navbar.php'; ?>
 
     <!-- CATEGORY SECTION START -->
     <div class="container-lg mt-4">
@@ -239,72 +193,12 @@
 
 
 
-    <!-- FOOTER SECTION START -->
-    <div class="bg-dark text-light mt-5" data-bs-theme="dark">
-        <div class="row g-0 p-4">
-            <div class="col-lg-4">
-                <h1 class="fw-bold">INTIME FURNITURE</h1>
-                <p>Solusi Kebutuhan Furniture Anda</p>
-                <div
-                    class="p-2 bg-dark-subtle shadow text-light d-flex justify-content-center align-items-center rounded"
-                    style="width: 50px">
-                    <i class="fab fa-instagram fs-1"></i>
-                </div>
-            </div>
-            <div class="col-lg-2 mt-5 mt-lg-0">
-                <h4 class="fw-bold mb-3">Navigation</h4>
-                <a href="#" class="nav-link mb-2">Dashboard</a>
-                <a href="#" class="nav-link mb-2">Tentang Kami</a>
-                <a href="#" class="nav-link">Produk</a>
-            </div>
-            <div class="col-lg-3 mt-5 mt-lg-0">
-                <h4 class="fw-bold mb-3">Kategori</h4>
-                <a href="#" class="nav-link mb-2">Furniture Ruang Keluarga</a>
-                <a href="#" class="nav-link mb-2">Furniture Kamar Tidur</a>
-                <a href="#" class="nav-link">Furniture Ruang Belajar & Bekerja</a>
-            </div>
-            <div class="col-lg-3 mt-5 mt-lg-0">
-                <h4 class="fw-bold mb-3">Kontak</h4>
-                <a href="#" class="nav-link mb-2"><i class="fas fa-map-pin"></i> Jl. Merdeka No.123, Jakarta,
-                    Indonesia</a>
-                <a href="#" class="nav-link mb-2"><i class="fas fa-phone"></i> +62 812 3456 7890</a>
-                <a href="#" class="nav-link"><i class="fas fa-envelope"></i> company@example.com</a>
-            </div>
-        </div>
-
-        <hr class="border-light" />
-        <footer class="text-center py-4">
-            <small>&copy; <?= date('Y') ?> Intime Furniture. All rights reserved.</small>
-            <br>
-            <a href="#" class="nav-link">Developed by Desadroid</a>
-        </footer>
-    </div>
-
-    <!-- FOOTER SECTION END -->
-
-    <a
-        href="https://wa.me/628123456789?text=Halo,%20saya%20ingin%20bertanya"
-        class="wa-floating-btn"
-        target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <!-- FOOTER & WA SECTION -->
+    <?php include 'partials/footer.php'; ?>
 
 
-    <!-- Bootstrap JS (hanya 1 file) -->
-    <script src="assets/bootstrap/js/bootstrap.bundle.min.js" defer></script>
-
-    <!-- ScrollReveal -->
-    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
-
-    <!-- Custom JS -->
-    <script src="assets/js/main.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-    </script>
+    <!-- SCRIPT -->
+    <?php include 'partials/scripts.php'; ?>
 
 </body>
 
