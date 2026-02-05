@@ -5,13 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>INTIME FURNITURE</title>
+  <link rel="icon" type="image/x-icon" href="assets/img/logo.ico">
 
   <!-- Bootstrap CSS CDN -->
-   <script src="https://unpkg.com/scrollreveal"></script>
-   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
   <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
- 
+
 
   <script
     src="https://kit.fontawesome.com/0722d0c4d5.js"
@@ -19,7 +20,7 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/custom.css" />
-    
+
 </head>
 
 <body>
@@ -28,7 +29,10 @@
     class="navbar bg-nav sticky-top navbar-expand-lg"
     data-bs-theme="light">
     <div class="container-lg">
-      <a class="navbar-brand" href="index.php"><b>INTIME FURNITURE</b></a>
+      <a class="navbar-brand d-flex align-items-center" href="index.php">
+        <img src="assets/img/logo.png" alt="Logo" width="40" class="align-text-top me-2">
+        <b>INTIME FURNITURE</b>
+      </a>
       <div class="navbarMenu d-none d-lg-block ms-auto text-dark">
         <a class="nav-link d-inline" href="index.php">Dashboard</a>
         <a class="nav-link d-inline ps-4" href="about_us.php">Tentang Kami</a>
@@ -54,7 +58,7 @@
   <!-- NAVBAR SECTION END -->
 
   <!-- CAROUSEL SECTION -->
-  <div
+  <!-- <div
     id="carouselExampleCaptions"
     class="container-lg carousel slide py-md-3 mb-5"
     data-bs-ride="carousel">
@@ -132,11 +136,86 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
+  </div> -->
+  <div
+    id="carouselExampleCaptions"
+    class="container-lg carousel slide py-md-3 mb-5"
+    data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Slide 1"></button>
+      <button
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+    </div>
+    <div class="carousel-inner rounded-3 shadow">
+      <div class="carousel-item ratio ratio-21x9 active">
+        <img
+          src="assets/img/cr1.png"
+          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
+          alt="Koleksi Furniture Minimalis" />
+        <div
+          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
+          <div class="d-block text-start px-md-5">
+            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
+              Kenyamanan Modern untuk Rumah Anda
+            </p>
+            <p class="capt-desc">
+              Temukan koleksi sofa dan meja tamu eksklusif yang memadukan estetika minimalis
+              dengan kenyamanan maksimal. Transformasikan ruang keluarga Anda sekarang.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item ratio ratio-21x9">
+        <img
+          src="assets/img/cr2.jpg"
+          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
+          alt="Kualitas Material Terbaik" />
+        <div
+          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
+          <div class="d-block text-start px-md-5">
+            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
+              Kualitas Premium, Harga Terjangkau
+            </p>
+            <p class="capt-desc">
+              Dibuat dari material kayu pilihan dan kain berkualitas tinggi yang tahan lama.
+              Dapatkan penawaran spesial potongan hingga 30% untuk set ruang makan minggu ini!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
   <!-- CAROUSEL SECTION END -->
 
   <!-- CATEGORY SECTION START -->
-  <div class="container-lg mb-5" >
+  <div class="container-lg mb-5">
     <div class="d-flex align-items-center justify-content-center">
       <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
         Kategori Produk
@@ -200,9 +279,9 @@
   <!-- CATEGORY SECTION END -->
 
   <!-- ABOUT US SECTION START -->
-  <div class="container-lg mb-5" > 
-    <div class="d-flex align-items-center justify-content-center pt-5" >
-      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill" >
+  <div class="container-lg mb-5">
+    <div class="d-flex align-items-center justify-content-center pt-5">
+      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
         Tentang Kami
       </h5>
     </div>
@@ -548,12 +627,12 @@
   <!-- ScrollReveal -->
   <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-  AOS.init({
-    duration: 1000,
-    once: true
-  });
-</script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+  </script>
 
   <!-- Custom JS -->
   <script src="assets/js/main.js" defer></script>

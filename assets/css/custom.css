@@ -1,3 +1,19 @@
+/* Mendaftarkan font Poppins Regular */
+@font-face {
+    font-family: 'PoppinsCustom';
+    src: url('assets/fonts/Poppins-Regular.woff2') format('woff2'),
+         url('assets/fonts/Poppins-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Mendaftarkan font Poppins Bold */
+@font-face {
+    font-family: 'PoppinsCustom';
+    src: url('assets/fonts/Poppins-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
 body {
   font-family: "Poppins", sans-serif;
   background: rgba(165, 124, 95, 0.1);
@@ -39,10 +55,10 @@ body {
 }
 
 .capt-title {
-  font-size: 24px;
+  font-size: 14px;
 }
 .capt-desc {
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .card-category {
@@ -126,7 +142,7 @@ body {
 /* ===== DESKTOP STYLE ===== */
 @media (min-width: 992px) {
   .capt-title {
-    font-size: 50px;
+    font-size: 40px;
   }
   .capt-desc {
     font-size: 15px;
