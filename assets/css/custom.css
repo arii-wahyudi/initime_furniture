@@ -51,7 +51,7 @@ body {
 /* Jika ingin mempersempit area klik tombol (opsional) */
 .carousel-control-prev,
 .carousel-control-next {
-  width: 10%; /* Defaultnya 15%, diubah jadi 5% agar lebih ramping ke samping */
+  width: 11%; /* Defaultnya 15%, diubah jadi 5% agar lebih ramping ke samping */
 }
 
 .capt-title {
@@ -142,10 +142,11 @@ body {
 /* ===== DESKTOP STYLE ===== */
 @media (min-width: 992px) {
   .capt-title {
-    font-size: 40px;
+    font-size: 54px;
+
   }
   .capt-desc {
-    font-size: 15px;
+    font-size: 24px;
   }
   /* Mengecilkan ikon panah */
   .carousel-control-prev-icon,
