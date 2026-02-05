@@ -1,18 +1,19 @@
 /* Mendaftarkan font Poppins Regular */
 @font-face {
-    font-family: 'PoppinsCustom';
-    src: url('assets/fonts/Poppins-Regular.woff2') format('woff2'),
-         url('assets/fonts/Poppins-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: "PoppinsCustom";
+  src:
+    url("assets/fonts/Poppins-Regular.woff2") format("woff2"),
+    url("assets/fonts/Poppins-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* Mendaftarkan font Poppins Bold */
 @font-face {
-    font-family: 'PoppinsCustom';
-    src: url('assets/fonts/Poppins-Bold.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal;
+  font-family: "PoppinsCustom";
+  src: url("assets/fonts/Poppins-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
 }
 body {
   font-family: "Poppins", sans-serif;
@@ -77,7 +78,7 @@ body {
 
 .card-category:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
 
 .card-category img {
@@ -88,7 +89,6 @@ body {
   transform: scale(1.05);
   opacity: 0.7;
 }
-
 
 .wa-floating-btn {
   position: fixed;
@@ -121,11 +121,14 @@ body {
 }
 
 .dropdown-menu-custom {
-  min-width: 190px; 
+  min-width: 190px;
   border: none;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
 
+.modal {
+  max-height: 80%;
+}
 
 /* Responsif: Jadi bulat di layar kecil/HP */
 @media (max-width: 576px) {
@@ -143,7 +146,6 @@ body {
 @media (min-width: 992px) {
   .capt-title {
     font-size: 54px;
-
   }
   .capt-desc {
     font-size: 24px;
@@ -156,6 +158,9 @@ body {
   .carousel-control-prev,
   .carousel-control-next {
     width: 6%;
+  }
+  .modal {
+    max-height: 100%;
   }
 }
 

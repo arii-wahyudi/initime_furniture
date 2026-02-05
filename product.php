@@ -141,7 +141,8 @@ include 'partials/header.php';
                         <h4>Sofa Bed</h4>
                         <span class="badge text-bg-secondary">Ruang Keluarga</span>
                         <p class="my-2">Rp 2.500.000</p>
-                        <a href="#" class="btn btn-outline-secondary text-dark mt-3 w-100">Lihat Detail</a>
+
+                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
                     </div>
                 </div>
             </div>
@@ -155,7 +156,8 @@ include 'partials/header.php';
                         <h4>Rak TV</h4>
                         <span class="badge text-bg-secondary">Ruang Keluarga</span>
                         <p class="my-2">Rp 1.790.000</p>
-                        <a href="#" class="btn btn-outline-secondary text-dark mt-3 w-100">Lihat Detail</a>
+
+                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
                     </div>
                 </div>
             </div>
@@ -169,7 +171,8 @@ include 'partials/header.php';
                         <h4>Lemari Pakaian</h4>
                         <span class="badge text-bg-secondary">Kamar Tidur</span>
                         <p class="my-2">Rp 8.250.000</p>
-                        <a href="#" class="btn btn-outline-secondary text-dark mt-3 w-100">Lihat Detail</a>
+
+                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
                     </div>
                 </div>
             </div>
@@ -183,12 +186,63 @@ include 'partials/header.php';
                         <h4>Kursi Kantor</h4>
                         <span class="badge text-bg-secondary">Ruang Belajar & Bekerja</span>
                         <p class="my-2">Rp 2.500.000</p>
-                        <a href="#" class="btn btn-outline-secondary text-dark mt-3 w-100">Lihat Detail</a>
+
+                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal Start -->
+    <div class="modal fade" id="modalProd1" tabindex="-1" aria-labelledby="modalProd1Label" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalProd1Label">Detail Produk</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-lg-6 d-lg-block d-flex justify-content-center align-items-center">
+                            <div class="d-lg-none ratio ratio-16x9">
+                                <img src="assets/img/prod1.jpg" alt="" class="w-100 shadow object-fit-cover" />
+                            </div>
+                            <div class="d-lg-block d-none ratio ratio-1x1">
+                                <img src="assets/img/prod1.jpg" alt="" class="w-100 shadow object-fit-cover" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 ">
+                            <h2 class="fw-bold">Sofa Bed</h2>
+                            <span class="badge text-bg-secondary mb-3">Ruang Keluarga</span>
+                            <span class="mb-3 fs-2 fw-bold d-block">Rp 2.500.000</span>
+                            <p>P : 200 cm</p>
+                            <p>L : 200 cm</p>
+                            <p>T : 200 cm</p>
+                            <p>
+                                <b class="d-block">Keunggulan Produk :</b>
+                            <ul>
+                                <li>Desain modern dan minimalis</li>
+                                <li>Mudah diubah menjadi kasur</li>
+                                <li>Bahan berkualitas tinggi</li>
+                            </ul>
+                            </p>
+                            <p>
+                                <b class="d-block mb-2">Dekripsi Produk :</b>
+                                Ubah ruang tamu Anda menjadi kamar tidur tamu yang nyaman dalam hitungan detik! Sofa Bed SpaceSaver dirancang khusus untuk efisiensi ruang tanpa mengorbankan gaya. Dengan desain Skandinavia yang bersih, sofa ini cocok untuk bersantai menonton TV, dan mudah diubah menjadi kasur flat saat dibutuhkan. Dilengkapi dengan mekanisme click-clack yang kokoh, menjadikannya perabot 2-in-1 paling praktis untuk hunian modern.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <p>Stok: 10 unit</p>
+                    <a href="" class="btn btn-success ms-auto">
+                        <i class="far fa-paper-plane me-2"></i> Pesan Melalui WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
     <!-- PRODUCT SECTION END -->
 
 
