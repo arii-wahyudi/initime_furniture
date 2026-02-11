@@ -87,7 +87,7 @@ include 'partials/header.php';
       <span class="visually-hidden">Next</span>
     </button>
   </div> -->
-  <div
+  <!-- <div
     id="carouselExampleCaptions"
     class="container-lg carousel slide py-md-3 mb-5"
     data-bs-ride="carousel">
@@ -161,75 +161,87 @@ include 'partials/header.php';
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
+  </div> -->
+  <div
+    id="carouselExampleCaptions"
+    class="container-lg carousel slide py-md-3 mb-5"
+    data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Slide 1"></button>
+      <button
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+    </div>
+    <div class="carousel-inner rounded-3 shadow">
+
+      <div class="carousel-item ratio ratio-21x9 active">
+        <img
+          src="assets/img/cr1.png"
+          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
+          alt="Intime Furniture Rumah dan Kantor" />
+        <div
+          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
+          <div class="d-block text-start px-md-5">
+            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
+              Solusi Interior Fungsional & Estetik
+            </p>
+            <p class="capt-desc">
+              Intime Furniture menghadirkan koleksi terbaik untuk kebutuhan rumah dan kantor.
+              Desain modern yang ergonomis untuk menunjang kenyamanan aktivitas Anda setiap hari.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item ratio ratio-21x9">
+        <img
+          src="assets/img/cr2.jpg"
+          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
+          alt="Custom Furniture Intime" />
+        <div
+          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
+          <div class="d-block text-start px-md-5">
+            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
+              Wujudkan Desain Impian Anda
+            </p>
+            <p class="capt-desc">
+              Nikmati layanan Custom Furniture dengan material pilihan berkualitas tinggi.
+              Kami menjamin presisi, ketepatan waktu, dan hasil yang kuat serta tahan lama.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExampleCaptions"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
   <!-- CAROUSEL SECTION END -->
 
-  <!-- CATEGORY SECTION START -->
-  <div class="container-lg mb-5">
-    <div class="d-flex align-items-center justify-content-center">
-      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
-        Kategori Produk
-      </h5>
-    </div>
-
-    <div class="row g-2" data-aos="fade-up">
-      <div class="col-6 col-md-3">
-        <div class="card card-category shadow bg-card-category">
-          <img
-            src="assets/img/cat1-ruangtamu.png"
-            class="card-img object-fit-cover opacity-50"
-            alt="" />
-          <div
-            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-            <h5 class="card-title m-0 text-center">Furniture Ruang Tamu</h5>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="card card-category shadow bg-card-category">
-          <img
-            src="assets/img/cat2-ruangmakan.jpg"
-            class="card-img object-fit-cover opacity-50"
-            alt="" />
-          <div
-            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-            <h5 class="card-title m-0 text-center">Furniture Ruang Makan</h5>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="card card-category shadow bg-card-category">
-          <img
-            src="assets/img/cat3-ruangrapat.png"
-            class="card-img object-fit-cover opacity-50"
-            alt="" />
-          <div
-            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-            <h5 class="card-title m-0 text-center">Furniture Ruang Rapat</h5>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div
-          class="card card-category d-flex flex-column align-items-center justify-content-center shadow-sm border-3 border-light p-4">
-          <img
-            src="assets/img/more-category.svg"
-            alt=""
-            width="30"
-            height="30"
-            class="mb-2" />
-          <p class="card-title m-0 text-center">Lihat Semua Kategori</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- CATEGORY SECTION END -->
-
   <!-- ABOUT US SECTION START -->
-  <div class="container-lg mb-5">
+  <!-- <div class="container-lg mb-5">
     <div class="d-flex align-items-center justify-content-center pt-5">
       <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
         Tentang Kami
@@ -306,8 +318,150 @@ include 'partials/header.php';
         </div>
       </div>
     </div>
+  </div> -->
+  <div class="container-lg mb-5">
+    <div class="d-flex align-items-center justify-content-center pt-5">
+      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
+        Tentang Kami
+      </h5>
+    </div>
+
+    <div class="row mt-3" data-aos="fade-up">
+      <div class="col-lg-6 d-flex justify-content-center align-items-center">
+        <div class="ratio ratio-16x9">
+          <img
+            src="assets/img/furniture-img.png"
+            alt="Showroom Intime Furniture"
+            class="object-fit-cover rounded-3 shadow" />
+        </div>
+      </div>
+      <div
+        class="col-lg-6 mt-3 mt-lg-0 d-flex justify-content-center align-items-center">
+        <div class="d-inline">
+          <h2 class="fw-bold d-block mb-3">INTIME FURNITURE</h2>
+          <p>
+            Kami adalah penyedia solusi interior yang berfokus pada furniture berkualitas untuk kebutuhan rumah dan kantor.
+            Dengan desain modern dan material pilihan, kami berkomitmen menghadirkan produk yang tidak hanya estetik,
+            tetapi juga kuat, ergonomis, dan tahan lama untuk menunjang produktivitas Anda.
+          </p>
+
+          <div class="row mb-3">
+            <div class="col-2">
+              <div
+                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                <i class="fas fa-couch"></i>
+              </div>
+            </div>
+            <div class="col-10">
+              <h5 class="fw-bold mb-1">Material Berkualitas Tinggi</h5>
+              <p class="small text-muted">
+                Menggunakan kayu pilihan dan bahan premium untuk memastikan furniture kokoh dan tahan lama.
+              </p>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-2">
+              <div
+                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                <i class="fas fa-tools"></i>
+              </div>
+            </div>
+            <div class="col-10">
+              <h5 class="fw-bold mb-1">Custom Sesuai Kebutuhan</h5>
+              <p class="small text-muted">
+                Wujudkan desain furniture impian yang disesuaikan dengan ukuran ruangan dan gaya interior Anda.
+              </p>
+            </div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-2">
+              <div
+                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                <i class="fas fa-shipping-fast"></i>
+              </div>
+            </div>
+            <div class="col-10">
+              <h5 class="fw-bold mb-1">Layanan Profesional</h5>
+              <p class="small text-muted">
+                Pengerjaan tepat waktu dengan proses pengiriman dan instalasi yang rapi oleh tim berpengalaman.
+              </p>
+            </div>
+          </div>
+
+          <a href="about_us.php" class="btn btn-outline-secondary text-dark fw-bold">
+            Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- ABOUT US SECTION END -->
+
+  <!-- CATEGORY SECTION START -->
+  <div class="container-lg mb-5">
+    <div class="d-flex align-items-center justify-content-center">
+      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
+        Kategori Produk
+      </h5>
+    </div>
+
+    <div class="row g-2" data-aos="fade-up">
+      <div class="col-6 col-md-3">
+        <div class="card card-category shadow bg-card-category">
+          <img
+            src="assets/img/cat1-ruangtamu.png"
+            class="card-img object-fit-cover opacity-50"
+            alt="" />
+          <div
+            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
+            <h5 class="card-title m-0 text-center">Furniture Ruang Tamu</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card card-category shadow bg-card-category">
+          <img
+            src="assets/img/cat2-ruangmakan.jpg"
+            class="card-img object-fit-cover opacity-50"
+            alt="" />
+          <div
+            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
+            <h5 class="card-title m-0 text-center">Furniture Ruang Makan</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div class="card card-category shadow bg-card-category">
+          <img
+            src="assets/img/cat3-ruangrapat.png"
+            class="card-img object-fit-cover opacity-50"
+            alt="" />
+          <div
+            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
+            <h5 class="card-title m-0 text-center">Furniture Ruang Rapat</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-3">
+        <div
+          class="card card-category d-flex flex-column align-items-center justify-content-center shadow-sm border-3 border-light p-4">
+          <img
+            src="assets/img/more-category.svg"
+            alt=""
+            width="30"
+            height="30"
+            class="mb-2" />
+          <p class="card-title m-0 text-center">Lihat Semua Kategori</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- CATEGORY SECTION END -->
 
   <!-- PRODUCT SECTION START -->
   <div class="container-lg mb-5">
@@ -319,13 +473,13 @@ include 'partials/header.php';
 
     <div class="row mt-3" data-aos="fade-up">
       <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow">
+        <div class="card shadow h-100">
           <div class="card-body m-0 p-0">
             <img src="assets/img/prod1.jpg" alt="" class="w-100" />
           </div>
           <div class="card-footer py-3">
             <h4>Sofa Bed</h4>
-            <span class="badge text-bg-secondary">Ruang Keluarga</span>
+            <span class="badge text-bg-secondary">Furniture Rumah</span>
             <p class="my-2">Rp 2.500.000</p>
 
             <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
@@ -335,13 +489,13 @@ include 'partials/header.php';
       </div>
 
       <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow">
+        <div class="card shadow h-100">
           <div class="card-body m-0 p-0">
             <img src="assets/img/prod2.jpg" alt="" class="w-100" />
           </div>
           <div class="card-footer py-3">
             <h4>Rak TV</h4>
-            <span class="badge text-bg-secondary">Ruang Keluarga</span>
+            <span class="badge text-bg-secondary">Furniture Rumah</span>
             <p class="my-2">Rp 1.790.000</p>
 
             <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
@@ -350,13 +504,13 @@ include 'partials/header.php';
       </div>
 
       <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow">
+        <div class="card shadow h-100">
           <div class="card-body m-0 p-0">
             <img src="assets/img/prod3.jpg" alt="" class="w-100" />
           </div>
           <div class="card-footer py-3">
             <h4>Lemari Pakaian</h4>
-            <span class="badge text-bg-secondary">Kamar Tidur</span>
+            <span class="badge text-bg-secondary">Furniture Rumah</span>
             <p class="my-2">Rp 8.250.000</p>
 
             <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
@@ -365,13 +519,13 @@ include 'partials/header.php';
       </div>
 
       <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow">
+        <div class="card shadow h-100">
           <div class="card-body m-0 p-0">
             <img src="assets/img/prod4.jpg" alt="" class="w-100" />
           </div>
           <div class="card-footer py-3">
             <h4>Kursi Kantor</h4>
-            <span class="badge text-bg-secondary">Ruang Belajar & Bekerja</span>
+            <span class="badge text-bg-secondary">Furniture Kantor</span>
             <p class="my-2">Rp 2.500.000</p>
 
             <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
@@ -381,7 +535,7 @@ include 'partials/header.php';
     </div>
 
     <div class="d-flex justify-content-center align-items-center">
-      <a href="#" class="btn btn-outline-secondary text-dark w-auto mt-4 px-4">Lihat Semua Produk</a>
+      <a href="product.php" class="btn btn-outline-secondary text-dark w-auto mt-4 px-4">Lihat Semua Produk</a>
     </div>
 
     <!-- Modal Start -->

@@ -1,22 +1,22 @@
 /* Mendaftarkan font Poppins Regular */
 @font-face {
-  font-family: "PoppinsCustom";
+  font-family: "MyPoppins";
   src:
-    url("assets/fonts/Poppins-Regular.woff2") format("woff2"),
-    url("assets/fonts/Poppins-Regular.ttf") format("truetype");
+    url("../fonts/Poppins-Medium.woff2") format("woff2"),
+    url("../fonts/Poppins-Medium.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
-
 /* Mendaftarkan font Poppins Bold */
 @font-face {
-  font-family: "PoppinsCustom";
-  src: url("assets/fonts/Poppins-Bold.woff2") format("woff2");
+  font-family: "MyPoppins";
+  src: url("../fonts/Poppins-Bold.woff2") format("woff2");
   font-weight: bold;
   font-style: normal;
 }
+
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: "MyPoppins", sans-serif;
   background: rgba(165, 124, 95, 0.1);
 }
 
@@ -96,7 +96,7 @@ body {
   right: 25px;
   background-color: #25d366;
   color: white;
-  padding: 24px 20px;
+  padding: 24px 26px;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 600;
@@ -104,7 +104,7 @@ body {
   align-items: center;
   justify-content: center;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
+  z-index: 1040;
   transition: all 0.3s ease-in-out;
   animation: pulse-green 2s infinite;
 }
@@ -126,9 +126,9 @@ body {
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
 }
 
-.modal {
+/* .modal {
   max-height: 80%;
-}
+} */
 
 /* Responsif: Jadi bulat di layar kecil/HP */
 @media (max-width: 576px) {

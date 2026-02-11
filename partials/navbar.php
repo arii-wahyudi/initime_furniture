@@ -12,10 +12,10 @@
         <a class="nav-link d-inline ps-4" href="product.php">Produk</a>
       </div>
       <button class="btn btn-outline-dark d-lg-none" id="btn-bar">
-        <i class="fa-solid fa-bars"></i>
+        <i class="fas fa-bars"></i>
       </button>
       <button class="btn btn-outline-dark d-lg-none d-none" id="btn-times">
-        <i class="fa-solid fa-times"></i>
+        <i class="fas fa-times"></i>
       </button>
     </div>
     <div
