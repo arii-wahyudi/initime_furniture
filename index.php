@@ -1,5 +1,59 @@
 <?php
 $title = "Dashboard - Intime Furniture";
+// Database connection (adjust credentials if needed)
+$db_host = 'localhost';
+$db_user = 'root';
+$db_pass = '';
+$db_name = 'initime_x8y2';
+$conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+if (!$conn) {
+  die('Database connection error: ' . mysqli_connect_error());
+}
+
+// Load settings into associative array: $settings['site_name'] etc.
+$settings = [];
+$sql = "SELECT nama_setting, isi FROM settings";
+if ($res = mysqli_query($conn, $sql)) {
+  while ($row = mysqli_fetch_assoc($res)) {
+    $settings[$row['nama_setting']] = $row['isi'];
+  }
+  mysqli_free_result($res);
+}
+
+// Load categories
+$categories = [];
+$sql = "SELECT id, nama_kategori FROM kategori_produk ORDER BY id";
+if ($res = mysqli_query($conn, $sql)) {
+  while ($row = mysqli_fetch_assoc($res)) {
+    $categories[] = $row;
+  }
+  mysqli_free_result($res);
+}
+
+// Build category map for easy lookup
+$cat_map = [];
+foreach ($categories as $c) {
+  $cat_map[$c['id']] = $c['nama_kategori'];
+}
+
+// Load products (top products) - only active
+$products = [];
+$sql = "SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori_produk k ON p.id_kategori = k.id WHERE p.status = 'aktif' ORDER BY p.created_at DESC LIMIT 8";
+if ($res = mysqli_query($conn, $sql)) {
+  while ($row = mysqli_fetch_assoc($res)) {
+    $products[] = $row;
+  }
+  mysqli_free_result($res);
+}
+
+// Load contact info (single row expected)
+$contact = null;
+$sql = "SELECT alamat, telepon, email, maps_embed FROM kontak_toko ORDER BY id LIMIT 1";
+if ($res = mysqli_query($conn, $sql)) {
+  $contact = mysqli_fetch_assoc($res);
+  mysqli_free_result($res);
+}
+
 include 'partials/header.php';
 ?>
 
@@ -7,164 +61,9 @@ include 'partials/header.php';
   <!-- NAVBAR SECTION -->
   <?php include 'partials/navbar.php'; ?>
 
-  <!-- CAROUSEL SECTION -->
-  <!-- <div
-    id="carouselExampleCaptions"
-    class="container-lg carousel slide py-md-3 mb-5"
-    data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide-to="0"
-        class="active"
-        aria-current="true"
-        aria-label="Slide 1"></button>
-      <button
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide-to="1"
-        aria-label="Slide 2"></button>
-    </div>
-    <div class="carousel-inner rounded-3 shadow">
-      <div class="carousel-item ratio ratio-21x9 active">
-        <img
-          src="assets/img/cr1.png"
-          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
-          alt="..." />
-        <div
-          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
-          <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
-              First slide label
-            </p>
-            <p class="capt-desc">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Tempora eveniet blanditiis optio, officiis quaerat ex quas. Esse
-              corporis, error tempora minima illo ab tempore aliquam
-              doloremque reprehenderit optio omnis natus!
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item ratio ratio-21x9">
-        <img
-          src="assets/img/cr2.jpg"
-          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
-          alt="..." />
-        <div
-          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
-          <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
-              Second slide label
-            </p>
-            <p class="capt-desc">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Veritatis quo voluptatum perferendis, nam obcaecati atque
-              asperiores quam vero laboriosam corporis quaerat? Beatae quia
-              fugiat repellendus voluptates, dolore recusandae aliquid
-              deserunt?
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div> -->
-  <!-- <div
-    id="carouselExampleCaptions"
-    class="container-lg carousel slide py-md-3 mb-5"
-    data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide-to="0"
-        class="active"
-        aria-current="true"
-        aria-label="Slide 1"></button>
-      <button
-        type="button"
-        data-bs-target="#carouselExampleCaptions"
-        data-bs-slide-to="1"
-        aria-label="Slide 2"></button>
-    </div>
-    <div class="carousel-inner rounded-3 shadow">
-      <div class="carousel-item ratio ratio-21x9 active">
-        <img
-          src="assets/img/cr1.png"
-          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
-          alt="Koleksi Furniture Minimalis" />
-        <div
-          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
-          <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
-              Kenyamanan Modern untuk Rumah Anda
-            </p>
-            <p class="capt-desc">
-              Temukan koleksi sofa dan meja tamu eksklusif yang memadukan estetika minimalis
-              dengan kenyamanan maksimal. Transformasikan ruang keluarga Anda sekarang.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="carousel-item ratio ratio-21x9">
-        <img
-          src="assets/img/cr2.jpg"
-          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
-          alt="Kualitas Material Terbaik" />
-        <div
-          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
-          <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
-              Kualitas Premium, Harga Terjangkau
-            </p>
-            <p class="capt-desc">
-              Dibuat dari material kayu pilihan dan kain berkualitas tinggi yang tahan lama.
-              Dapatkan penawaran spesial potongan hingga 30% untuk set ruang makan minggu ini!
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <button
-      class="carousel-control-prev"
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-      class="carousel-control-next"
-      type="button"
-      data-bs-target="#carouselExampleCaptions"
-      data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div> -->
   <div
     id="carouselExampleCaptions"
-    class="container-lg carousel slide py-md-3 mb-5"
+    class="container-lg carousel slide py-md-3 mb-3"
     data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button
@@ -181,44 +80,36 @@ include 'partials/header.php';
         aria-label="Slide 2"></button>
     </div>
     <div class="carousel-inner rounded-3 shadow">
+      <?php
+      $cr1_img = isset($settings['carousel_1_image']) ? $settings['carousel_1_image'] : 'assets/img/cr1.png';
+      $cr1_title = isset($settings['carousel_1_title']) ? $settings['carousel_1_title'] : 'Solusi Interior Fungsional & Estetik';
+      $cr1_desc = isset($settings['carousel_1_desc']) ? $settings['carousel_1_desc'] : 'Intime Furniture menghadirkan koleksi terbaik untuk kebutuhan rumah dan kantor.';
+
+      $cr2_img = isset($settings['carousel_2_image']) ? $settings['carousel_2_image'] : 'assets/img/cr2.jpg';
+      $cr2_title = isset($settings['carousel_2_title']) ? $settings['carousel_2_title'] : 'Wujudkan Desain Impian Anda';
+      $cr2_desc = isset($settings['carousel_2_desc']) ? $settings['carousel_2_desc'] : 'Nikmati layanan Custom Furniture dengan material pilihan berkualitas tinggi.';
+      ?>
 
       <div class="carousel-item ratio ratio-21x9 active">
-        <img
-          src="assets/img/cr1.png"
-          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
-          alt="Intime Furniture Rumah dan Kantor" />
-        <div
-          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
+        <img src="<?= htmlspecialchars($cr1_img) ?>" class="d-block w-100 img-fluid opacity-25 object-fit-cover" alt="<?= htmlspecialchars($cr1_title) ?>" />
+        <div class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
           <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
-              Solusi Interior Fungsional & Estetik
-            </p>
-            <p class="capt-desc">
-              Intime Furniture menghadirkan koleksi terbaik untuk kebutuhan rumah dan kantor.
-              Desain modern yang ergonomis untuk menunjang kenyamanan aktivitas Anda setiap hari.
-            </p>
+            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2"><?= htmlspecialchars($cr1_title) ?></p>
+            <p class="capt-desc"><?= htmlspecialchars($cr1_desc) ?></p>
           </div>
         </div>
       </div>
 
       <div class="carousel-item ratio ratio-21x9">
-        <img
-          src="assets/img/cr2.jpg"
-          class="d-block w-100 img-fluid opacity-25 object-fit-cover"
-          alt="Custom Furniture Intime" />
-        <div
-          class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
+        <img src="<?= htmlspecialchars($cr2_img) ?>" class="d-block w-100 img-fluid opacity-25 object-fit-cover" alt="<?= htmlspecialchars($cr2_title) ?>" />
+        <div class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
           <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2">
-              Wujudkan Desain Impian Anda
-            </p>
-            <p class="capt-desc">
-              Nikmati layanan Custom Furniture dengan material pilihan berkualitas tinggi.
-              Kami menjamin presisi, ketepatan waktu, dan hasil yang kuat serta tahan lama.
-            </p>
+            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2"><?= htmlspecialchars($cr2_title) ?></p>
+            <p class="capt-desc"><?= htmlspecialchars($cr2_desc) ?></p>
           </div>
         </div>
       </div>
+
     </div>
 
     <button
@@ -320,7 +211,7 @@ include 'partials/header.php';
     </div>
   </div> -->
   <div class="container-lg mb-5">
-    <div class="d-flex align-items-center justify-content-center pt-5">
+    <div class="d-flex align-items-center justify-content-center pt-3">
       <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
         Tentang Kami
       </h5>
@@ -330,69 +221,54 @@ include 'partials/header.php';
       <div class="col-lg-6 d-flex justify-content-center align-items-center">
         <div class="ratio ratio-16x9">
           <img
-            src="assets/img/furniture-img.png"
-            alt="Showroom Intime Furniture"
+            src="<?= htmlspecialchars($settings['about_image'] ?? 'assets/img/furniture-img.png') ?>"
+            alt="<?= htmlspecialchars($settings['about_title'] ?? 'Tentang Kami') ?>"
             class="object-fit-cover rounded-3 shadow" />
         </div>
       </div>
       <div
         class="col-lg-6 mt-3 mt-lg-0 d-flex justify-content-center align-items-center">
         <div class="d-inline">
-          <h2 class="fw-bold d-block mb-3">INTIME FURNITURE</h2>
-          <p>
-            Kami adalah penyedia solusi interior yang berfokus pada furniture berkualitas untuk kebutuhan rumah dan kantor.
-            Dengan desain modern dan material pilihan, kami berkomitmen menghadirkan produk yang tidak hanya estetik,
-            tetapi juga kuat, ergonomis, dan tahan lama untuk menunjang produktivitas Anda.
-          </p>
+          <h2 class="fw-bold d-block mb-3"><?= htmlspecialchars($settings['about_title'] ?? 'INTIME FURNITURE') ?></h2>
+          <p><?= nl2br(htmlspecialchars($settings['about_desc'] ?? 'Kami adalah penyedia solusi interior yang berfokus pada furniture berkualitas untuk kebutuhan rumah dan kantor.')) ?></p>
 
           <div class="row mb-3">
             <div class="col-2">
-              <div
-                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+              <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
                 <i class="fas fa-couch"></i>
               </div>
             </div>
             <div class="col-10">
-              <h5 class="fw-bold mb-1">Material Berkualitas Tinggi</h5>
-              <p class="small text-muted">
-                Menggunakan kayu pilihan dan bahan premium untuk memastikan furniture kokoh dan tahan lama.
-              </p>
+              <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_exp_title'] ?? '4+ Tahun Pengalaman') ?></h5>
+              <p class="small text-muted"><?= htmlspecialchars($settings['about_exp_desc'] ?? 'Berpengalaman dalam produksi dan instalasi furniture') ?></p>
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col-2">
-              <div
-                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                <i class="fas fa-tools"></i>
+              <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                <i class="fas fa-users"></i>
               </div>
             </div>
             <div class="col-10">
-              <h5 class="fw-bold mb-1">Custom Sesuai Kebutuhan</h5>
-              <p class="small text-muted">
-                Wujudkan desain furniture impian yang disesuaikan dengan ukuran ruangan dan gaya interior Anda.
-              </p>
+              <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_team_title'] ?? 'Tim Profesional') ?></h5>
+              <p class="small text-muted"><?= htmlspecialchars($settings['about_team_desc'] ?? 'Didukung oleh tenaga ahli berpengalaman') ?></p>
             </div>
           </div>
 
           <div class="row mb-4">
             <div class="col-2">
-              <div
-                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+              <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
                 <i class="fas fa-shipping-fast"></i>
               </div>
             </div>
             <div class="col-10">
-              <h5 class="fw-bold mb-1">Layanan Profesional</h5>
-              <p class="small text-muted">
-                Pengerjaan tepat waktu dengan proses pengiriman dan instalasi yang rapi oleh tim berpengalaman.
-              </p>
+              <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_fast_title'] ?? 'Pengerjaan Cepat') ?></h5>
+              <p class="small text-muted"><?= htmlspecialchars($settings['about_fast_desc'] ?? 'Proses produksi dan instalasi tepat waktu') ?></p>
             </div>
           </div>
 
-          <a href="about_us.php" class="btn btn-outline-secondary text-dark fw-bold">
-            Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i>
-          </a>
+          <a href="about_us.php" class="btn btn-outline-secondary text-dark fw-bold">Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
         </div>
       </div>
     </div>
@@ -408,45 +284,28 @@ include 'partials/header.php';
     </div>
 
     <div class="row g-2" data-aos="fade-up">
-      <div class="col-6 col-md-3">
-        <div class="card card-category shadow bg-card-category">
-          <img
-            src="assets/img/cat1-ruangtamu.png"
-            class="card-img object-fit-cover opacity-50"
-            alt="" />
-          <div
-            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-            <h5 class="card-title m-0 text-center">Furniture Ruang Tamu</h5>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="card card-category shadow bg-card-category">
-          <img
-            src="assets/img/cat2-ruangmakan.jpg"
-            class="card-img object-fit-cover opacity-50"
-            alt="" />
-          <div
-            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-            <h5 class="card-title m-0 text-center">Furniture Ruang Makan</h5>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-md-3">
-        <div class="card card-category shadow bg-card-category">
-          <img
-            src="assets/img/cat3-ruangrapat.png"
-            class="card-img object-fit-cover opacity-50"
-            alt="" />
-          <div
-            class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-            <h5 class="card-title m-0 text-center">Furniture Ruang Rapat</h5>
-          </div>
-        </div>
-      </div>
-
+      <?php
+      $default_cat_images = [
+        'assets/img/cat1-ruangtamu.png',
+        'assets/img/cat2-ruangmakan.jpg',
+        'assets/img/cat3-ruangrapat.png'
+      ];
+      if (empty($categories)) {
+        echo '<div class="col-12"><p class="text-center">Belum ada kategori.</p></div>';
+      } else {
+        foreach ($categories as $i => $cat) {
+          $img = $default_cat_images[$i % count($default_cat_images)];
+          $name = htmlspecialchars($cat['nama_kategori']);
+          echo "<div class=\"col-12 col-md-6\">";
+          echo "<div class=\"card card-category shadow bg-card-category\">";
+          echo "<img src=\"$img\" class=\"card-img object-fit-cover opacity-50\" alt=\"$name\" />";
+          echo "<div class=\"card-img-overlay d-flex justify-content-center align-items-center p-4\">";
+          echo "<h5 class=\"card-title m-0 text-center\">$name</h5>";
+          echo "</div></div></div>";
+        }
+      }
+      ?>
+      <!-- 
       <div class="col-6 col-md-3">
         <div
           class="card card-category d-flex flex-column align-items-center justify-content-center shadow-sm border-3 border-light p-4">
@@ -458,7 +317,7 @@ include 'partials/header.php';
             class="mb-2" />
           <p class="card-title m-0 text-center">Lihat Semua Kategori</p>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <!-- CATEGORY SECTION END -->
@@ -602,32 +461,19 @@ include 'partials/header.php';
     </div>
 
     <div class="row mt-3">
-      <div class="col-md-4 mb-4" data-aos="fade-up">
-        <div class="card shadow bg-title p-3">
-          <p class="fst-italic">
-            "Produk berkualitas tinggi dan layanan pelanggan yang luar biasa!"
-          </p>
-          <p class="fw-bold">— Budi Santoso</p>
+      <?php
+      for ($i = 1; $i <= 3; $i++) {
+        $text = isset($settings["testimonial_{$i}_text"]) ? $settings["testimonial_{$i}_text"] : '';
+        $name = isset($settings["testimonial_{$i}_name"]) ? $settings["testimonial_{$i}_name"] : '';
+        if (empty($text) && empty($name)) continue;
+      ?>
+        <div class="col-md-4 mb-4" data-aos="fade-up">
+          <div class="card shadow bg-title p-3">
+            <p class="fst-italic">"<?= htmlspecialchars($text) ?>"</p>
+            <p class="fw-bold">— <?= htmlspecialchars($name) ?></p>
+          </div>
         </div>
-      </div>
-
-      <div class="col-md-4 mb-4" data-aos="fade-up">
-        <div class="card shadow bg-title p-3">
-          <p class="fst-italic">
-            "Desain modern dan nyaman. Sangat merekomendasikan!"
-          </p>
-          <p class="fw-bold">— Dewi Putri</p>
-        </div>
-      </div>
-
-      <div class="col-md-4 mb-4" data-aos="fade-up">
-        <div class="card shadow bg-title p-3">
-          <p class="fst-italic">
-            "Kualitas produk sangat baik dan pengiriman cepat."
-          </p>
-          <p class="fw-bold">— Andi Prasetyo</p>
-        </div>
-      </div>
+      <?php } ?>
     </div>
   </div>
   <!-- TESTIMONIALS SECTION END -->
@@ -651,7 +497,7 @@ include 'partials/header.php';
               </div>
               <div class="col-10 p-3">
                 <span class="fw-bold fs-5">Alamat</span>
-                <p>Jl. Merdeka No.123, Jakarta, Indonesia</p>
+                <p><?= htmlspecialchars($contact['alamat'] ?? 'Jl. Merdeka No.123, Jakarta, Indonesia') ?></p>
               </div>
             </div>
           </div>
@@ -666,7 +512,7 @@ include 'partials/header.php';
               </div>
               <div class="col-10 p-3">
                 <span class="fw-bold fs-5">Telepon</span>
-                <p>+62 812 3456 7890</p>
+                <p><?= htmlspecialchars($contact['telepon'] ?? '+62 812 3456 7890') ?></p>
               </div>
             </div>
           </div>
@@ -681,14 +527,14 @@ include 'partials/header.php';
               </div>
               <div class="col-10 p-3">
                 <span class="fw-bold fs-5">Email</span>
-                <p>company@example.com</p>
+                <p><?= htmlspecialchars($contact['email'] ?? 'company@example.com') ?></p>
               </div>
             </div>
           </div>
         </div>
 
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.1071332340566!2d106.77214907478529!3d-6.380170462407521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69efaf0ebfd4d9%3A0x795475c2c686a1f3!2sIntime%20furniture%20depok!5e0!3m2!1sid!2sid!4v1769402937982!5m2!1sid!2sid"
+          src="<?= htmlspecialchars($contact['maps_embed'] ?? 'https://www.google.com/maps/embed?...') ?>"
           class="mt-4 w-100 shadow"
           height="250"
           style="border: 0"
