@@ -1,5 +1,54 @@
 <?php
 $title = "Produk Kami - Intime Furniture";
+require __DIR__ . '/admin/config.php';
+
+// Load settings and categories
+$settings = [];
+$res = mysqli_query($conn, "SELECT nama_setting, isi FROM settings");
+if ($res) {
+    while ($r = mysqli_fetch_assoc($res)) $settings[$r['nama_setting']] = $r['isi'];
+    mysqli_free_result($res);
+}
+
+$categories = [];
+$res = mysqli_query($conn, "SELECT id, nama_kategori FROM kategori_produk ORDER BY id");
+if ($res) {
+    while ($r = mysqli_fetch_assoc($res)) $categories[] = $r;
+    mysqli_free_result($res);
+}
+
+// Load products
+// handle filters: search query and category
+$q = trim((string)($_GET['q'] ?? ''));
+$cat = (int)($_GET['cat'] ?? 0);
+
+$products = [];
+$sql = "SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori_produk k ON p.id_kategori = k.id WHERE p.status = 'aktif'";
+if ($cat) {
+    $sql .= " AND p.id_kategori = " . $cat;
+}
+if ($q !== '') {
+    $qe = mysqli_real_escape_string($conn, $q);
+    $sql .= " AND (p.nama_produk LIKE '%$qe%' OR p.deskripsi LIKE '%$qe%')";
+}
+$sql .= " ORDER BY p.created_at DESC";
+$res = mysqli_query($conn, $sql);
+if ($res) {
+    while ($r = mysqli_fetch_assoc($res)) $products[] = $r;
+    mysqli_free_result($res);
+}
+
+// Log searches to statistik (server-side) when query present
+if ($q !== '') {
+    $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
+    if ($stmt) {
+        $ev = 'search';
+        mysqli_stmt_bind_param($stmt, 's', $ev);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+}
+
 include 'partials/header.php';
 ?>
 
@@ -104,15 +153,19 @@ include 'partials/header.php';
         <div class="container-lg mt-3">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-6 g-1">
-                    <div class="input-group shadow-sm">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-search text-muted"></i>
-                        </span>
-                        <input
-                            type="text"
-                            class="form-control border-start-0"
-                            placeholder="Cari produk..." />
-                    </div>
+                    <form method="get" action="product.php">
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input
+                                type="text"
+                                name="q"
+                                value="<?= htmlspecialchars($q) ?>"
+                                class="form-control border-start-0"
+                                placeholder="Cari produk..." />
+                        </div>
+                    </form>
                 </div>
                 <div class="col-lg-4 col-6 g-1">
                     <div class="dropdown w-100">
@@ -122,9 +175,10 @@ include 'partials/header.php';
                         </a>
 
                         <ul class="dropdown-menu w-100 dropdown-menu-custom mt-2">
-                            <li><a class="dropdown-item w-100" href="product.php#product">Ruang Tamu</a></li>
-                            <li><a class="dropdown-item w-100" href="product.php#product">Ruang Makan</a></li>
-                            <li><a class="dropdown-item w-100" href="product.php#product">Ruang Rapat</a></li>
+                            <li><a class="dropdown-item" href="product.php">Semua Kategori</a></li>
+                            <?php foreach ($categories as $c): ?>
+                                <li><a class="dropdown-item" href="product.php?cat=<?= (int)$c['id'] ?>"><?= htmlspecialchars($c['nama_kategori']) ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>
@@ -132,117 +186,41 @@ include 'partials/header.php';
         </div>
 
         <div class="row mt-3 px-1 px-lg-0">
-            <div class="col-6 col-lg-3 g-3">
-                <div class="card shadow">
-                    <div class="card-body m-0 p-0">
-                        <img src="assets/img/prod1.jpg" alt="" class="w-100" />
-                    </div>
-                    <div class="card-footer py-3">
-                        <h4>Sofa Bed</h4>
-                        <span class="badge text-bg-secondary">Ruang Keluarga</span>
-                        <p class="my-2">Rp 2.500.000</p>
+            <?php if (empty($products)) : ?>
+                <div class="col-12"><p class="text-center">Belum ada produk.</p></div>
+            <?php else: ?>
+                <?php foreach ($products as $p):
+                    $img = public_image_url($p['gambar'] ?? '');
+                    $price = isset($p['harga']) ? number_format((float)$p['harga'], 0, ',', '.') : '-';
+                    $category = isset($p['nama_kategori']) ? htmlspecialchars($p['nama_kategori']) : '';
+                    $slug = htmlspecialchars($p['slug'] ?? '');
+                    $pid = (int)$p['id'];
+                    $wa_number = isset($settings['whatsapp']) ? preg_replace('/[^0-9]/','', $settings['whatsapp']) : '628123456789';
+                    $wa_msg = rawurlencode("Saya mau beli produk {$p['nama_produk']} - apakah masih tersedia? Mohon info harga dan estimasi kirim.");
+                ?>
+                <div class="col-6 col-lg-3 g-3">
+                    <div class="card shadow h-100">
+                        <div class="card-body m-0 p-0">
+                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
+                        </div>
+                        <div class="card-footer py-3">
+                            <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
+                            <span class="badge text-bg-secondary"><?= $category ?></span>
+                            <p class="my-2">Rp <?= $price ?></p>
 
-                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
+                                                        <div class="d-grid">
+                                                            <a href="product_detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
+                                                            <a href="https://wa.me/<?= $wa_number ?>?text=<?= $wa_msg ?>" class="btn btn-success mt-2 wa-link" data-product-id="<?= $pid ?>">Pesan via WhatsApp</a>
+                                                        </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-6 col-lg-3 g-3">
-                <div class="card shadow">
-                    <div class="card-body m-0 p-0">
-                        <img src="assets/img/prod2.jpg" alt="" class="w-100" />
-                    </div>
-                    <div class="card-footer py-3">
-                        <h4>Rak TV</h4>
-                        <span class="badge text-bg-secondary">Ruang Keluarga</span>
-                        <p class="my-2">Rp 1.790.000</p>
-
-                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-lg-3 g-3">
-                <div class="card shadow">
-                    <div class="card-body m-0 p-0">
-                        <img src="assets/img/prod3.jpg" alt="" class="w-100" />
-                    </div>
-                    <div class="card-footer py-3">
-                        <h4>Lemari Pakaian</h4>
-                        <span class="badge text-bg-secondary">Kamar Tidur</span>
-                        <p class="my-2">Rp 8.250.000</p>
-
-                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-lg-3 g-3">
-                <div class="card shadow">
-                    <div class="card-body m-0 p-0">
-                        <img src="assets/img/prod4.jpg" alt="" class="w-100" />
-                    </div>
-                    <div class="card-footer py-3">
-                        <h4>Kursi Kantor</h4>
-                        <span class="badge text-bg-secondary">Ruang Belajar & Bekerja</span>
-                        <p class="my-2">Rp 2.500.000</p>
-
-                        <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-                    </div>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
     <!-- Modal Start -->
-    <div class="modal fade" id="modalProd1" tabindex="-1" aria-labelledby="modalProd1Label" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalProd1Label">Detail Produk</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-lg-6 d-lg-block d-flex justify-content-center align-items-center">
-                            <div class="d-lg-none ratio ratio-16x9">
-                                <img src="assets/img/prod1.jpg" alt="" class="w-100 shadow object-fit-cover" />
-                            </div>
-                            <div class="d-lg-block d-none ratio ratio-1x1">
-                                <img src="assets/img/prod1.jpg" alt="" class="w-100 shadow object-fit-cover" />
-                            </div>
-                        </div>
-                        <div class="col-lg-6 ">
-                            <h2 class="fw-bold">Sofa Bed</h2>
-                            <span class="badge text-bg-secondary mb-3">Ruang Keluarga</span>
-                            <span class="mb-3 fs-2 fw-bold d-block">Rp 2.500.000</span>
-                            <p>P : 200 cm</p>
-                            <p>L : 200 cm</p>
-                            <p>T : 200 cm</p>
-                            <p>
-                                <b class="d-block">Keunggulan Produk :</b>
-                            <ul>
-                                <li>Desain modern dan minimalis</li>
-                                <li>Mudah diubah menjadi kasur</li>
-                                <li>Bahan berkualitas tinggi</li>
-                            </ul>
-                            </p>
-                            <p>
-                                <b class="d-block mb-2">Dekripsi Produk :</b>
-                                Ubah ruang tamu Anda menjadi kamar tidur tamu yang nyaman dalam hitungan detik! Sofa Bed SpaceSaver dirancang khusus untuk efisiensi ruang tanpa mengorbankan gaya. Dengan desain Skandinavia yang bersih, sofa ini cocok untuk bersantai menonton TV, dan mudah diubah menjadi kasur flat saat dibutuhkan. Dilengkapi dengan mekanisme click-clack yang kokoh, menjadikannya perabot 2-in-1 paling praktis untuk hunian modern.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <p>Stok: 10 unit</p>
-                    <a href="" class="btn btn-success ms-auto">
-                        <i class="far fa-paper-plane me-2"></i> Pesan Melalui WhatsApp
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal End -->
+                <!-- Product details moved to product_detail.php -->
     <!-- PRODUCT SECTION END -->
 
 

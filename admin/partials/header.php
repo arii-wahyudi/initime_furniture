@@ -27,5 +27,41 @@
         .card.rounded-4 {
             border-radius: 1rem;
         }
+        /* Sidebar layout */
+        .admin-sidebar { transition: transform .2s ease; width:280px; }
+        .admin-sidebar.collapsed { transform: translateX(-300px); }
+        .admin-main { margin-left: 280px; transition: margin .2s ease; }
+        .admin-main.shifted { margin-left: 0 !important; }
+        .admin-topbar { transition: margin .2s ease; margin-left:280px; }
+        .admin-topbar.shifted { margin-left: 0 !important; }
+        /* Mobile: hide sidebar by default, show when .show is present */
+        @media (max-width: 767px) {
+            .admin-sidebar { transform: translateX(-300px); position:fixed; left:0; top:0; bottom:0; }
+            .admin-sidebar.show { transform: translateX(0); }
+            .admin-main { margin-left: 0; }
+            .admin-topbar { margin-left: 0; }
+        }
+
+        /* Bigger sidebar items */
+        .admin-sidebar .nav-link { font-size: 15px; padding: 12px; color: #333; }
+        .admin-sidebar .nav-link i { width: 22px; text-align: center; }
+        .admin-sidebar .h6 { font-size: 18px; }
+
+        /* Backdrop for mobile sidebar */
+        .sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index:1015; display: none; }
+        .sidebar-backdrop.show { display: block; }
+
+        /* Ensure mobile close button looks good */
+        .admin-sidebar .btn-close { background: #fff; border-radius: 6px; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        /* Settings cards: cleaner headers and responsive save */
+        .settings-card .card-header { display:flex; align-items:center; justify-content:space-between; background:transparent; border-bottom:0; padding:0.75rem 1rem; }
+        .settings-card .card-title { margin:0; font-weight:600; font-size:1rem; }
+        .settings-card .card-body { padding:1rem; }
+        .settings-save { display:flex; justify-content:flex-end; }
+        @media(max-width:767px){ .settings-save .btn { width:100%; } }
+        .collapse-toggle { border:none; background:transparent; color:#6c757d; }
+        .collapse-toggle .fa { transition: transform .25s ease; }
+        .collapse-toggle.collapsed .fa { transform: rotate(0deg); }
+        .collapse-toggle:not(.collapsed) .fa { transform: rotate(180deg); }
     </style>
 </head>

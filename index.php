@@ -1,14 +1,7 @@
 <?php
 $title = "Dashboard - Intime Furniture";
-// Database connection (adjust credentials if needed)
-$db_host = 'localhost';
-$db_user = 'root';
-$db_pass = '';
-$db_name = 'initime_x8y2';
-$conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-if (!$conn) {
-  die('Database connection error: ' . mysqli_connect_error());
-}
+// Use centralized config which provides $conn
+require __DIR__ . '/admin/config.php';
 
 // Load settings into associative array: $settings['site_name'] etc.
 $settings = [];
@@ -53,6 +46,8 @@ if ($res = mysqli_query($conn, $sql)) {
   $contact = mysqli_fetch_assoc($res);
   mysqli_free_result($res);
 }
+$about_img = isset($settings['about_image']) ? $settings['about_image'] : 'furniture-img.png';
+$about_img = 'assets/img/' . basename($about_img);
 
 include 'partials/header.php';
 ?>
@@ -81,11 +76,15 @@ include 'partials/header.php';
     </div>
     <div class="carousel-inner rounded-3 shadow">
       <?php
-      $cr1_img = isset($settings['carousel_1_image']) ? $settings['carousel_1_image'] : 'assets/img/cr1.png';
+      $cr1_img = isset($settings['carousel_1_image']) ? $settings['carousel_1_image'] : 'cr1.png';
+      $cr1_img = 'assets/img/' . basename($cr1_img);
+
       $cr1_title = isset($settings['carousel_1_title']) ? $settings['carousel_1_title'] : 'Solusi Interior Fungsional & Estetik';
       $cr1_desc = isset($settings['carousel_1_desc']) ? $settings['carousel_1_desc'] : 'Intime Furniture menghadirkan koleksi terbaik untuk kebutuhan rumah dan kantor.';
 
-      $cr2_img = isset($settings['carousel_2_image']) ? $settings['carousel_2_image'] : 'assets/img/cr2.jpg';
+      $cr2_img = isset($settings['carousel_2_image']) ? $settings['carousel_2_image'] : 'cr2.jpg';
+      $cr2_img = 'assets/img/' . basename($cr2_img);
+
       $cr2_title = isset($settings['carousel_2_title']) ? $settings['carousel_2_title'] : 'Wujudkan Desain Impian Anda';
       $cr2_desc = isset($settings['carousel_2_desc']) ? $settings['carousel_2_desc'] : 'Nikmati layanan Custom Furniture dengan material pilihan berkualitas tinggi.';
       ?>
@@ -221,7 +220,7 @@ include 'partials/header.php';
       <div class="col-lg-6 d-flex justify-content-center align-items-center">
         <div class="ratio ratio-16x9">
           <img
-            src="<?= htmlspecialchars($settings['about_image'] ?? 'assets/img/furniture-img.png') ?>"
+            src="<?= htmlspecialchars($about_img) ?>"
             alt="<?= htmlspecialchars($settings['about_title'] ?? 'Tentang Kami') ?>"
             class="object-fit-cover rounded-3 shadow" />
         </div>
@@ -296,12 +295,14 @@ include 'partials/header.php';
         foreach ($categories as $i => $cat) {
           $img = $default_cat_images[$i % count($default_cat_images)];
           $name = htmlspecialchars($cat['nama_kategori']);
+          $cid = (int)$cat['id'];
           echo "<div class=\"col-12 col-md-6\">";
+          echo "<a href=\"product.php?cat=$cid\" class=\"text-decoration-none\">";
           echo "<div class=\"card card-category shadow bg-card-category\">";
           echo "<img src=\"$img\" class=\"card-img object-fit-cover opacity-50\" alt=\"$name\" />";
           echo "<div class=\"card-img-overlay d-flex justify-content-center align-items-center p-4\">";
-          echo "<h5 class=\"card-title m-0 text-center\">$name</h5>";
-          echo "</div></div></div>";
+          echo "<h5 class=\"card-title m-0 text-center text-dark\">$name</h5>";
+          echo "</div></div></a></div>";
         }
       }
       ?>
@@ -331,122 +332,41 @@ include 'partials/header.php';
     </div>
 
     <div class="row mt-3" data-aos="fade-up">
-      <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow h-100">
-          <div class="card-body m-0 p-0">
-            <img src="assets/img/prod1.jpg" alt="" class="w-100" />
-          </div>
-          <div class="card-footer py-3">
-            <h4>Sofa Bed</h4>
-            <span class="badge text-bg-secondary">Furniture Rumah</span>
-            <p class="my-2">Rp 2.500.000</p>
-
-            <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-
-          </div>
+      <?php if (empty($products)) : ?>
+        <div class="col-12">
+          <p class="text-center">Belum ada produk.</p>
         </div>
-      </div>
-
-      <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow h-100">
-          <div class="card-body m-0 p-0">
-            <img src="assets/img/prod2.jpg" alt="" class="w-100" />
+      <?php else: ?>
+        <?php foreach ($products as $p):
+          $img = public_image_url($p['gambar'] ?? '');
+          $img = str_replace('/project/', '', $img);
+          $price = isset($p['harga']) ? number_format((float)$p['harga'], 0, ',', '.') : '-';
+          $category = isset($p['nama_kategori']) ? htmlspecialchars($p['nama_kategori']) : '';
+          $slug = htmlspecialchars($p['slug'] ?? '');
+          $pid = (int)$p['id'];
+        ?>
+          <div class="col-6 col-lg-3 g-3">
+            <div class="card shadow h-100">
+              <div class="card-body m-0 p-0">
+                <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
+              </div>
+              <div class="card-footer py-3">
+                <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
+                <span class="badge text-bg-secondary"><?= $category ?></span>
+                <p class="my-2">Rp <?= $price ?></p>
+                <a href="product_detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark mt-3 w-100 btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
+              </div>
+            </div>
           </div>
-          <div class="card-footer py-3">
-            <h4>Rak TV</h4>
-            <span class="badge text-bg-secondary">Furniture Rumah</span>
-            <p class="my-2">Rp 1.790.000</p>
-
-            <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow h-100">
-          <div class="card-body m-0 p-0">
-            <img src="assets/img/prod3.jpg" alt="" class="w-100" />
-          </div>
-          <div class="card-footer py-3">
-            <h4>Lemari Pakaian</h4>
-            <span class="badge text-bg-secondary">Furniture Rumah</span>
-            <p class="my-2">Rp 8.250.000</p>
-
-            <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-6 col-lg-3 g-3">
-        <div class="card shadow h-100">
-          <div class="card-body m-0 p-0">
-            <img src="assets/img/prod4.jpg" alt="" class="w-100" />
-          </div>
-          <div class="card-footer py-3">
-            <h4>Kursi Kantor</h4>
-            <span class="badge text-bg-secondary">Furniture Kantor</span>
-            <p class="my-2">Rp 2.500.000</p>
-
-            <button class="btn btn-outline-secondary text-dark mt-3 w-100" data-bs-toggle="modal" data-bs-target="#modalProd1">Lihat Detail</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
 
     <div class="d-flex justify-content-center align-items-center">
       <a href="product.php" class="btn btn-outline-secondary text-dark w-auto mt-4 px-4">Lihat Semua Produk</a>
     </div>
 
-    <!-- Modal Start -->
-    <div class="modal fade" id="modalProd1" tabindex="-1" aria-labelledby="modalProd1Label" aria-hidden="true">
-      <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modalProd1Label">Detail Produk</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row g-3">
-              <div class="col-lg-6 d-lg-block d-flex justify-content-center align-items-center">
-                <div class="d-lg-none ratio ratio-16x9">
-                  <img src="assets/img/prod1.jpg" alt="" class="w-100 shadow object-fit-cover" />
-                </div>
-                <div class="d-lg-block d-none ratio ratio-1x1">
-                  <img src="assets/img/prod1.jpg" alt="" class="w-100 shadow object-fit-cover" />
-                </div>
-              </div>
-              <div class="col-lg-6 ">
-                <h2 class="fw-bold">Sofa Bed</h2>
-                <span class="badge text-bg-secondary mb-3">Ruang Keluarga</span>
-                <span class="mb-3 fs-2 fw-bold d-block">Rp 2.500.000</span>
-                <p>P : 200 cm</p>
-                <p>L : 200 cm</p>
-                <p>T : 200 cm</p>
-                <p>
-                  <b class="d-block">Keunggulan Produk :</b>
-                <ul>
-                  <li>Desain modern dan minimalis</li>
-                  <li>Mudah diubah menjadi kasur</li>
-                  <li>Bahan berkualitas tinggi</li>
-                </ul>
-                </p>
-                <p>
-                  <b class="d-block mb-2">Dekripsi Produk :</b>
-                  Ubah ruang tamu Anda menjadi kamar tidur tamu yang nyaman dalam hitungan detik! Sofa Bed SpaceSaver dirancang khusus untuk efisiensi ruang tanpa mengorbankan gaya. Dengan desain Skandinavia yang bersih, sofa ini cocok untuk bersantai menonton TV, dan mudah diubah menjadi kasur flat saat dibutuhkan. Dilengkapi dengan mekanisme click-clack yang kokoh, menjadikannya perabot 2-in-1 paling praktis untuk hunian modern.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <p>Stok: 10 unit</p>
-            <a href="" class="btn btn-success ms-auto">
-              <i class="far fa-paper-plane me-2"></i> Pesan Melalui WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Modal End -->
+    <!-- Product detail moved to separate page -->
   </div>
 
   </div>

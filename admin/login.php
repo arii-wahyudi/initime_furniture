@@ -1,7 +1,6 @@
 <?php
+require __DIR__ . '/config.php';
 $title = 'Admin Login - Intime Furniture';
-// Simple admin login form (no authentication logic here).
-// Implement server-side validation and authentication as needed.
 include __DIR__ . '/partials/header.php';
 ?>
 
@@ -18,14 +17,36 @@ include __DIR__ . '/partials/header.php';
                                 <small class="text-muted">Masuk untuk mengelola situs</small>
                             </div>
 
+                            <?php if (!empty($_GET['error'])): ?>
+                                <div class="alert alert-danger small" role="alert">
+                                    <?php if ($_GET['error'] === 'invalid'): ?>
+                                        Username atau password salah.
+                                    <?php elseif ($_GET['error'] === 'csrf'): ?>
+                                        Terjadi kesalahan keamanan (CSRF). Coba lagi.
+                                    <?php else: ?>
+                                        Terjadi kesalahan. Coba lagi.
+                                    <?php endif; ?>
+                                </div>
+                            <?php elseif (!empty($_GET['msg'])): ?>
+                                <div class="alert alert-success small" role="alert">
+                                    <?php if ($_GET['msg'] === 'loggedout'): ?>
+                                        Anda telah logout.
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+
                             <form method="post" action="authenticate.php" novalidate>
+                                <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Username</label>
                                     <input id="username" name="username" type="text" class="form-control form-control-lg rounded-pill" required autofocus>
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
-                                    <input id="password" name="password" type="password" class="form-control form-control-lg rounded-pill" required>
+                                    <div class="input-group input-group-lg">
+                                        <input id="password" name="password" type="password" class="form-control rounded-pill" required>
+                                        <button id="togglePassword" type="button" class="btn btn-outline-secondary rounded-pill ms-2" title="Tampilkan kata sandi"><i class="fa fa-eye"></i></button>
+                                    </div>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -37,6 +58,9 @@ include __DIR__ . '/partials/header.php';
 
                                 <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill">Masuk</button>
                             </form>
+                            <div class="mt-3 text-center small">
+                                <a href="../index.php" class="text-decoration-none">Lihat situs publik</a>
+                            </div>
                         </div>
                         <div class="card-footer bg-transparent border-0 text-center text-muted small py-3">
                             © <?= date('Y') ?> Intime Furniture — Admin Area
@@ -47,6 +71,17 @@ include __DIR__ . '/partials/header.php';
         </div>
 
         <?php include __DIR__ . '/partials/scripts.php'; ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const pwd = document.getElementById('password');
+            const btn = document.getElementById('togglePassword');
+            if (!pwd || !btn) return;
+            btn.addEventListener('click', function(){
+                if (pwd.type === 'password') { pwd.type = 'text'; btn.innerHTML = '<i class="fa fa-eye-slash"></i>'; }
+                else { pwd.type = 'password'; btn.innerHTML = '<i class="fa fa-eye"></i>'; }
+            });
+        });
+    </script>
 </body>
 
 </html>
