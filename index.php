@@ -292,33 +292,27 @@ include 'partials/header.php';
       if (empty($categories)) {
         echo '<div class="col-12"><p class="text-center">Belum ada kategori.</p></div>';
       } else {
-        foreach ($categories as $i => $cat) {
+        // Tampilkan maksimal 3 kategori
+        $display_count = min(count($categories), 3);
+        for ($i = 0; $i < $display_count; $i++) {
+          $cat = $categories[$i];
           $img = $default_cat_images[$i % count($default_cat_images)];
           $name = htmlspecialchars($cat['nama_kategori']);
           $cid = (int)$cat['id'];
-          echo "<div class=\"col-12 col-md-6\">";
+          echo "<div class=\"col-6 col-md-4\">";
           echo "<a href=\"product.php?cat=$cid\" class=\"text-decoration-none\">";
           echo "<div class=\"card card-category shadow bg-card-category\">";
           echo "<img src=\"$img\" class=\"card-img object-fit-cover opacity-50\" alt=\"$name\" />";
           echo "<div class=\"card-img-overlay d-flex justify-content-center align-items-center p-4\">";
-          echo "<h5 class=\"card-title m-0 text-center text-dark\">$name</h5>";
+          echo "<h5 class=\"card-title m-0 text-center\">$name</h5>";
           echo "</div></div></a></div>";
         }
       }
       ?>
-      <!-- 
-      <div class="col-6 col-md-3">
-        <div
-          class="card card-category d-flex flex-column align-items-center justify-content-center shadow-sm border-3 border-light p-4">
-          <img
-            src="assets/img/more-category.svg"
-            alt=""
-            width="30"
-            height="30"
-            class="mb-2" />
-          <p class="card-title m-0 text-center">Lihat Semua Kategori</p>
-        </div>
-      </div> -->
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center mt-4">
+      <a href="product.php" class="btn btn-outline-secondary text-dark w-auto px-4">Lihat Semua Kategori</a>
     </div>
   </div>
   <!-- CATEGORY SECTION END -->
