@@ -11,7 +11,7 @@ if ($res) {
 }
 
 $categories = [];
-$res = mysqli_query($conn, "SELECT id, nama_kategori FROM kategori_produk ORDER BY id");
+$res = mysqli_query($conn, "SELECT id, nama_kategori, image FROM kategori_produk ORDER BY id");
 if ($res) {
     while ($r = mysqli_fetch_assoc($res)) $categories[] = $r;
     mysqli_free_result($res);
@@ -87,7 +87,11 @@ include 'partials/header.php';
 
             if (!empty($categories)):
                 foreach ($categories as $i => $cat):
-                    $img = $settings['about_image'] ?? $default_cat_images[$i % count($default_cat_images)];
+                    // prefer category image, fallback to settings about image or defaults
+                    $img = '';
+                    if (!empty($cat['image'])) $img = public_image_url($cat['image'], 'categories');
+                    if (empty($img)) $img = public_image_url($settings['about_image'] ?? '', 'settings');
+                    if (empty($img)) $img = $default_cat_images[$i % count($default_cat_images)];
             ?>
                     <div class="col-6 col-md-4">
                         <a href="product.php?cat=<?= (int)$cat['id'] ?>" class="text-decoration-none text-dark category-link" data-cat-id="<?= (int)$cat['id'] ?>">

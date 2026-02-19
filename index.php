@@ -15,7 +15,7 @@ if ($res = mysqli_query($conn, $sql)) {
 
 // Load categories
 $categories = [];
-$sql = "SELECT id, nama_kategori FROM kategori_produk ORDER BY id";
+$sql = "SELECT id, nama_kategori, image FROM kategori_produk ORDER BY id";
 if ($res = mysqli_query($conn, $sql)) {
   while ($row = mysqli_fetch_assoc($res)) {
     $categories[] = $row;
@@ -46,8 +46,9 @@ if ($res = mysqli_query($conn, $sql)) {
   $contact = mysqli_fetch_assoc($res);
   mysqli_free_result($res);
 }
-$about_img = isset($settings['about_image']) ? $settings['about_image'] : 'furniture-img.png';
-$about_img = 'assets/img/' . basename($about_img);
+$about_img = public_image_url($settings['about_image'] ?? '', 'settings');
+// fallback
+if (empty($about_img)) $about_img = 'assets/img/furniture-img.png';
 
 include 'partials/header.php';
 ?>
@@ -79,14 +80,14 @@ include 'partials/header.php';
     </div>
     <div class="carousel-inner rounded-3 shadow">
       <?php
-      $cr1_img = isset($settings['carousel_1_image']) ? $settings['carousel_1_image'] : 'cr1.png';
-      $cr1_img = 'assets/img/' . basename($cr1_img);
+      $cr1_img = public_image_url($settings['carousel_1_image'] ?? '', 'settings');
+      if (empty($cr1_img)) $cr1_img = 'assets/img/cr1.png';
 
       $cr1_title = isset($settings['carousel_1_title']) ? $settings['carousel_1_title'] : 'Solusi Interior Fungsional & Estetik';
       $cr1_desc = isset($settings['carousel_1_desc']) ? $settings['carousel_1_desc'] : 'Intime Furniture menghadirkan koleksi terbaik untuk kebutuhan rumah dan kantor.';
 
-      $cr2_img = isset($settings['carousel_2_image']) ? $settings['carousel_2_image'] : 'cr2.jpg';
-      $cr2_img = 'assets/img/' . basename($cr2_img);
+      $cr2_img = public_image_url($settings['carousel_2_image'] ?? '', 'settings');
+      if (empty($cr2_img)) $cr2_img = 'assets/img/cr2.jpg';
 
       $cr2_title = isset($settings['carousel_2_title']) ? $settings['carousel_2_title'] : 'Wujudkan Desain Impian Anda';
       $cr2_desc = isset($settings['carousel_2_desc']) ? $settings['carousel_2_desc'] : 'Nikmati layanan Custom Furniture dengan material pilihan berkualitas tinggi.';
@@ -168,9 +169,12 @@ include 'partials/header.php';
 
               <div class="row mb-3">
                 <div class="col-2">
-                  <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                    <i class="fas fa-couch"></i>
-                  </div>
+                  <?php $exp_icon = public_image_url($settings['about_exp_icon'] ?? '', 'settings'); ?>
+                  <?php if (!empty($settings['about_exp_icon']) && !empty($exp_icon)): ?>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($exp_icon) ?>" alt="icon" class="img-preview"></div>
+                  <?php else: ?>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-couch"></i></div>
+                  <?php endif; ?>
                 </div>
                 <div class="col-10">
                   <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_exp_title'] ?? '4+ Tahun Pengalaman') ?></h5>
@@ -180,9 +184,12 @@ include 'partials/header.php';
 
               <div class="row mb-3">
                 <div class="col-2">
-                  <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                    <i class="fas fa-users"></i>
-                  </div>
+                  <?php $team_icon = public_image_url($settings['about_team_icon'] ?? '', 'settings'); ?>
+                  <?php if (!empty($settings['about_team_icon']) && !empty($team_icon)): ?>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($team_icon) ?>" alt="icon" class="img-preview"></div>
+                  <?php else: ?>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-users"></i></div>
+                  <?php endif; ?>
                 </div>
                 <div class="col-10">
                   <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_team_title'] ?? 'Tim Profesional') ?></h5>
@@ -192,9 +199,12 @@ include 'partials/header.php';
 
               <div class="row mb-4">
                 <div class="col-2">
-                  <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                    <i class="fas fa-shipping-fast"></i>
-                  </div>
+                  <?php $fast_icon = public_image_url($settings['about_fast_icon'] ?? '', 'settings'); ?>
+                  <?php if (!empty($settings['about_fast_icon']) && !empty($fast_icon)): ?>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($fast_icon) ?>" alt="icon" class="img-preview"></div>
+                  <?php else: ?>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-shipping-fast"></i></div>
+                  <?php endif; ?>
                 </div>
                 <div class="col-10">
                   <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_fast_title'] ?? 'Pengerjaan Cepat') ?></h5>
@@ -222,11 +232,11 @@ include 'partials/header.php';
 
     <div class="row g-2" data-aos="fade-up">
       <?php
-      $default_cat_images = [
-        'assets/img/cat1-ruangtamu.png',
-        'assets/img/cat2-ruangmakan.jpg',
-        'assets/img/cat3-ruangrapat.png'
-      ];
+            $default_cat_images = [
+              'assets/img/cat1-ruangtamu.png',
+              'assets/img/cat2-ruangmakan.jpg',
+              'assets/img/cat3-ruangrapat.png'
+            ];
       if (empty($categories)) {
         echo '<div class="col-12"><p class="text-center">Belum ada kategori.</p></div>';
       } else {
@@ -234,7 +244,15 @@ include 'partials/header.php';
         $display_count = min(count($categories), 3);
         for ($i = 0; $i < $display_count; $i++) {
           $cat = $categories[$i];
-          $img = $default_cat_images[$i % count($default_cat_images)];
+                // prefer category image from DB, fallback to settings/about or default
+                $img = '';
+                if (!empty($cat['image'])) {
+                  $img = public_image_url($cat['image'], 'categories');
+                }
+                if (empty($img)) {
+                  $img = public_image_url($settings['about_image'] ?? '', 'settings');
+                }
+                if (empty($img)) $img = $default_cat_images[$i % count($default_cat_images)];
           $name = htmlspecialchars($cat['nama_kategori']);
           $cid = (int)$cat['id'];
           echo "<div class=\"col-6 col-md-4\">";
