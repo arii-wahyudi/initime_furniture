@@ -40,12 +40,31 @@ if ($res) {
 
 // Log searches to statistik (server-side) when query present
 if ($q !== '') {
-    $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
-    if ($stmt) {
-        $ev = 'search';
-        mysqli_stmt_bind_param($stmt, 's', $ev);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
+    // record search interest per returned product (helps determine which products were searched)
+    if (!empty($products)) {
+        $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event) VALUES (?, ?)");
+        if ($stmt) {
+            $ev = 'search';
+            $count = 0;
+            foreach ($products as $pr) {
+                if (!isset($pr['id'])) continue;
+                $pid = (int)$pr['id'];
+                mysqli_stmt_bind_param($stmt, 'is', $pid, $ev);
+                mysqli_stmt_execute($stmt);
+                $count++;
+                if ($count >= 50) break; // avoid too many inserts
+            }
+            mysqli_stmt_close($stmt);
+        }
+    } else {
+        // fallback: record generic search event
+        $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
+        if ($stmt) {
+            $ev = 'search';
+            mysqli_stmt_bind_param($stmt, 's', $ev);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+        }
     }
 }
 

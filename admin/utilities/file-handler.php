@@ -19,7 +19,16 @@ function handle_file_upload($file, $target_dir, $allowed_mimes = ['image/jpeg', 
         return false;
     }
 
-    if (!isset($file['type']) || !in_array($file['type'], $allowed_mimes)) {
+    // Determine MIME type using finfo when available, fallback to provided type
+    $mime = $file['type'] ?? '';
+    if (function_exists('finfo_open')) {
+        $f = finfo_open(FILEINFO_MIME_TYPE);
+        $m = finfo_file($f, $file['tmp_name']);
+        if ($m) $mime = $m;
+        finfo_close($f);
+    }
+    // Accept any image/* MIME or allowed_mimes list
+    if (strpos($mime, 'image/') !== 0 && !in_array($mime, $allowed_mimes)) {
         return false;
     }
 

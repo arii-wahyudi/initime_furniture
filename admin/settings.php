@@ -84,7 +84,7 @@ if ($res2) {
                         </div>
                         <div id="section-tentang" class="collapse show">
                             <div class="card-body">
-                                <form action="settings_update.php" method="post">
+                                <form action="settings_update.php" method="post" enctype="multipart/form-data">
                                     <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                     <div class="mb-3">
                                         <label class="form-label">About Title</label>
