@@ -125,8 +125,8 @@ include 'partials/header.php';
             </h5>
         </div>
 
-        <div class="container-lg mt-3">
-            <div class="row justify-content-center" data-aos="fade-up">
+        <div class="container-lg mt-3" style="overflow: visible;">
+            <div class="row justify-content-center" data-aos="fade-up" style="overflow: visible;">
                 <div class="col-lg-8 col-6 g-1">
                     <form method="get" action="product.php">
                         <div class="input-group shadow-sm">
@@ -142,8 +142,8 @@ include 'partials/header.php';
                         </div>
                     </form>
                 </div>
-                <div class="col-lg-4 col-6 g-1">
-                    <div class="dropdown w-100">
+                <div class="col-lg-4 col-6 g-1" style="overflow: visible;">
+                    <div class="dropdown w-100" style="overflow: visible;">
                         <a class="btn btn-light shadow w-100 d-flex justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                             <span><i class="fas fa-sliders-h me-2"></i>Kategori</span>
                             <small><i class="fas fa-chevron-down"></i></small>
