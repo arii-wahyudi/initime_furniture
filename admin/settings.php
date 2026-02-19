@@ -267,6 +267,28 @@ if ($res2) {
     </main>
 
     <?php include __DIR__ . '/partials/scripts.php'; ?>
+    <!-- SweetAlert2 for nicer alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php
+    // If there's a session message, render it with SweetAlert
+    $__msg = get_session_message();
+    if ($__msg):
+        $s_type = $__msg['type'] ?? 'info';
+        $s_text = $__msg['text'] ?? '';
+        $s_title = $s_type === 'success' ? 'Berhasil' : ($s_type === 'error' ? 'Gagal' : 'Informasi');
+        $s_icon = $s_type === 'success' ? 'success' : ($s_type === 'error' ? 'error' : 'info');
+    ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: '<?= htmlspecialchars($s_icon) ?>',
+                title: '<?= htmlspecialchars($s_title) ?>',
+                text: '<?= htmlspecialchars($s_text) ?>',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+    <?php endif; ?>
     <script>
         function previewFile(input, imgId) {
             const f = input.files && input.files[0];

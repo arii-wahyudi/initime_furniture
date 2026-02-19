@@ -19,8 +19,47 @@ $fields = [
     'logo', 'carousel_1_image', 'carousel_2_image', 'about_image'
 ];
 
+// Human-readable labels for settings keys
+$labels = [
+    'site_name' => 'Nama Situs',
+    'logo' => 'Logo',
+    'carousel_1_image' => 'Carousel 1 Image',
+    'carousel_2_image' => 'Carousel 2 Image',
+    'carousel_1_title' => 'Carousel 1 Title',
+    'carousel_1_desc' => 'Carousel 1 Description',
+    'carousel_2_title' => 'Carousel 2 Title',
+    'carousel_2_desc' => 'Carousel 2 Description',
+    'about_title' => 'About Title',
+    'about_desc' => 'About Description',
+    'about_exp_title' => 'About Experience Title',
+    'about_exp_desc' => 'About Experience Description',
+    'about_team_title' => 'About Team Title',
+    'about_team_desc' => 'About Team Description',
+    'about_fast_title' => 'About Fast Title',
+    'about_fast_desc' => 'About Fast Description',
+    'footer_text' => 'Footer Text',
+    'footer_credit' => 'Footer Credit',
+    'instagram' => 'Instagram',
+    'whatsapp' => 'WhatsApp',
+    'about_image' => 'About Image'
+];
+
+$changed = [];
 foreach ($fields as $f) {
-    if (isset($_POST[$f])) db_upsert_setting($conn, $f, trim($_POST[$f]));
+    if (!isset($_POST[$f])) continue;
+    $val = trim($_POST[$f]);
+    $esc = mysqli_real_escape_string($conn, $f);
+    $cur = null;
+    $res = mysqli_query($conn, "SELECT isi FROM settings WHERE nama_setting='" . $esc . "' LIMIT 1");
+    if ($res && mysqli_num_rows($res) > 0) {
+        $row = mysqli_fetch_assoc($res);
+        $cur = $row['isi'];
+        mysqli_free_result($res);
+    }
+    if ($cur !== $val) {
+        db_upsert_setting($conn, $f, $val);
+        $changed[] = $labels[$f] ?? $f;
+    }
 }
 
 $img_keys = ['logo', 'carousel_1_image', 'carousel_2_image', 'about_exp_icon', 'about_team_icon', 'about_fast_icon', 'about_image'];
@@ -59,4 +98,28 @@ if ($need_contact) {
     }
 }
 
-redirect('settings.php');
+// Determine which contact fields changed and add to $changed
+if ($need_contact) {
+    // fetch current kontak_toko
+    $curContact = [];
+    $cres = mysqli_query($conn, "SELECT alamat, telepon, email, maps_embed FROM kontak_toko LIMIT 1");
+    if ($cres && mysqli_num_rows($cres) > 0) {
+        $curContact = mysqli_fetch_assoc($cres);
+        mysqli_free_result($cres);
+    }
+    foreach ($contact_keys as $postk => $col) {
+        $newv = $contact_data[$col] ?? '';
+        $oldv = $curContact[$col] ?? null;
+        if ($oldv !== $newv) {
+            $mapLabel = ['alamat' => 'Alamat', 'telepon' => 'Telepon', 'email' => 'Email', 'maps_embed' => 'Maps Embed'];
+            $changed[] = $mapLabel[$col] ?? $postk;
+        }
+    }
+}
+
+// Redirect with message listing changed fields (if any)
+if (!empty($changed)) {
+    redirect_with_message('settings.php', 'success', 'Berhasil mengubah: ' . implode(', ', array_unique($changed)));
+} else {
+    redirect_with_message('settings.php', 'info', 'Tidak ada perubahan.');
+}
