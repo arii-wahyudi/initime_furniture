@@ -68,12 +68,21 @@ body {
 }
 
 /* Fix dropdown kategori ketutup produk */
-.dropdown-menu-custom {
-  position: absolute;
-  z-index: 1080;
-}
 .dropdown {
   position: relative;
+  z-index: 1050;
+}
+
+.dropdown-menu-custom {
+  position: fixed !important;
+  z-index: 9999 !important;
+  min-width: 190px;
+  border: none;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
 .capt-desc {
   font-size: 10px;
@@ -135,16 +144,6 @@ body {
 
 .wa-floating-btn i {
   font-size: 42px;
-}
-
-.dropdown-menu-custom {
-  min-width: 190px;
-  border: none;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  z-index: 9999 !important;
 }
 
 /* .modal {
