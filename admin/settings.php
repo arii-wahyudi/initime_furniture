@@ -79,6 +79,40 @@ if ($res) {
                                         <label class="form-label">About Description</label>
                                         <textarea name="about_desc" class="form-control" rows="4"><?= htmlspecialchars($settings['about_desc'] ?? '') ?></textarea>
                                     </div>
+                                    <hr>
+                                    <h6>About Items (3) — Title, Short Desc & Icon</h6>
+                                    <?php
+                                    $about_items = [
+                                        ['key' => 'about_exp', 'label' => 'Experience'],
+                                        ['key' => 'about_team', 'label' => 'Team'],
+                                        ['key' => 'about_fast', 'label' => 'Fast']
+                                    ];
+                                    foreach ($about_items as $it):
+                                        $t = $it['key'] . '_title';
+                                        $d = $it['key'] . '_desc';
+                                        $ic = $it['key'] . '_icon';
+                                        $iconInfo = resolve_image_info($settings[$ic] ?? '', 'settings');
+                                        $iconUrl = htmlspecialchars($iconInfo['url']);
+                                    ?>
+                                        <div class="mb-3 row">
+                                            <div class="col-md-6">
+                                                <label class="form-label"><?= $it['label'] ?> Title</label>
+                                                <input type="text" name="<?= $t ?>" class="form-control" value="<?= htmlspecialchars($settings[$t] ?? '') ?>">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label"><?= $it['label'] ?> Short Desc</label>
+                                                <input type="text" name="<?= $d ?>" class="form-control" value="<?= htmlspecialchars($settings[$d] ?? '') ?>">
+                                            </div>
+                                            <div class="col-md-6 mt-2">
+                                                <label class="form-label">Icon Image (optional)</label>
+                                                <div class="mb-2">
+                                                    <?php if (!empty($iconUrl)): ?><img id="preview_<?= $ic ?>" src="<?= $iconUrl ?>" style="max-height:48px; display:block"><?php else: ?><img id="preview_<?= $ic ?>" src="" style="max-height:48px; display:none"><?php endif; ?>
+                                                </div>
+                                                <input type="file" name="<?= $ic ?>_file" class="form-control mb-2" accept="image/*" onchange="previewFile(this, 'preview_<?= $ic ?>')">
+                                                <input type="text" name="<?= $ic ?>" class="form-control" value="<?= htmlspecialchars($settings[$ic] ?? '') ?>">
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
                                     <div class="settings-save"><button class="btn btn-primary">Simpan</button></div>
                                 </form>
                             </div>
