@@ -8,8 +8,8 @@ $settings_dir = __DIR__ . '/../uploads/settings';
 
 $fields = [
     'site_name',
-    'carousel_1_title', 'carousel_1_desc', 'carousel_1_phrase',
-    'carousel_2_title', 'carousel_2_desc', 'carousel_2_phrase',
+    'carousel_1_title', 'carousel_1_desc',
+    'carousel_2_title', 'carousel_2_desc',
     'about_title', 'about_desc',
     'about_exp_title', 'about_exp_desc',
     'about_team_title', 'about_team_desc',

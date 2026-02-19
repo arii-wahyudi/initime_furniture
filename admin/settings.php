@@ -12,6 +12,17 @@ if ($res) {
     while ($r = mysqli_fetch_assoc($res)) $settings[$r['nama_setting']] = $r['isi'];
     mysqli_free_result($res);
 }
+// Load toko contact from kontak_toko table so fields show current values
+$res2 = mysqli_query($conn, "SELECT alamat, telepon, email, maps_embed FROM kontak_toko LIMIT 1");
+if ($res2) {
+    if ($ct = mysqli_fetch_assoc($res2)) {
+        if (!empty($ct['alamat'])) $settings['shop_address'] = $ct['alamat'];
+        if (!empty($ct['telepon'])) $settings['shop_telepon'] = $ct['telepon'];
+        if (!empty($ct['email'])) $settings['shop_email'] = $ct['email'];
+        if (!empty($ct['maps_embed'])) $settings['shop_maps_embed'] = $ct['maps_embed'];
+    }
+    mysqli_free_result($res2);
+}
 ?>
 
 <body class="bg-light">
@@ -148,8 +159,6 @@ if ($res) {
                                             <input type="text" name="carousel_<?= $i ?>_title" class="form-control mb-2" value="<?= htmlspecialchars($settings['carousel_' . $i . '_title'] ?? '') ?>">
                                             <label class="form-label">Description</label>
                                             <textarea name="carousel_<?= $i ?>_desc" class="form-control mb-2" rows="2"><?= htmlspecialchars($settings['carousel_' . $i . '_desc'] ?? '') ?></textarea>
-                                            <label class="form-label">Short Phrase (3 words)</label>
-                                            <input type="text" name="carousel_<?= $i ?>_phrase" class="form-control mb-2" value="<?= htmlspecialchars($settings['carousel_' . $i . '_phrase'] ?? '') ?>">
                                         </div>
                                     <?php endfor; ?>
                                     <div class="settings-save"><button class="btn btn-primary">Simpan Carousel</button></div>
