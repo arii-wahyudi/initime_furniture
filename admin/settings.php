@@ -59,10 +59,14 @@ if ($res2) {
                                                     $logoUrl = htmlspecialchars($logoInfo['url']);
                                                     $logoExists = $logoInfo['exists'] ? 'Yes' : 'No';
                                                     ?>
-                                                    <?php if (!empty($logoUrl)): ?><img id="preview_logo" src="<?= $logoUrl ?>" style="max-height:80px; display:block"><?php else: ?><img id="preview_logo" src="" style="max-height:80px; display:none"><?php endif; ?>
+                                                    <?php if (!empty($logoUrl)): ?><img id="preview_logo" src="<?= $logoUrl ?>" class="img-preview" style="display:block"><?php else: ?><img id="preview_logo" src="" class="img-preview" style="display:none"><?php endif; ?>
                                                 </div>
-                                                <input type="file" name="logo_file" class="form-control mb-2" accept="image/*" onchange="previewFile(this, 'preview_logo')">
-                                                <input type="text" name="logo" class="form-control" value="<?= htmlspecialchars($settings['logo'] ?? '') ?>">
+                                                <div class="input-group mb-2">
+                                                    <input type="file" id="logo_file" name="logo_file" class="form-control" accept="image/*" onchange="previewFile(this, 'preview_logo'); showFilename(this, 'logo_filename')">
+                                                </div>
+                                                <div id="logo_filename" class="input-filename"><?= htmlspecialchars(basename($settings['logo'] ?? '')) ?></div>
+                                                <input type="text" name="logo" class="form-control mt-2" placeholder="Path atau filename logo (opsional)" value="<?= htmlspecialchars($settings['logo'] ?? '') ?>">
+                                                <div class="form-help">Rekomendasi ukuran minimal 200x200px. Jika upload, field path akan diisi otomatis.</div>
                                             </div>
                                             <div class="settings-save"><button class="btn btn-primary">Simpan</button></div>
                                         </form>
@@ -273,6 +277,13 @@ if ($res2) {
             };
             reader.readAsDataURL(f);
         }
+
+            function showFilename(input, targetId) {
+                const el = document.getElementById(targetId);
+                if (!el) return;
+                const f = input.files && input.files[0];
+                el.textContent = f ? f.name : '';
+            }
 
         // Rotate chevron on collapse toggle (Bootstrap 5 collapse events)
         document.addEventListener('DOMContentLoaded', function() {

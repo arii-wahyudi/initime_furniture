@@ -27,4 +27,19 @@ if ($image_path) {
     db_update($conn, "UPDATE kategori_produk SET nama_kategori = ?, slug = ? WHERE id = ?", [$nama, $slug, $id], 'ssi');
 }
 
+// handle remove image checkbox
+if (!empty($_POST['remove_image']) && $_POST['remove_image'] == '1') {
+    // fetch current image path and delete file
+    $q = mysqli_prepare($conn, "SELECT image FROM kategori_produk WHERE id = ? LIMIT 1");
+    mysqli_stmt_bind_param($q, 'i', $id);
+    mysqli_stmt_execute($q);
+    $res = mysqli_stmt_get_result($q);
+    $row = mysqli_fetch_assoc($res);
+    if (!empty($row['image'])) {
+        $fs = resolve_image_info($row['image'], 'categories')['fs'] ?? null;
+        if ($fs) @unlink($fs);
+    }
+    db_update($conn, "UPDATE kategori_produk SET image = NULL WHERE id = ?", [$id], 'i');
+}
+
 redirect('categories.php');

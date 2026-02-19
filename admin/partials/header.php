@@ -63,5 +63,9 @@
         .collapse-toggle .fa { transition: transform .25s ease; }
         .collapse-toggle.collapsed .fa { transform: rotate(0deg); }
         .collapse-toggle:not(.collapsed) .fa { transform: rotate(180deg); }
+        /* Image preview styling */
+        .img-preview { height:56px; width:56px; object-fit:cover; border-radius:6px; border:1px solid rgba(0,0,0,0.06); }
+        .form-help { font-size:0.85rem; color:#6c757d; }
+        .input-filename { font-size:0.85rem; color:#495057; margin-top:6px; }
     </style>
 </head>

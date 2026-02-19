@@ -33,12 +33,22 @@ include __DIR__ . '/partials/header.php';
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Gambar Kategori (opsional)</label>
-                            <div class="mb-2">
+                            <div class="mb-2 d-flex align-items-center gap-2">
                                 <?php $imgInfo = resolve_image_info($category['image'] ?? '', 'categories'); $imgUrl = htmlspecialchars($imgInfo['url']); ?>
-                                <?php if (!empty($imgUrl)): ?><img id="preview_image" src="<?= $imgUrl ?>" style="max-height:80px; display:block"><?php else: ?><img id="preview_image" src="" style="max-height:80px; display:none"><?php endif; ?>
+                                <?php if (!empty($imgUrl)): ?><img id="preview_image" src="<?= $imgUrl ?>" class="img-preview" style="display:block"><?php else: ?><img id="preview_image" src="" class="img-preview" style="display:none"><?php endif; ?>
+                                <div>
+                                    <input type="file" id="image_file" name="image_file" class="form-control" accept="image/*" onchange="previewFile(this,'preview_image'); showFilename(this,'image_filename')">
+                                    <div id="image_filename" class="input-filename"><?= htmlspecialchars(basename($category['image'] ?? '')) ?></div>
+                                </div>
                             </div>
-                            <input type="file" name="image_file" class="form-control mb-2" accept="image/*" onchange="previewFile(this,'preview_image')">
-                            <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($category['image'] ?? '') ?>">
+                            <input type="text" name="image" class="form-control" placeholder="Path atau filename (opsional)" value="<?= htmlspecialchars($category['image'] ?? '') ?>">
+                            <div class="form-help">Upload gambar kategori untuk tampil pada listing. Maks 1MB disarankan.</div>
+                            <?php if (!empty($category['image'])): ?>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" value="1" id="remove_image" name="remove_image">
+                                    <label class="form-check-label" for="remove_image">Hapus gambar saat menyimpan</label>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <button class="btn btn-primary">Simpan</button>
                         <a href="categories.php" class="btn btn-link">Batal</a>
