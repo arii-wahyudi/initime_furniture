@@ -24,12 +24,21 @@ include __DIR__ . '/partials/header.php';
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><?= $title ?></h5>
-                    <form action="<?= $id ? 'category_update.php' : 'category_store.php' ?>" method="post">
+                    <form action="<?= $id ? 'category_update.php' : 'category_store.php' ?>" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                         <?php if ($id): ?><input type="hidden" name="id" value="<?= (int)$id ?>"><?php endif; ?>
                         <div class="mb-3">
                             <label class="form-label">Nama Kategori</label>
                             <input type="text" name="nama_kategori" class="form-control" required value="<?= htmlspecialchars($category['nama_kategori'] ?? '') ?>">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Gambar Kategori (opsional)</label>
+                            <div class="mb-2">
+                                <?php $imgInfo = resolve_image_info($category['image'] ?? '', 'categories'); $imgUrl = htmlspecialchars($imgInfo['url']); ?>
+                                <?php if (!empty($imgUrl)): ?><img id="preview_image" src="<?= $imgUrl ?>" style="max-height:80px; display:block"><?php else: ?><img id="preview_image" src="" style="max-height:80px; display:none"><?php endif; ?>
+                            </div>
+                            <input type="file" name="image_file" class="form-control mb-2" accept="image/*" onchange="previewFile(this,'preview_image')">
+                            <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($category['image'] ?? '') ?>">
                         </div>
                         <button class="btn btn-primary">Simpan</button>
                         <a href="categories.php" class="btn btn-link">Batal</a>

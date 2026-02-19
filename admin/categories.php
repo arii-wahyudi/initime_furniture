@@ -37,6 +37,7 @@ include __DIR__ . '/partials/header.php';
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Gambar</th>
                                     <th>Nama Kategori</th>
                                     <th class="d-none d-md-table-cell">Dibuat</th>
                                     <th>Action</th>
@@ -46,6 +47,13 @@ include __DIR__ . '/partials/header.php';
                                 <?php if (!empty($rows)): $i=1; foreach($rows as $row): ?>
                                     <tr>
                                         <td><?= $i++ ?></td>
+                                        <td>
+                                            <?php if (!empty($row['image'])): ?>
+                                                <img src="<?= htmlspecialchars(public_image_url($row['image'], 'categories')) ?>" style="height:40px; object-fit:cover;">
+                                            <?php else: ?>
+                                                <div class="text-muted small">-</div>
+                                            <?php endif; ?>
+                                        </td>
                                         <td><?= htmlspecialchars($row['nama_kategori']) ?></td>
                                         <td class="d-none d-md-table-cell"><?= htmlspecialchars($row['created_at'] ?? '-') ?></td>
                                         <td>
