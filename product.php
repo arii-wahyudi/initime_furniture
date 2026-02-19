@@ -58,7 +58,7 @@ include 'partials/header.php';
 
     <!-- CATEGORY SECTION START -->
     <div class="container-lg mt-4">
-        <div class="row g-2">
+        <div class="row g-2" data-aos="fade-up">
             <?php
             $default_cat_images = [
                 'assets/img/cat1-ruangtamu.png',
@@ -103,7 +103,7 @@ include 'partials/header.php';
         </div>
 
         <div class="container-lg mt-3">
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" data-aos="fade-up">
                 <div class="col-lg-8 col-6 g-1">
                     <form method="get" action="product.php">
                         <div class="input-group shadow-sm">
@@ -137,7 +137,7 @@ include 'partials/header.php';
             </div>
         </div>
 
-        <div class="row mt-3 px-1 px-lg-0">
+        <div class="row mt-3 px-1 px-lg-0" data-aos="fade-up">
             <?php if (empty($products)) : ?>
                 <div class="col-12">
                     <p class="text-center">Belum ada produk.</p>

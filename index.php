@@ -144,8 +144,8 @@ include 'partials/header.php';
 
     <div class="card rounded-3 shadow mt-3" data-aos="fade-up">
       <div class="card-body">
-        <div class="row mt-3">
-          <div class="col-lg-6 d-flex justify-content-center align-items-center">
+        <div class="row">
+          <div class="col-lg-6 mt-0 mt-md-3 d-none d-md-flex justify-content-center align-items-center">
             <div class="ratio ratio-16x9">
               <img
                 src="<?= htmlspecialchars($about_img) ?>"
@@ -158,6 +158,13 @@ include 'partials/header.php';
             <div class="d-inline">
               <h2 class="fw-bold d-block mb-3"><?= htmlspecialchars($settings['about_title'] ?? 'INTIME FURNITURE') ?></h2>
               <p><?= nl2br(htmlspecialchars($settings['about_desc'] ?? 'Kami adalah penyedia solusi interior yang berfokus pada furniture berkualitas untuk kebutuhan rumah dan kantor.')) ?></p>
+
+              <div class="d-block d-md-none mb-4 mb-md-0 ratio ratio-16x9">
+                <img
+                  src="<?= htmlspecialchars($about_img) ?>"
+                  alt="<?= htmlspecialchars($settings['about_title'] ?? 'Tentang Kami') ?>"
+                  class="object-fit-cover rounded-3 shadow" />
+              </div>
 
               <div class="row mb-3">
                 <div class="col-2">
@@ -324,7 +331,7 @@ include 'partials/header.php';
   <!-- TESTIMONIALS SECTION END -->
 
   <!-- CONTACT SECTION START -->
-  <div class="container-lg mb-5">
+  <div class="container-lg mb-5" data-aos="fade-up">
     <div class="d-flex align-items-center justify-content-center pt-5">
       <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
         Hubungi Kami

@@ -29,8 +29,7 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 // Database connection
 $db_host = 'localhost';
 // $db_user = 'root';
-// $db_pass = 'KtHYm2dJL@yMaKx';
-// $db_name = 'desadroi_initime_x8y2';
+// $db_pass = '';
 $db_user = 'desadroi_fahmi';
 $db_pass = 'KtHYm2dJL@yMaKx';
 $db_name = 'desadroi_initime_x8y2';
