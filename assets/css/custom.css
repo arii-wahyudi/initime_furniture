@@ -66,6 +66,15 @@ body {
 .capt-title {
   font-size: 14px;
 }
+
+/* Fix dropdown kategori ketutup produk */
+.dropdown-menu-custom {
+  position: absolute;
+  z-index: 1080;
+}
+.dropdown {
+  position: relative;
+}
 .capt-desc {
   font-size: 10px;
 }
