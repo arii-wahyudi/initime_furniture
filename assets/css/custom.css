@@ -73,16 +73,19 @@ body {
   z-index: 1050;
 }
 
+/* Dropdown opens UPWARD */
 .dropdown-kategori-products .dropdown-menu {
   position: absolute !important;
-  top: 100% !important;
+  bottom: 100% !important;
   right: 0 !important;
   left: auto !important;
+  top: auto !important;
   z-index: 9999 !important;
   min-width: 190px;
   border: none;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
   display: none;
+  margin-bottom: 8px;
 }
 
 .dropdown-kategori-products .dropdown-menu.show {
@@ -91,6 +94,13 @@ body {
 
 .dropdown-toggle::after {
   display: none;
+}
+
+/* On mobile: add bottom margin to products when dropdown is nearby */
+@media (max-width: 768px) {
+  .dropdown-kategori-products .dropdown-menu.show {
+    margin-bottom: 300px;
+  }
 }
 .capt-desc {
   font-size: 10px;
