@@ -23,8 +23,8 @@
     id="pop-menu">
     <div class="menu ">
       <a class="nav-link fs-6 mb-3" href="index.php">Dashboard</a>
-      <a class="nav-link fs-6" href="product.php">Produk</a>
-      <a class="nav-link fs-6 mb-3" href="about_us.php">Tentang Kami</a>
+      <a class="nav-link fs-6 mb-3" href="product.php">Produk</a>
+      <a class="nav-link fs-6" href="about_us.php">Tentang Kami</a>
     </div>
   </div>
 </nav>
