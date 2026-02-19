@@ -84,10 +84,19 @@ if ($res) {
 
 // Category popularity (by events on products in that category)
 $cat_stats = [];
-$res = mysqli_query($conn, "SELECT k.id, k.nama_kategori, COUNT(ps.id) as cnt FROM produk_statistik ps JOIN produk p ON ps.id_produk = p.id JOIN kategori_produk k ON p.id_kategori = k.id GROUP BY k.id ORDER BY cnt DESC LIMIT 8");
+$res = mysqli_query($conn, "SELECT k.id, k.nama_kategori,
+    COALESCE(pcnt.cnt,0) + COALESCE(ccnt.cnt,0) AS cnt
+    FROM kategori_produk k
+    LEFT JOIN (
+        SELECT p.id_kategori AS kid, COUNT(ps.id) AS cnt FROM produk_statistik ps JOIN produk p ON ps.id_produk = p.id GROUP BY p.id_kategori
+    ) pcnt ON pcnt.kid = k.id
+    LEFT JOIN (
+        SELECT id_kategori AS kid, COUNT(*) AS cnt FROM produk_statistik WHERE id_kategori IS NOT NULL GROUP BY id_kategori
+    ) ccnt ON ccnt.kid = k.id
+    ORDER BY cnt DESC LIMIT 8");
 if ($res) {
-    while ($r = mysqli_fetch_assoc($res)) $cat_stats[] = $r;
-    mysqli_free_result($res);
+        while ($r = mysqli_fetch_assoc($res)) $cat_stats[] = $r;
+        mysqli_free_result($res);
 }
 ?>
 

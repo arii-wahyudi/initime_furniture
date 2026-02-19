@@ -10,3 +10,4 @@
 
  <!-- Custom JS -->
  <script src="assets/js/main.js" defer></script>
+ <script src="assets/js/analytics.js" defer></script>

@@ -12,13 +12,24 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // product_id is optional for some events (search)
 $id = isset($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
 $event = isset($_POST['event']) ? trim($_POST['event']) : '';
-$allowed = ['view','click','search','wa_click'];
+$allowed = ['view','click','search','wa_click','category'];
 if (!in_array($event, $allowed)) {
     echo json_encode(['ok' => 0, 'error' => 'Invalid event']);
     exit;
 }
 
-if ($id > 0) {
+// category events may provide category_id; otherwise product-specific events attach to a product
+$category_id = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
+if ($event === 'category' && $category_id > 0) {
+    $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_kategori, tipe_event) VALUES (?, ?)");
+    if (!$stmt) {
+        echo json_encode(['ok' => 0, 'error' => 'DB prepare failed']);
+        exit;
+    }
+    mysqli_stmt_bind_param($stmt, 'is', $category_id, $event);
+    $ok = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+} elseif ($id > 0) {
     $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event) VALUES (?, ?)");
     if (!$stmt) {
         echo json_encode(['ok' => 0, 'error' => 'DB prepare failed']);

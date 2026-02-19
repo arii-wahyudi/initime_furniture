@@ -71,7 +71,7 @@ include 'partials/header.php';
                     $img = $settings['about_image'] ?? $default_cat_images[$i % count($default_cat_images)];
             ?>
                     <div class="col-6 col-md-4">
-                        <a href="product.php?cat=<?= (int)$cat['id'] ?>" class="text-decoration-none text-dark">
+                        <a href="product.php?cat=<?= (int)$cat['id'] ?>" class="text-decoration-none text-dark category-link" data-cat-id="<?= (int)$cat['id'] ?>">
                             <div class="card card-category shadow bg-card-category">
                                 <img src="<?= htmlspecialchars($img) ?>" class="card-img object-fit-cover opacity-50" alt="<?= htmlspecialchars($cat['nama_kategori']) ?>" />
                                 <div class="card-img-overlay d-flex justify-content-center align-items-center p-4">
@@ -129,7 +129,7 @@ include 'partials/header.php';
                         <ul class="dropdown-menu w-100 dropdown-menu-custom mt-2">
                             <li><a class="dropdown-item" href="product.php">Semua Kategori</a></li>
                             <?php foreach ($categories as $c): ?>
-                                <li><a class="dropdown-item" href="product.php?cat=<?= (int)$c['id'] ?>"><?= htmlspecialchars($c['nama_kategori']) ?></a></li>
+                                <li><a class="dropdown-item category-link" data-cat-id="<?= (int)$c['id'] ?>" href="product.php?cat=<?= (int)$c['id'] ?>"><?= htmlspecialchars($c['nama_kategori']) ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
