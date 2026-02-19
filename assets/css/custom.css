@@ -68,17 +68,25 @@ body {
 }
 
 /* Fix dropdown kategori ketutup produk */
-.dropdown {
+.dropdown-kategori-products {
   position: relative;
   z-index: 1050;
 }
 
-.dropdown-menu-custom {
-  position: fixed !important;
+.dropdown-kategori-products .dropdown-menu {
+  position: absolute !important;
+  top: 100% !important;
+  right: 0 !important;
+  left: auto !important;
   z-index: 9999 !important;
   min-width: 190px;
   border: none;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
+  display: none;
+}
+
+.dropdown-kategori-products .dropdown-menu.show {
+  display: block !important;
 }
 
 .dropdown-toggle::after {
