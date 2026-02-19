@@ -5,7 +5,7 @@ require_post_method('settings.php');
 require_valid_csrf();
 
 $settings_dir = __DIR__ . '/../uploads/settings';
-$fields = ['site_name', 'carousel_1_title', 'carousel_1_desc', 'carousel_2_title', 'carousel_2_desc', 'about_title', 'about_desc', 'testimonial_1_text', 'testimonial_1_name', 'testimonial_2_text', 'testimonial_2_name', 'testimonial_3_text', 'testimonial_3_name', 'footer_text', 'footer_credit', 'instagram', 'whatsapp', 'logo', 'carousel_1_image', 'carousel_2_image'];
+$fields = ['site_name', 'carousel_1_title', 'carousel_1_desc', 'carousel_1_phrase', 'carousel_2_title', 'carousel_2_desc', 'carousel_2_phrase', 'about_title', 'about_desc', 'testimonial_1_text', 'testimonial_1_name', 'testimonial_2_text', 'testimonial_2_name', 'testimonial_3_text', 'testimonial_3_name', 'footer_text', 'footer_credit', 'instagram', 'whatsapp', 'logo', 'carousel_1_image', 'carousel_2_image', 'shop_address', 'shop_telepon', 'shop_email', 'shop_maps_embed'];
 
 foreach ($fields as $f) {
     if (isset($_POST[$f])) {

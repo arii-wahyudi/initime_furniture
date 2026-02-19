@@ -114,6 +114,8 @@ if ($res) {
                                             <input type="text" name="carousel_<?= $i ?>_title" class="form-control mb-2" value="<?= htmlspecialchars($settings['carousel_' . $i . '_title'] ?? '') ?>">
                                             <label class="form-label">Description</label>
                                             <textarea name="carousel_<?= $i ?>_desc" class="form-control mb-2" rows="2"><?= htmlspecialchars($settings['carousel_' . $i . '_desc'] ?? '') ?></textarea>
+                                            <label class="form-label">Short Phrase (3 words)</label>
+                                            <input type="text" name="carousel_<?= $i ?>_phrase" class="form-control mb-2" value="<?= htmlspecialchars($settings['carousel_' . $i . '_phrase'] ?? '') ?>">
                                         </div>
                                     <?php endfor; ?>
                                     <div class="settings-save"><button class="btn btn-primary">Simpan Carousel</button></div>
@@ -149,6 +151,40 @@ if ($res) {
                 </div>
 
                 <div class="col-12">
+                    <div class="card mt-3 settings-card">
+                        <div class="card-header">
+                            <div class="card-title">Kontak Toko</div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-secondary collapse-toggle" data-bs-toggle="collapse" data-bs-target="#section-kontak" aria-expanded="true"><i class="fa fa-chevron-down"></i></button>
+                            </div>
+                        </div>
+                        <div id="section-kontak" class="collapse show">
+                            <div class="card-body">
+                                <form action="settings_update.php" method="post">
+                                    <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                    <div class="mb-3">
+                                        <label class="form-label">Alamat</label>
+                                        <textarea name="shop_address" class="form-control" rows="3"><?= htmlspecialchars($settings['shop_address'] ?? $settings['kontak_address'] ?? '') ?></textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Telepon</label>
+                                            <input type="text" name="shop_telepon" class="form-control" value="<?= htmlspecialchars($settings['shop_telepon'] ?? '') ?>">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="text" name="shop_email" class="form-control" value="<?= htmlspecialchars($settings['shop_email'] ?? '') ?>">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Maps Embed / Link</label>
+                                            <input type="text" name="shop_maps_embed" class="form-control" value="<?= htmlspecialchars($settings['shop_maps_embed'] ?? '') ?>">
+                                        </div>
+                                    </div>
+                                    <div class="settings-save"><button class="btn btn-primary">Simpan Kontak</button></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Footer & Sosial</h5>
