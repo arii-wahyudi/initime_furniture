@@ -31,7 +31,7 @@ foreach ($categories as $c) {
 
 // Load products (top products) - only active
 $products = [];
-$sql = "SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori_produk k ON p.id_kategori = k.id WHERE p.status = 'aktif' ORDER BY p.created_at DESC LIMIT 8";
+$sql = "SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori_produk k ON p.id_kategori = k.id WHERE p.status = 'aktif' ORDER BY p.created_at DESC LIMIT 6";
 if ($res = mysqli_query($conn, $sql)) {
   while ($row = mysqli_fetch_assoc($res)) {
     $products[] = $row;
@@ -56,6 +56,9 @@ include 'partials/header.php';
   <!-- NAVBAR SECTION -->
   <?php include 'partials/navbar.php'; ?>
 
+
+
+  <!-- CAROUSEL SECTION START -->
   <div
     id="carouselExampleCaptions"
     class="container-lg carousel slide py-md-3 mb-3"
@@ -130,85 +133,8 @@ include 'partials/header.php';
   </div>
   <!-- CAROUSEL SECTION END -->
 
-  <!-- ABOUT US SECTION START -->
-  <!-- <div class="container-lg mb-5">
-    <div class="d-flex align-items-center justify-content-center pt-5">
-      <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
-        Tentang Kami
-      </h5>
-    </div>
 
-    <div class="row mt-3" data-aos="fade-up">
-      <div class="col-lg-6 d-flex justify-content-center align-items-center">
-        <div class="ratio ratio-16x9">
-          <img
-            src="assets/img/furniture-img.png"
-            alt=""
-            class="object-fit-cover rounded-3 shadow" />
-        </div>
-      </div>
-      <div
-        class="col-lg-6 mt-3 mt-lg-0 d-flex justify-content-center align-items-center">
-        <div class="d-inline">
-          <h2 class="fw-bold d-block mb-3">INTIME FURNITURE</h2>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo
-            repudiandae quo nam aspernatur magni. Facilis, quisquam
-            consequatur! Saepe animi aperiam laboriosam dolores tenetur a quia
-            porro maiores voluptate iusto error tempora sint expedita magnam
-            maxime, reprehenderit rem alias vitae amet, omnis hic asperiores
-            illum. Porro, in facilis. Maxime, voluptatum distinctio.
-          </p>
-          <div class="row">
-            <div class="col-2">
-              <div
-                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-1">
-                <i class="fas fa-medal"></i>
-              </div>
-            </div>
-            <div class="col-10">
-              <h5 class="fw-bold">4+ Tahun Pengalaman</h5>
-              <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptate, facilis.
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <div
-                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-1">
-                <i class="fas fa-users"></i>
-              </div>
-            </div>
-            <div class="col-10">
-              <h5 class="fw-bold">Tim Profesional</h5>
-              <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptate, facilis.
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <div
-                class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-1">
-                <i class="fas fa-clock"></i>
-              </div>
-            </div>
-            <div class="col-10">
-              <h5 class="fw-bold">Pengerjaaan Cepat</h5>
-              <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptate, facilis.
-              </p>
-            </div>
-          </div>
-          <a href="#" class="btn btn-outline-secondary text-dark">Lihat Selengkapnya <i class="fas fa-arrow-right ms-3"></i></a>
-        </div>
-      </div>
-    </div>
-  </div> -->
+  <!-- ABOUT US SECTION START -->
   <div class="container-lg mb-5">
     <div class="d-flex align-items-center justify-content-center pt-3">
       <h5 class="text-center mb-4 fs-md-5 bg-title py-2 px-3 rounded-pill">
@@ -216,61 +142,66 @@ include 'partials/header.php';
       </h5>
     </div>
 
-    <div class="row mt-3" data-aos="fade-up">
-      <div class="col-lg-6 d-flex justify-content-center align-items-center">
-        <div class="ratio ratio-16x9">
-          <img
-            src="<?= htmlspecialchars($about_img) ?>"
-            alt="<?= htmlspecialchars($settings['about_title'] ?? 'Tentang Kami') ?>"
-            class="object-fit-cover rounded-3 shadow" />
-        </div>
-      </div>
-      <div
-        class="col-lg-6 mt-3 mt-lg-0 d-flex justify-content-center align-items-center">
-        <div class="d-inline">
-          <h2 class="fw-bold d-block mb-3"><?= htmlspecialchars($settings['about_title'] ?? 'INTIME FURNITURE') ?></h2>
-          <p><?= nl2br(htmlspecialchars($settings['about_desc'] ?? 'Kami adalah penyedia solusi interior yang berfokus pada furniture berkualitas untuk kebutuhan rumah dan kantor.')) ?></p>
-
-          <div class="row mb-3">
-            <div class="col-2">
-              <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                <i class="fas fa-couch"></i>
-              </div>
-            </div>
-            <div class="col-10">
-              <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_exp_title'] ?? '4+ Tahun Pengalaman') ?></h5>
-              <p class="small text-muted"><?= htmlspecialchars($settings['about_exp_desc'] ?? 'Berpengalaman dalam produksi dan instalasi furniture') ?></p>
+    <div class="card rounded-3 shadow mt-3" data-aos="fade-up">
+      <div class="card-body">
+        <div class="row mt-3">
+          <div class="col-lg-6 d-flex justify-content-center align-items-center">
+            <div class="ratio ratio-16x9">
+              <img
+                src="<?= htmlspecialchars($about_img) ?>"
+                alt="<?= htmlspecialchars($settings['about_title'] ?? 'Tentang Kami') ?>"
+                class="object-fit-cover rounded-3 shadow" />
             </div>
           </div>
+          <div
+            class="col-lg-6 mt-3 mt-lg-0 d-flex justify-content-center align-items-center">
+            <div class="d-inline">
+              <h2 class="fw-bold d-block mb-3"><?= htmlspecialchars($settings['about_title'] ?? 'INTIME FURNITURE') ?></h2>
+              <p><?= nl2br(htmlspecialchars($settings['about_desc'] ?? 'Kami adalah penyedia solusi interior yang berfokus pada furniture berkualitas untuk kebutuhan rumah dan kantor.')) ?></p>
 
-          <div class="row mb-3">
-            <div class="col-2">
-              <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                <i class="fas fa-users"></i>
+              <div class="row mb-3">
+                <div class="col-2">
+                  <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                    <i class="fas fa-couch"></i>
+                  </div>
+                </div>
+                <div class="col-10">
+                  <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_exp_title'] ?? '4+ Tahun Pengalaman') ?></h5>
+                  <p class="small text-muted"><?= htmlspecialchars($settings['about_exp_desc'] ?? 'Berpengalaman dalam produksi dan instalasi furniture') ?></p>
+                </div>
               </div>
-            </div>
-            <div class="col-10">
-              <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_team_title'] ?? 'Tim Profesional') ?></h5>
-              <p class="small text-muted"><?= htmlspecialchars($settings['about_team_desc'] ?? 'Didukung oleh tenaga ahli berpengalaman') ?></p>
+
+              <div class="row mb-3">
+                <div class="col-2">
+                  <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                    <i class="fas fa-users"></i>
+                  </div>
+                </div>
+                <div class="col-10">
+                  <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_team_title'] ?? 'Tim Profesional') ?></h5>
+                  <p class="small text-muted"><?= htmlspecialchars($settings['about_team_desc'] ?? 'Didukung oleh tenaga ahli berpengalaman') ?></p>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-2">
+                  <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
+                    <i class="fas fa-shipping-fast"></i>
+                  </div>
+                </div>
+                <div class="col-10">
+                  <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_fast_title'] ?? 'Pengerjaan Cepat') ?></h5>
+                  <p class="small text-muted"><?= htmlspecialchars($settings['about_fast_desc'] ?? 'Proses produksi dan instalasi tepat waktu') ?></p>
+                </div>
+              </div>
+
+              <a href="about_us.php" class="btn btn-outline-secondary text-dark fw-bold">Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
             </div>
           </div>
-
-          <div class="row mb-4">
-            <div class="col-2">
-              <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2">
-                <i class="fas fa-shipping-fast"></i>
-              </div>
-            </div>
-            <div class="col-10">
-              <h5 class="fw-bold mb-1"><?= htmlspecialchars($settings['about_fast_title'] ?? 'Pengerjaan Cepat') ?></h5>
-              <p class="small text-muted"><?= htmlspecialchars($settings['about_fast_desc'] ?? 'Proses produksi dan instalasi tepat waktu') ?></p>
-            </div>
-          </div>
-
-          <a href="about_us.php" class="btn btn-outline-secondary text-dark fw-bold">Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
         </div>
       </div>
     </div>
+
   </div>
   <!-- ABOUT US SECTION END -->
 
@@ -311,7 +242,7 @@ include 'partials/header.php';
       ?>
     </div>
 
-    <div class="d-flex justify-content-center align-items-center mt-4">
+    <div class="d-flex justify-content-center align-items-center mt-4" data-aos="fade-up">
       <a href="product.php" class="btn btn-outline-secondary text-dark w-auto px-4">Lihat Semua Kategori</a>
     </div>
   </div>
@@ -339,7 +270,7 @@ include 'partials/header.php';
           $slug = htmlspecialchars($p['slug'] ?? '');
           $pid = (int)$p['id'];
         ?>
-          <div class="col-6 col-lg-3 g-3">
+          <div class="col-6 col-lg-2 g-3">
             <div class="card shadow h-100">
               <div class="card-body m-0 p-0">
                 <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
@@ -356,7 +287,7 @@ include 'partials/header.php';
       <?php endif; ?>
     </div>
 
-    <div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex justify-content-center align-items-center" data-aos="fade-up">
       <a href="product.php" class="btn btn-outline-secondary text-dark w-auto mt-4 px-4">Lihat Semua Produk</a>
     </div>
 
@@ -382,7 +313,7 @@ include 'partials/header.php';
         if (empty($text) && empty($name)) continue;
       ?>
         <div class="col-md-4 mb-4" data-aos="fade-up">
-          <div class="card shadow bg-title p-3">
+          <div class="card shadow h-100 bg-title p-3">
             <p class="fst-italic">"<?= htmlspecialchars($text) ?>"</p>
             <p class="fw-bold">— <?= htmlspecialchars($name) ?></p>
           </div>
@@ -411,7 +342,7 @@ include 'partials/header.php';
               </div>
               <div class="col-10 p-3">
                 <span class="fw-bold fs-5">Alamat</span>
-                <p><?= htmlspecialchars($contact['alamat'] ?? 'Jl. Merdeka No.123, Jakarta, Indonesia') ?></p>
+                <p><?= htmlspecialchars($contact['alamat'] ?? 'Blk. Singkuk No.22B, Pagar Kuning, Kec. Limo, Kota Depok, Jawa Barat 16515') ?></p>
               </div>
             </div>
           </div>
@@ -426,7 +357,7 @@ include 'partials/header.php';
               </div>
               <div class="col-10 p-3">
                 <span class="fw-bold fs-5">Telepon</span>
-                <p><?= htmlspecialchars($contact['telepon'] ?? '+62 812 3456 7890') ?></p>
+                <p><?= htmlspecialchars($contact['telepon'] ?? '+62 813 1701 1839') ?></p>
               </div>
             </div>
           </div>
@@ -441,14 +372,14 @@ include 'partials/header.php';
               </div>
               <div class="col-10 p-3">
                 <span class="fw-bold fs-5">Email</span>
-                <p><?= htmlspecialchars($contact['email'] ?? 'company@example.com') ?></p>
+                <p><?= htmlspecialchars($contact['email'] ?? 'furnitureintime@gmail.com') ?></p>
               </div>
             </div>
           </div>
         </div>
 
         <iframe
-          src="<?= htmlspecialchars($contact['maps_embed'] ?? 'https://www.google.com/maps/embed?...') ?>"
+          src="<?= htmlspecialchars($contact['maps_embed'] ?? 'https://www.google.com/maps?q=Blk.%20Singkuk%20No.22B%20Pagar%20Kuning%20Limo%20Depok&output=embed') ?>"
           class="mt-4 w-100 shadow"
           height="250"
           style="border: 0"

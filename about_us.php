@@ -12,7 +12,7 @@ include 'partials/header.php';
             <div class="row g-5 align-items-center">
                 <div class="col-lg-7">
                     <h1 class="display-6 fw-bold mb-2">Intime Furniture</h1>
-                    <p class="text-muted lead">Penyedia furniture berkualitas untuk rumah &amp; kantor — fungsional, nyaman, dan estetik.</p>
+                    <p class="text-muted lead">Penyedia furniture berkualitas untuk rumah &amp; kantor fungsional, nyaman, dan estetik.</p>
 
                     <div class="row gy-3 mt-4">
                         <div class="col-6 col-sm-4">
@@ -104,7 +104,7 @@ include 'partials/header.php';
                         <div class="col-sm-6">
                             <ul class="list-unstyled">
                                 <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Bisa custom sesuai kebutuhan</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Pelayanan profesional &amp; tepat waktu</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Pelayanan profesional & tepat waktu</li>
                             </ul>
                         </div>
                     </div>

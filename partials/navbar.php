@@ -3,7 +3,7 @@
     data-bs-theme="light">
     <div class="container-lg">
       <a class="navbar-brand d-flex align-items-center" href="index.php">
-        <img src="assets/img/logo.png" alt="Logo" width="40" class="align-text-top me-2">
+        <img src="assets/img/logo-wtext.png" alt="Logo" width="40" class="align-text-top me-2">
         <b>INTIME FURNITURE</b>
       </a>
       <div class="navbarMenu d-none d-lg-block ms-auto text-dark">

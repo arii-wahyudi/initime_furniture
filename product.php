@@ -59,84 +59,36 @@ include 'partials/header.php';
     <!-- CATEGORY SECTION START -->
     <div class="container-lg mt-4">
         <div class="row g-2">
-            <div class="col-6 col-md-4">
-                <div class="card card-category shadow bg-card-category">
-                    <img
-                        src="assets/img/cat1-ruangtamu.png"
-                        class="card-img object-fit-cover opacity-50"
-                        alt="" />
-                    <div
-                        class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-                        <h5 class="card-title m-0 text-center">Furniture Ruang Tamu</h5>
-                    </div>
-                </div>
-            </div>
+            <?php
+            $default_cat_images = [
+                'assets/img/cat1-ruangtamu.png',
+                'assets/img/cat2-ruangmakan.jpg',
+                'assets/img/cat3-ruangrapat.png'
+            ];
 
-            <div class="col-6 col-md-4">
-                <div class="card card-category shadow bg-card-category">
-                    <img
-                        src="assets/img/cat2-ruangmakan.jpg"
-                        class="card-img object-fit-cover opacity-50"
-                        alt="" />
-                    <div
-                        class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-                        <h5 class="card-title m-0 text-center">Furniture Ruang Makan</h5>
+            if (!empty($categories)):
+                foreach ($categories as $i => $cat):
+                    $img = $settings['about_image'] ?? $default_cat_images[$i % count($default_cat_images)];
+            ?>
+                    <div class="col-6 col-md-4">
+                        <a href="product.php?cat=<?= (int)$cat['id'] ?>" class="text-decoration-none text-dark">
+                            <div class="card card-category shadow bg-card-category">
+                                <img src="<?= htmlspecialchars($img) ?>" class="card-img object-fit-cover opacity-50" alt="<?= htmlspecialchars($cat['nama_kategori']) ?>" />
+                                <div class="card-img-overlay d-flex justify-content-center align-items-center p-4">
+                                    <h5 class="card-title m-0 text-center"><?= htmlspecialchars($cat['nama_kategori']) ?></h5>
+                                </div>
+                            </div>
+                        </a>
                     </div>
+                <?php
+                endforeach;
+            else:
+                // fallback: show a placeholder
+                ?>
+                <div class="col-12">
+                    <p class="text-center text-muted">Belum ada kategori.</p>
                 </div>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <div class="card card-category shadow bg-card-category">
-                    <img
-                        src="assets/img/cat3-ruangrapat.png"
-                        class="card-img object-fit-cover opacity-50"
-                        alt="" />
-                    <div
-                        class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-                        <h5 class="card-title m-0 text-center">Furniture Ruang Rapat</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <div class="card card-category shadow bg-card-category">
-                    <img
-                        src="assets/img/cat2-ruangmakan.jpg"
-                        class="card-img object-fit-cover opacity-50"
-                        alt="" />
-                    <div
-                        class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-                        <h5 class="card-title m-0 text-center">Furniture Ruang Makan</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <div class="card card-category shadow bg-card-category">
-                    <img
-                        src="assets/img/cat3-ruangrapat.png"
-                        class="card-img object-fit-cover opacity-50"
-                        alt="" />
-                    <div
-                        class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-                        <h5 class="card-title m-0 text-center">Furniture Ruang Rapat</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-6 col-md-4">
-                <div class="card card-category shadow bg-card-category">
-                    <img
-                        src="assets/img/cat1-ruangtamu.png"
-                        class="card-img object-fit-cover opacity-50"
-                        alt="" />
-                    <div
-                        class="card-img-overlay d-flex justify-content-center align-items-center p-4">
-                        <h5 class="card-title m-0 text-center">Furniture Ruang Tamu</h5>
-                    </div>
-                </div>
-            </div>
-
+            <?php endif; ?>
         </div>
     </div>
     <!-- CATEGORY SECTION END -->
@@ -187,7 +139,9 @@ include 'partials/header.php';
 
         <div class="row mt-3 px-1 px-lg-0">
             <?php if (empty($products)) : ?>
-                <div class="col-12"><p class="text-center">Belum ada produk.</p></div>
+                <div class="col-12">
+                    <p class="text-center">Belum ada produk.</p>
+                </div>
             <?php else: ?>
                 <?php foreach ($products as $p):
                     $img = public_image_url($p['gambar'] ?? '');
@@ -195,32 +149,32 @@ include 'partials/header.php';
                     $category = isset($p['nama_kategori']) ? htmlspecialchars($p['nama_kategori']) : '';
                     $slug = htmlspecialchars($p['slug'] ?? '');
                     $pid = (int)$p['id'];
-                    $wa_number = isset($settings['whatsapp']) ? preg_replace('/[^0-9]/','', $settings['whatsapp']) : '628123456789';
+                    $wa_number = isset($settings['whatsapp']) ? preg_replace('/[^0-9]/', '', $settings['whatsapp']) : '628123456789';
                     $wa_msg = rawurlencode("Saya mau beli produk {$p['nama_produk']} - apakah masih tersedia? Mohon info harga dan estimasi kirim.");
                 ?>
-                <div class="col-6 col-lg-3 g-3">
-                    <div class="card shadow h-100">
-                        <div class="card-body m-0 p-0">
-                            <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
-                        </div>
-                        <div class="card-footer py-3">
-                            <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
-                            <span class="badge text-bg-secondary"><?= $category ?></span>
-                            <p class="my-2">Rp <?= $price ?></p>
+                    <div class="col-6 col-lg-2 g-3">
+                        <div class="card shadow h-100">
+                            <div class="card-body m-0 p-0">
+                                <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
+                            </div>
+                            <div class="card-footer py-3">
+                                <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
+                                <span class="badge text-bg-secondary"><?= $category ?></span>
+                                <p class="my-2">Rp <?= $price ?></p>
 
-                                                        <div class="d-grid">
-                                                            <a href="product_detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
-                                                            <a href="https://wa.me/<?= $wa_number ?>?text=<?= $wa_msg ?>" class="btn btn-success mt-2 wa-link" data-product-id="<?= $pid ?>">Pesan via WhatsApp</a>
-                                                        </div>
+                                <div class="d-grid">
+                                    <a href="product_detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
+                                    <a href="https://wa.me/<?= $wa_number ?>?text=<?= $wa_msg ?>" class="btn btn-success mt-2 wa-link" data-product-id="<?= $pid ?>">Pesan via WhatsApp</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
     </div>
     <!-- Modal Start -->
-                <!-- Product details moved to product_detail.php -->
+    <!-- Product details moved to product_detail.php -->
     <!-- PRODUCT SECTION END -->
 
 
