@@ -14,6 +14,14 @@
   font-weight: bold;
   font-style: normal;
 }
+.dropdown {
+    position: relative;
+    z-index: 1055;
+}
+
+.dropdown-menu {
+    z-index: 2000 !important;
+}
 
 body {
   font-family: "MyPoppins", sans-serif;
