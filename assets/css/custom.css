@@ -224,6 +224,23 @@ body {
   object-fit: cover;
 }
 
+/* Admin mobile product card styling (improve appearance on phones) */
+.admin-mobile-product-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+.admin-mobile-product-card .product-title {
+  font-size: 0.95rem;
+}
+.admin-mobile-product-card .ratio img.object-fit-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.admin-mobile-product-card .card-body { padding-top: 0.6rem; padding-bottom: 0.6rem; }
+.admin-mobile-product-card .btn { padding-top: 0.45rem; padding-bottom: 0.45rem; }
+
 @media (max-width: 576px) {
   .card-category { height: 130px; }
   .card-category .card-img { height: 130px; }

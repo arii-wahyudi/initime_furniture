@@ -58,7 +58,8 @@ include 'partials/header.php';
                         <div class="col-6 col-sm-4">
                             <div class="d-flex flex-column">
                                 <small class="text-uppercase text-muted">Kontak WA</small>
-                                <a class="fw-semibold" href="<?= 'https://wa.me/' . preg_replace('/\D/', '', $contact['telepon'] ?? '6281317011839') ?>"><?= htmlspecialchars($contact['telepon'] ?? '0813‑1701‑1839') ?></a>
+                                <?php $wa_href = 'https://wa.me/' . preg_replace('/\D/', '', $contact['telepon'] ?? '6281317011839') . '?text=' . rawurlencode('Halo, saya ingin menanyakan produk dan ketersediaan.'); ?>
+                                <a class="fw-semibold" href="<?= $wa_href ?>" target="_blank"><?= htmlspecialchars($contact['telepon'] ?? '0813‑1701‑1839') ?></a>
                             </div>
                         </div>
                         <div class="col-12 col-sm-4">
@@ -184,7 +185,10 @@ include 'partials/header.php';
                     <div class="card-body">
                         <h6 class="fw-bold">Kontak &amp; Lokasi</h6>
                         <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-primary"></i><?= htmlspecialchars($contact['alamat'] ?? 'Blk. Singkuk No.22B, Pagar Kuning, Kec. Limo, Kota Depok, Jawa Barat 16515') ?></p>
-                        <p class="mb-1"><i class="fas fa-phone me-2 text-primary"></i><a href="<?= 'https://wa.me/' . preg_replace('/\D/', '', $contact['telepon'] ?? '6281317011839') ?>"><?= htmlspecialchars($contact['telepon'] ?? '0813‑1701‑1839') ?></a></p>
+                                                <p class="mb-1"><i class="fas fa-phone me-2 text-primary"></i>
+                                                    <?php $wa_aside = 'https://wa.me/' . preg_replace('/\D/', '', $contact['telepon'] ?? '6281317011839') . '?text=' . rawurlencode('Halo, saya ingin menanyakan produk dan ketersediaan.'); ?>
+                                                    <a href="<?= $wa_aside ?>" target="_blank"><?= htmlspecialchars($contact['telepon'] ?? '0813‑1701‑1839') ?></a>
+                                                </p>
                         <p class="mb-3"><i class="fas fa-envelope me-2 text-primary"></i><a href="<?= 'mailto:' . htmlspecialchars($contact['email'] ?? 'furnitureintime@gmail.com') ?>"><?= htmlspecialchars($contact['email'] ?? 'furnitureintime@gmail.com') ?></a></p>
                         <a href="https://maps.app.goo.gl/s8Pg3RnhPKGB5MyV8" target="_blank" class="btn btn-outline-secondary w-100">Buka di Google Maps</a>
                     </div>

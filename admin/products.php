@@ -65,22 +65,28 @@ include __DIR__ . '/partials/header.php';
                     <div class="d-block d-sm-none">
                         <?php if (!empty($rows)): foreach($rows as $row):
                             $ri = resolve_image_info($row['gambar'] ?? '', 'products');
-                            $thumb = htmlspecialchars($ri['url']);
-                            $thumbExists = $ri['exists'] ? 'Yes' : 'No';
+                            $thumb = $ri['url'] ?: 'assets/img/furniture-img.png';
+                            $thumb = htmlspecialchars($thumb);
+                            $status = htmlspecialchars($row['status'] ?? '');
                         ?>
-                        <div class="card mb-2 shadow-sm">
+                        <div class="card mb-2 admin-mobile-product-card">
                             <div class="row g-0 align-items-center">
-                                    <div class="col-4">
-                                    <img src="<?= $thumb ?>" alt="<?= htmlspecialchars($row['nama_produk']) ?>" class="img-fluid rounded-start" style="height:80px; width:100%; object-fit:cover;">
+                                <div class="col-4">
+                                    <div class="ratio ratio-1x1 rounded-start overflow-hidden">
+                                        <img src="<?= $thumb ?>" alt="<?= htmlspecialchars($row['nama_produk']) ?>" class="object-fit-cover">
+                                    </div>
                                 </div>
-                                                                        <div class="small text-muted">Img exists: <?= $thumbExists ?></div>
                                 <div class="col-8">
-                                    <div class="card-body p-2">
+                                    <div class="card-body py-2 px-3">
                                         <div class="d-flex justify-content-between align-items-start">
-                                            <div class="small fw-bold"><?= htmlspecialchars($row['nama_produk']) ?></div>
-                                            <div class="small text-muted"><?= htmlspecialchars($row['status']) ?></div>
+                                            <div class="fw-semibold product-title small mb-1"><?= htmlspecialchars($row['nama_produk']) ?></div>
+                                            <?php if (strtolower($status) === 'aktif'): ?>
+                                                <span class="badge bg-success">Aktif</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-secondary"><?= $status ?></span>
+                                            <?php endif; ?>
                                         </div>
-                                        <div class="small text-success">Rp <?= number_format($row['harga'],0,',','.') ?></div>
+                                        <div class="text-success fw-bold">Rp <?= number_format($row['harga'],0,',','.') ?></div>
                                         <div class="mt-2 d-flex gap-2">
                                             <a href="product_edit.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-primary flex-fill">Edit</a>
                                             <a href="product_delete.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-danger flex-fill" onclick="return confirm('Hapus produk?')">Hapus</a>
