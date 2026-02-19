@@ -25,3 +25,4 @@ ScrollReveal().reveal(".reveal", {
   origin: "left",
   interval: 100,
 });
+// (Kategori dropdown feature removed) 

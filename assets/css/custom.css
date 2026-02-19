@@ -15,12 +15,14 @@
   font-style: normal;
 }
 .dropdown {
-    position: relative;
-    z-index: 1055;
+  position: relative;
+  z-index: 9999;
 }
 
-.dropdown-menu {
-    z-index: 2000 !important;
+
+.row[data-aos] {
+  position: relative;
+  z-index: auto; /* allow dropdowns appended to body to overlay AOS-animated rows */
 }
 
 body {
@@ -67,26 +69,8 @@ body {
   font-size: 14px;
 }
 
-/* Fix dropdown kategori ketutup produk */
-.dropdown-kategori-products {
-  position: relative;
-  z-index: 1050;
-}
 
-/* Dropdown opens UPWARD */
-.dropdown-kategori-products .dropdown-menu {
-  position: absolute !important;
-  bottom: 100% !important;
-  right: 0 !important;
-  left: auto !important;
-  top: auto !important;
-  z-index: 9999 !important;
-  min-width: 190px;
-  border: none;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15) !important;
-  display: none;
-  margin-bottom: 8px;
-}
+
 
 .dropdown-kategori-products .dropdown-menu.show {
   display: block !important;
@@ -96,10 +80,25 @@ body {
   display: none;
 }
 
-/* On mobile: add bottom margin to products when dropdown is nearby */
-@media (max-width: 768px) {
-  .dropdown-kategori-products .dropdown-menu.show {
-    margin-bottom: 300px;
+/* DESKTOP: Dropdown ke atas */
+@media (min-width: 992px) {
+  .dropdown-kategori-products .dropdown-menu {
+    bottom: 100% !important;
+    top: auto !important;
+    margin-bottom: 8px;
+  }
+}
+
+/* MOBILE: Dropdown ke bawah, produk turun */
+@media (max-width: 991px) {
+  .dropdown-kategori-products .dropdown-menu {
+    top: 100% !important;
+    bottom: auto !important;
+    margin-top: 8px;
+  }
+  
+  #product {
+    margin-top: 250px;
   }
 }
 .capt-desc {
@@ -312,7 +311,10 @@ body {
   padding: 1.5rem;
   z-index: 5;
 }
-
+#product {
+  position: relative;
+  z-index: auto; /* remove stacking priority so global dropdown can appear above */
+}
 @media (max-width: 992px) {
   .carousel-caption { width: 70%; padding: 1rem; }
 }
@@ -320,3 +322,4 @@ body {
   .carousel-caption { position: relative; width: 100%; padding: 0.75rem; }
   .carousel-item.ratio img.object-fit-cover { position: relative; height: auto; }
 }
+/* Dropdown tweaks removed for kategori (kategori feature deleted) */
