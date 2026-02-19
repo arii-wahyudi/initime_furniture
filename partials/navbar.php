@@ -8,8 +8,8 @@
       </a>
       <div class="navbarMenu d-none d-lg-block ms-auto text-dark">
         <a class="nav-link d-inline" href="index.php">Dashboard</a>
-        <a class="nav-link d-inline ps-4" href="about_us.php">Tentang Kami</a>
         <a class="nav-link d-inline ps-4" href="product.php">Produk</a>
+        <a class="nav-link d-inline ps-4" href="about_us.php">Tentang Kami</a>
       </div>
       <button class="btn btn-outline-dark d-lg-none" id="btn-bar">
         <i class="fas fa-bars"></i>

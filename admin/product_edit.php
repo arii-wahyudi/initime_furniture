@@ -28,7 +28,13 @@ include __DIR__ . '/partials/header.php';
                 </div>
                 <div class="card-body">
                     <form action="<?= $id ? 'product_update.php' : 'product_store.php' ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        
+                        <input type="hidden" name="id" value="<?= (int)$id ?>">
 
+                        <div class="mb-3">
+                            <label class="form-label">Nama Produk</label>
+                            <input type="text" name="nama_produk" class="form-control" placeholder="Masukkan nama produk" value="<?= htmlspecialchars($product['nama_produk'] ?? '') ?>" required>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Kategori</label>
                             <select name="id_kategori" class="form-select">

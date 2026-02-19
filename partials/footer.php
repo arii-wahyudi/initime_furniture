@@ -74,8 +74,9 @@ $phone_display = $phone ?? ($settings['whatsapp'] ?? '+62 812 3456 7890');
     <div class="col-lg-2 mt-5 mt-lg-0">
       <h4 class="fw-bold mb-3">Navigation</h4>
       <a href="/" class="nav-link mb-2">Dashboard</a>
+      <a href="product.php" class="nav-link mb-2">Produk</a>
       <a href="about_us.php" class="nav-link mb-2">Tentang Kami</a>
-      <a href="product.php" class="nav-link">Produk</a>
+      <a href="admin/index.php" class="nav-link">Admin</a>
     </div>
     <div class="col-lg-3 mt-5 mt-lg-0">
       <h4 class="fw-bold mb-3">Kategori</h4>
