@@ -92,7 +92,15 @@ include 'partials/header.php';
 <body>
   <?php include 'partials/navbar.php'; ?>
 
-  <div class="container-lg my-5" data-aos="fade-up">
+  <div class="container-lg mt-3 mb-5" data-aos="fade-up">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent p-0 mb-4">
+        <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
+        <?php if ($category): ?><li class="breadcrumb-item"><a href="product.php#product"><?= $category ?></a></li><?php endif; ?>
+        <li class="breadcrumb-item active" aria-current="page"><?= $title ?></li>
+      </ol>
+    </nav>
+
     <div class="row g-4 align-items-start">
       <div class="col-lg-6">
         <div class="card shadow-sm" data-aos="fade-up">
@@ -100,6 +108,22 @@ include 'partials/header.php';
             <img src="<?= htmlspecialchars($img) ?>" alt="<?= $title ?>" class="w-100 object-fit-cover" />
           </div>
         </div>
+      </div>
+
+      <div class="col-lg-6">
+        <h1 class="fw-bold mb-2"><?= $title ?></h1>
+        <p class="mb-2"><span class="badge text-bg-secondary"><?= $category ?></span></p>
+        <h3 class="fw-bold text-success">Rp <?= $price ?></h3>
+
+        <div class="mt-3">
+          <?= nl2br(htmlspecialchars($product['deskripsi'] ?? '')) ?>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+          <a href="https://wa.me/<?= isset($settings['whatsapp']) ? preg_replace('/[^0-9]/', '', $settings['whatsapp']) : '628123456789' ?>?text=Halo%20saya%20ingin%20memesan%20<?= urlencode($product['nama_produk']) ?>" class="btn btn-success wa-link ms-auto" data-product-id="<?= $prod_id ?>">Pesan Via WhatsApp</a>
+          <a href="product.php" class="btn btn-outline-secondary">Kembali</a>
+        </div>
+
         <?php if (!empty($related)): ?>
           <div class="mt-4">
             <h5 class="mb-3">Produk Terkait</h5>
@@ -123,29 +147,6 @@ include 'partials/header.php';
             </div>
           </div>
         <?php endif; ?>
-      </div>
-
-      <div class="col-lg-6">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent p-0 mb-2">
-            <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-            <?php if ($category): ?><li class="breadcrumb-item"><a href="product.php#product"><?= $category ?></a></li><?php endif; ?>
-            <li class="breadcrumb-item active" aria-current="page"><?= $title ?></li>
-          </ol>
-        </nav>
-
-        <h1 class="fw-bold mb-2"><?= $title ?></h1>
-        <p class="mb-2"><span class="badge text-bg-secondary"><?= $category ?></span></p>
-        <h3 class="fw-bold text-success">Rp <?= $price ?></h3>
-
-        <div class="mt-3">
-          <?= nl2br(htmlspecialchars($product['deskripsi'] ?? '')) ?>
-        </div>
-
-        <div class="mt-4 d-flex gap-2">
-          <a href="https://wa.me/<?= isset($settings['whatsapp']) ? preg_replace('/[^0-9]/', '', $settings['whatsapp']) : '628123456789' ?>?text=Halo%20saya%20ingin%20memesan%20<?= urlencode($product['nama_produk']) ?>" class="btn btn-success wa-link ms-auto" data-product-id="<?= $prod_id ?>">Pesan Via WhatsApp</a>
-          <a href="product.php" class="btn btn-outline-secondary">Kembali</a>
-        </div>
 
       </div>
     </div>
