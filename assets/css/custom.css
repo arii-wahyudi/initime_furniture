@@ -194,6 +194,17 @@ body {
   border-radius: 8px;
 }
 
+/* Stronger selector for about-section icon wrapper to prevent accidental overflow */
+.card .p-3.bg-title .img-preview,
+.p-3.bg-title img.img-preview {
+  width: 56px;
+  height: 56px;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 /* Category card images */
 .card-category {
   height: 150px;
