@@ -30,7 +30,7 @@ if ($res2) {
     <?php include __DIR__ . '/partials/topbar.php'; ?>
 
     <main class="admin-main">
-        <div class="container-fluid py-4" style="max-width:1000px;">
+        <div class="container-fluid py-4" style="max-width:1200px;">
             <div class="row g-3">
                 <div class="col-12 col-md-6">
                     <div class="card">
@@ -61,12 +61,14 @@ if ($res2) {
                                                     ?>
                                                     <?php if (!empty($logoUrl)): ?><img id="preview_logo" src="<?= $logoUrl ?>" class="img-preview" style="display:block"><?php else: ?><img id="preview_logo" src="" class="img-preview" style="display:none"><?php endif; ?>
                                                 </div>
-                                                <div class="input-group mb-2">
+                                                <div class="input-group mb-3">
                                                     <input type="file" id="logo_file" name="logo_file" class="form-control" accept="image/*" onchange="previewFile(this, 'preview_logo'); showFilename(this, 'logo_filename')">
                                                 </div>
-                                                <div id="logo_filename" class="input-filename"><?= htmlspecialchars(basename($settings['logo'] ?? '')) ?></div>
-                                                <input type="text" name="logo" class="form-control mt-2" placeholder="Path atau filename logo (opsional)" value="<?= htmlspecialchars($settings['logo'] ?? '') ?>">
-                                                <div class="form-help">Rekomendasi ukuran minimal 200x200px. Jika upload, field path akan diisi otomatis.</div>
+                                                <input type="text" readonly name="logo" class="form-control mt-2 bg-secondary-subtle" placeholder="Path atau filename logo (opsional)" value="<?= htmlspecialchars($settings['logo'] ?? '') ?>">
+                                                <div class="form-help mt-2">Rekomendasi ukuran minimal 200x200px.
+                                                    <br>
+                                                    Jika upload, field path akan diisi otomatis.
+                                                </div>
                                             </div>
                                             <div class="settings-save"><button class="btn btn-primary">Simpan</button></div>
                                         </form>
@@ -232,7 +234,7 @@ if ($res2) {
                             </div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card mt-4">
                         <div class="card-body">
                             <h5 class="card-title">Footer & Sosial</h5>
                             <form action="settings_update.php" method="post">
@@ -278,12 +280,12 @@ if ($res2) {
             reader.readAsDataURL(f);
         }
 
-            function showFilename(input, targetId) {
-                const el = document.getElementById(targetId);
-                if (!el) return;
-                const f = input.files && input.files[0];
-                el.textContent = f ? f.name : '';
-            }
+        function showFilename(input, targetId) {
+            const el = document.getElementById(targetId);
+            if (!el) return;
+            const f = input.files && input.files[0];
+            el.textContent = f ? f.name : '';
+        }
 
         // Rotate chevron on collapse toggle (Bootstrap 5 collapse events)
         document.addEventListener('DOMContentLoaded', function() {

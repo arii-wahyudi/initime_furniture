@@ -10,7 +10,7 @@ include __DIR__ . '/partials/header.php';
     <?php include __DIR__ . '/partials/topbar.php'; ?>
 
     <main class="admin-main">
-        <div class="container-fluid py-4">
+        <div class="container-fluid py-4" style="max-width:1200px;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="mb-0">Kategori Produk</h4>
                 <a href="category_edit.php" class="btn btn-primary btn-sm">Tambah Kategori</a>

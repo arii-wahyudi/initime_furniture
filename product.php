@@ -178,7 +178,9 @@ include 'partials/header.php';
                     <div class="col-6 col-lg-2 g-3">
                         <div class="card shadow h-100">
                             <div class="card-body m-0 p-0">
-                                <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
+                                <div class="ratio ratio-1x1">
+                                    <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="object-fit-cover" />
+                                </div>
                             </div>
                             <div class="card-footer py-3">
                                 <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>

@@ -95,8 +95,8 @@ $res = mysqli_query($conn, "SELECT k.id, k.nama_kategori,
     ) ccnt ON ccnt.kid = k.id
     ORDER BY cnt DESC LIMIT 8");
 if ($res) {
-        while ($r = mysqli_fetch_assoc($res)) $cat_stats[] = $r;
-        mysqli_free_result($res);
+    while ($r = mysqli_fetch_assoc($res)) $cat_stats[] = $r;
+    mysqli_free_result($res);
 }
 ?>
 
@@ -171,12 +171,14 @@ if ($res) {
                     <?php if (empty($recent)): ?>
                         <p class="text-muted small">Belum ada produk.</p>
                     <?php else: ?>
-                        <div class="row g-3">
+                        <div class="row g-3 mt-3">
                             <?php foreach ($recent as $p): ?>
                                 <div class="col-6 col-md-3">
                                     <div class="card h-100">
                                         <?php if (!empty($p['gambar'])): ?>
-                                            <img src="<?= htmlspecialchars(public_image_url($p['gambar'], 'products')) ?>" class="card-img-top" alt="<?= htmlspecialchars($p['nama_produk']) ?>">
+                                            <div class="ratio ratio-1x1">
+                                                <img src="<?= htmlspecialchars(public_image_url($p['gambar'], 'products')) ?>" class="card-img-top object-fit-cover" alt="<?= htmlspecialchars($p['nama_produk']) ?>">
+                                            </div>
                                         <?php endif; ?>
                                         <div class="card-body p-2">
                                             <div class="small text-muted"><?= htmlspecialchars($p['nama_kategori'] ?? '-') ?></div>

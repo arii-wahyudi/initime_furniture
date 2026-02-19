@@ -48,7 +48,7 @@ include 'partials/header.php';
                         </div>
                     </div>
 
-                    <div class="row gy-3 mt-4">
+                    <div class="row g-2 mt-4">
                         <div class="col-6 col-sm-4">
                             <div class="d-flex flex-column">
                                 <small class="text-uppercase text-muted">Tahun Berdiri</small>

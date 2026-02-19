@@ -171,7 +171,9 @@ include 'partials/header.php';
                 <div class="col-2">
                   <?php $exp_icon = public_image_url($settings['about_exp_icon'] ?? '', 'settings'); ?>
                   <?php if (!empty($settings['about_exp_icon']) && !empty($exp_icon)): ?>
-                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($exp_icon) ?>" alt="icon" class="img-preview"></div>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center">
+                      <img src="<?= htmlspecialchars($exp_icon) ?>" alt="icon" class="img-preview" width="30" height="30">
+                    </div>
                   <?php else: ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-couch"></i></div>
                   <?php endif; ?>
@@ -186,7 +188,7 @@ include 'partials/header.php';
                 <div class="col-2">
                   <?php $team_icon = public_image_url($settings['about_team_icon'] ?? '', 'settings'); ?>
                   <?php if (!empty($settings['about_team_icon']) && !empty($team_icon)): ?>
-                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($team_icon) ?>" alt="icon" class="img-preview"></div>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($team_icon) ?>" alt="icon" class="img-preview" width="30" height="30"></div>
                   <?php else: ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-users"></i></div>
                   <?php endif; ?>
@@ -201,7 +203,7 @@ include 'partials/header.php';
                 <div class="col-2">
                   <?php $fast_icon = public_image_url($settings['about_fast_icon'] ?? '', 'settings'); ?>
                   <?php if (!empty($settings['about_fast_icon']) && !empty($fast_icon)): ?>
-                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($fast_icon) ?>" alt="icon" class="img-preview"></div>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($fast_icon) ?>" alt="icon" class="img-preview" width="30" height="30"></div>
                   <?php else: ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-shipping-fast"></i></div>
                   <?php endif; ?>
@@ -232,11 +234,11 @@ include 'partials/header.php';
 
     <div class="row g-2" data-aos="fade-up">
       <?php
-            $default_cat_images = [
-              'assets/img/cat1-ruangtamu.png',
-              'assets/img/cat2-ruangmakan.jpg',
-              'assets/img/cat3-ruangrapat.png'
-            ];
+      $default_cat_images = [
+        'assets/img/cat1-ruangtamu.png',
+        'assets/img/cat2-ruangmakan.jpg',
+        'assets/img/cat3-ruangrapat.png'
+      ];
       if (empty($categories)) {
         echo '<div class="col-12"><p class="text-center">Belum ada kategori.</p></div>';
       } else {
@@ -244,15 +246,15 @@ include 'partials/header.php';
         $display_count = min(count($categories), 3);
         for ($i = 0; $i < $display_count; $i++) {
           $cat = $categories[$i];
-                // prefer category image from DB, fallback to settings/about or default
-                $img = '';
-                if (!empty($cat['image'])) {
-                  $img = public_image_url($cat['image'], 'categories');
-                }
-                if (empty($img)) {
-                  $img = public_image_url($settings['about_image'] ?? '', 'settings');
-                }
-                if (empty($img)) $img = $default_cat_images[$i % count($default_cat_images)];
+          // prefer category image from DB, fallback to settings/about or default
+          $img = '';
+          if (!empty($cat['image'])) {
+            $img = public_image_url($cat['image'], 'categories');
+          }
+          if (empty($img)) {
+            $img = public_image_url($settings['about_image'] ?? '', 'settings');
+          }
+          if (empty($img)) $img = $default_cat_images[$i % count($default_cat_images)];
           $name = htmlspecialchars($cat['nama_kategori']);
           $cid = (int)$cat['id'];
           echo "<div class=\"col-6 col-md-4\">";
@@ -298,7 +300,9 @@ include 'partials/header.php';
           <div class="col-6 col-lg-2 g-3">
             <div class="card shadow h-100">
               <div class="card-body m-0 p-0">
-                <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="w-100" />
+                <div class="ratio ratio-1x1">
+                  <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="object-fit-cover" />
+                </div>
               </div>
               <div class="card-footer py-3">
                 <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
