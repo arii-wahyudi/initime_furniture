@@ -67,7 +67,7 @@ if ($inserted_id && isset($_FILES['additional_images']) && is_array($_FILES['add
             
             $filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
             if ($filename) {
-                add_product_image($inserted_id, $filename, null, $conn);
+                add_product_image($inserted_id, $filename, $conn);
             }
         }
     }

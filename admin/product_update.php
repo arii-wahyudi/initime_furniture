@@ -59,7 +59,7 @@ if (isset($_FILES['additional_images']) && is_array($_FILES['additional_images']
             
             $filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
             if ($filename) {
-                add_product_image($id, $filename, null, $conn);
+                add_product_image($id, $filename, $conn);
             }
         }
     }

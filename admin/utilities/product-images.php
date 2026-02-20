@@ -52,7 +52,7 @@ function get_product_primary_image($id_produk, $conn)
  * Tambah gambar baru untuk produk
  * urutan otomatis = urutan terakhir + 1 (jika null)
  */
-function add_product_image($id_produk, $gambar_filename, $urutan = null, $conn = null)
+function add_product_image($id_produk, $gambar_filename, $conn, $urutan = null)
 {
     $id_produk = intval($id_produk);
     $gambar_filename = mysqli_real_escape_string($conn, $gambar_filename);
