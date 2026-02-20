@@ -127,8 +127,26 @@ include __DIR__ . '/partials/header.php';
                         <!-- Upload Additional Images -->
                         <div class="mb-4">
                             <label class="form-label">Upload Gambar Tambahan <?= !$id ? '(Opsional)' : '' ?></label>
-                            <input type="file" name="additional_images[]" class="form-control" accept="image/*" multiple>
-                            <small class="form-text text-muted">Pilih 1 atau lebih gambar untuk ditambahkan ke produk ini</small>
+                            
+                            <!-- Drag-Drop Zone -->
+                            <div id="dropZone" class="border-2 border-dashed border-primary rounded p-4 text-center mb-3" 
+                                 style="background-color:#f8f9ff;cursor:pointer;transition:all 0.3s ease;min-height:120px;display:flex;align-items:center;justify-content:center;">
+                                <div>
+                                    <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:#0d6efd;"></i>
+                                    <p class="mt-2 mb-0"><strong>Drag gambar ke sini</strong> atau <span style="color:#0d6efd;text-decoration:underline;cursor:pointer;">pilih file</span></p>
+                                    <small class="text-muted">Support: JPG, PNG, WebP (max 5MB per file)</small>
+                                </div>
+                                <input type="file" id="fileInput" name="additional_images[]" class="d-none" accept="image/*" multiple>
+                            </div>
+                            
+                            <!-- Image Preview Cards -->
+                            <div id="previewContainer" class="row g-2">
+                                <!-- Images akan ditambah di sini via JavaScript -->
+                            </div>
+                            
+                            <small class="form-text text-muted d-block mt-2">
+                                💡 <strong>Tips:</strong> Gambar pertama akan menjadi gambar utama. Anda bisa mengubahnya nanti.
+                            </small>
                         </div>
                         <?php else: ?>
                         <!-- For new product, allow multiple images upload from start -->
@@ -136,8 +154,26 @@ include __DIR__ . '/partials/header.php';
                         <h6 class="mb-3">Gambar Tambahan (Opsional)</h6>
                         <div class="mb-4">
                             <label class="form-label">Upload Gambar Tambahan</label>
-                            <input type="file" name="additional_images[]" class="form-control" accept="image/*" multiple>
-                            <small class="form-text text-muted">Anda bisa menambahkan multiple gambar. Semuanya akan disimpan setelah produk dibuat</small>
+                            
+                            <!-- Drag-Drop Zone -->
+                            <div id="dropZone" class="border-2 border-dashed border-primary rounded p-4 text-center mb-3" 
+                                 style="background-color:#f8f9ff;cursor:pointer;transition:all 0.3s ease;min-height:120px;display:flex;align-items:center;justify-content:center;">
+                                <div>
+                                    <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:#0d6efd;"></i>
+                                    <p class="mt-2 mb-0"><strong>Drag gambar ke sini</strong> atau <span style="color:#0d6efd;text-decoration:underline;cursor:pointer;">pilih file</span></p>
+                                    <small class="text-muted">Support: JPG, PNG, WebP (max 5MB per file)</small>
+                                </div>
+                                <input type="file" id="fileInput" name="additional_images[]" class="d-none" accept="image/*" multiple>
+                            </div>
+                            
+                            <!-- Image Preview Cards -->
+                            <div id="previewContainer" class="row g-2">
+                                <!-- Images akan ditambah di sini via JavaScript -->
+                            </div>
+                            
+                            <small class="form-text text-muted d-block mt-2">
+                                💡 <strong>Tips:</strong> Gambar pertama akan menjadi gambar utama. Anda bisa mengubahnya nanti.
+                            </small>
                         </div>
                         <?php endif; ?>
 
@@ -249,6 +285,108 @@ include __DIR__ . '/partials/header.php';
                             btnHapus.disabled = false;
                             aiStatus.textContent = 'Network error';
                         });
+                }
+            });
+        })();
+
+        // Multiple Images Upload Handler
+        (function() {
+            const dropZones = document.querySelectorAll('#dropZone');
+            const fileInputs = document.querySelectorAll('#fileInput');
+            const previewContainers = document.querySelectorAll('#previewContainer');
+
+            const fileListMap = new Map(); // Store selected files per container
+
+            dropZones.forEach((dropZone, index) => {
+                const fileInput = fileInputs[index];
+                const previewContainer = previewContainers[index];
+                fileListMap.set(index, []);
+
+                // Click to open file dialog
+                dropZone.addEventListener('click', () => fileInput.click());
+
+                // Handle file input change
+                fileInput.addEventListener('change', (e) => {
+                    handleFiles(e.target.files, index);
+                });
+
+                // Drag over
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropZone.style.backgroundColor = '#e7f1ff';
+                    dropZone.style.borderColor = '#0d6efd';
+                });
+
+                // Drag leave
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.style.backgroundColor = '#f8f9ff';
+                    dropZone.style.borderColor = 'var(--bs-primary)';
+                });
+
+                // Drop
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.style.backgroundColor = '#f8f9ff';
+                    dropZone.style.borderColor = 'var(--bs-primary)';
+                    handleFiles(e.dataTransfer.files, index);
+                });
+
+                function handleFiles(files, containerIndex) {
+                    const arr = Array.from(files);
+                    const currentFiles = fileListMap.get(containerIndex) || [];
+                    
+                    arr.forEach(file => {
+                        if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) { // 5MB limit
+                            currentFiles.push(file);
+                            renderPreview(file, containerIndex, currentFiles.length - 1);
+                        } else if (!file.type.startsWith('image/')) {
+                            alert('File bukan gambar: ' + file.name);
+                        } else if (file.size > 5 * 1024 * 1024) {
+                            alert('File terlalu besar (> 5MB): ' + file.name);
+                        }
+                    });
+
+                    fileListMap.set(containerIndex, currentFiles);
+                    updateFileInput(containerIndex);
+                }
+
+                function renderPreview(file, containerIndex, index) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const previewContainer = previewContainers[containerIndex];
+                        const card = document.createElement('div');
+                        card.className = 'col-6 col-md-3';
+                        card.innerHTML = `
+                            <div class="card h-100 position-relative" style="overflow:hidden;">
+                                <div class="ratio ratio-1x1">
+                                    <img src="${e.target.result}" class="object-fit-cover" alt="Preview">
+                                </div>
+                                <div class="position-absolute top-0 end-0 p-1">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.col-6').remove()">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body p-2">
+                                    <small class="text-truncate d-block">${file.name}</small>
+                                    <small class="text-muted">${(file.size / 1024).toFixed(0)} KB</small>
+                                </div>
+                            </div>
+                        `;
+                        card.dataset.fileIndex = index;
+                        previewContainer.appendChild(card);
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+                function updateFileInput(containerIndex) {
+                    const fileDataTransfer = new DataTransfer();
+                    const files = fileListMap.get(containerIndex) || [];
+                    
+                    files.forEach(file => {
+                        fileDataTransfer.items.add(file);
+                    });
+
+                    fileInput.files = fileDataTransfer.files;
                 }
             });
         })();
