@@ -63,7 +63,19 @@ if (!$product) {
   exit;
 }
 
-$img = public_image_url($product['gambar'] ?? '');
+// Load gambar produk (multiple images support)
+$product_images = get_product_images($product['id'], $conn);
+if (empty($product_images)) {
+  // Fallback ke gambar lama jika belum migrasi
+  if (!empty($product['gambar'])) {
+    $product_images = [
+      ['id' => 0, 'gambar' => $product['gambar'], 'urutan' => 0, 'is_primary' => 1]
+    ];
+  }
+}
+
+$primary_image = !empty($product_images) ? $product_images[0] : null;
+$img = $primary_image ? public_image_url($primary_image['gambar'] ?? '') : public_image_url($product['gambar'] ?? '');
 $img = str_replace('/project/', '', $img);
 
 $price = isset($product['harga']) ? number_format((float)$product['harga'], 0, ',', '.') : '-';
@@ -103,10 +115,29 @@ include 'partials/header.php';
 
     <div class="row g-4 align-items-start">
       <div class="col-lg-6">
-        <div class="card shadow-sm" data-aos="fade-up">
-          <div class="ratio ratio-1x1">
-            <img src="<?= htmlspecialchars($img) ?>" alt="<?= $title ?>" class="w-100 object-fit-cover" />
+        <!-- Product Image Gallery -->
+        <div class="product-gallery">
+          <div class="gallery-main card shadow-sm">
+            <div class="ratio ratio-1x1">
+              <img id="mainImage" src="<?= htmlspecialchars($img) ?>" alt="<?= $title ?>" class="w-100 object-fit-cover" />
+            </div>
           </div>
+
+          <!-- Thumbnails (if multiple images) -->
+          <?php if (count($product_images) > 1): ?>
+          <div class="gallery-thumbnails mt-3">
+            <div class="d-flex gap-2 flex-wrap">
+              <?php foreach ($product_images as $index => $img_item): ?>
+              <img src="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>"
+                   alt="<?= $title ?>"
+                   class="thumbnail-img <?= $index === 0 ? 'active' : '' ?>"
+                   onclick="changeMainImage(this)"
+                   style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;"
+                   data-image-url="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>">
+              <?php endforeach; ?>
+            </div>
+          </div>
+          <?php endif; ?>
         </div>
       </div>
 
@@ -156,6 +187,33 @@ include 'partials/header.php';
   <?php include 'partials/scripts.php'; ?>
 
   <script>
+    // Gallery thumbnail navigation
+    function changeMainImage(thumbnailElement) {
+      const mainImage = document.getElementById('mainImage');
+      const imageUrl = thumbnailElement.getAttribute('data-image-url') || thumbnailElement.src;
+      mainImage.src = imageUrl;
+      
+      // Update active thumbnail styling
+      document.querySelectorAll('.thumbnail-img').forEach(img => {
+        img.style.borderColor = 'transparent';
+      });
+      thumbnailElement.style.borderColor = '#007bff';
+    }
+
+    // Keyboard navigation for gallery
+    document.addEventListener('keydown', function(e) {
+      const thumbnails = document.querySelectorAll('.thumbnail-img');
+      if (thumbnails.length === 0) return;
+      
+      const activeIndex = Array.from(thumbnails).findIndex(img => img.style.borderColor === 'rgb(0, 123, 255)');
+      
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        if (activeIndex > 0) changeMainImage(thumbnails[activeIndex - 1]);
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        if (activeIndex < thumbnails.length - 1) changeMainImage(thumbnails[activeIndex + 1]);
+      }
+    });
+
     // view event already recorded by global script for modal links; send explicit view here
     (function() {
       try {

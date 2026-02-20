@@ -49,6 +49,7 @@ require __DIR__ . '/utilities/database.php';
 require __DIR__ . '/utilities/file-handler.php';
 require __DIR__ . '/utilities/validation.php';
 require __DIR__ . '/utilities/response.php';
+require __DIR__ . '/utilities/product-images.php';
 
 function check_csrf($token)
 {

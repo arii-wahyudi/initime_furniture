@@ -42,28 +42,58 @@ if ($res) {
 if ($q !== '') {
     // record search interest per returned product (helps determine which products were searched)
     if (!empty($products)) {
-        $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event) VALUES (?, ?)");
-        if ($stmt) {
-            $ev = 'search';
-            $count = 0;
+        // Try to insert with search query if column exists; otherwise fallback to existing behavior.
+        $ev = 'search';
+        $count = 0;
+        $safe_q = mb_substr($q, 0, 250); // limit length
+
+        // Preferred: store id_produk, tipe_event, search_query
+        $stmt = @mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event, search_query) VALUES (?, ?, ?)");
+        $use_query_col = (bool)$stmt;
+
+        if ($use_query_col) {
             foreach ($products as $pr) {
                 if (!isset($pr['id'])) continue;
                 $pid = (int)$pr['id'];
-                mysqli_stmt_bind_param($stmt, 'is', $pid, $ev);
+                mysqli_stmt_bind_param($stmt, 'iss', $pid, $ev, $safe_q);
                 mysqli_stmt_execute($stmt);
                 $count++;
                 if ($count >= 50) break; // avoid too many inserts
             }
             mysqli_stmt_close($stmt);
+        } else {
+            // fallback older schema: only id_produk and tipe_event
+            $stmt2 = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event) VALUES (?, ?)");
+            if ($stmt2) {
+                foreach ($products as $pr) {
+                    if (!isset($pr['id'])) continue;
+                    $pid = (int)$pr['id'];
+                    mysqli_stmt_bind_param($stmt2, 'is', $pid, $ev);
+                    mysqli_stmt_execute($stmt2);
+                    $count++;
+                    if ($count >= 50) break;
+                }
+                mysqli_stmt_close($stmt2);
+            }
         }
     } else {
         // fallback: record generic search event
-        $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
+        // prefer to also record the query text when no products found
+        $safe_q = mb_substr($q, 0, 250);
+        $stmt = @mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event, search_query) VALUES (?, ?) ");
         if ($stmt) {
             $ev = 'search';
-            mysqli_stmt_bind_param($stmt, 's', $ev);
+            mysqli_stmt_bind_param($stmt, 'ss', $ev, $safe_q);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
+        } else {
+            $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
+            if ($stmt) {
+                $ev = 'search';
+                mysqli_stmt_bind_param($stmt, 's', $ev);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+            }
         }
     }
 }
@@ -153,7 +183,14 @@ include 'partials/header.php';
                 </div>
             <?php else: ?>
                 <?php foreach ($products as $p):
-                    $img = public_image_url($p['gambar'] ?? '');
+                    // Get primary image from produk_gambar table if available, fallback to old gambar column
+                    $primary_img = get_product_primary_image($p['id'], $conn);
+                    if ($primary_img) {
+                      $img = public_image_url($primary_img['gambar'] ?? '');
+                    } else {
+                      $img = public_image_url($p['gambar'] ?? '');
+                    }
+                    
                     $price = isset($p['harga']) ? number_format((float)$p['harga'], 0, ',', '.') : '-';
                     $category = isset($p['nama_kategori']) ? htmlspecialchars($p['nama_kategori']) : '';
                     $slug = htmlspecialchars($p['slug'] ?? '');

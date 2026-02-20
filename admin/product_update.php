@@ -38,4 +38,40 @@ db_update(
     'issdsi'
 );
 
+// Handle additional images upload (multiple images support)
+if (isset($_FILES['additional_images']) && is_array($_FILES['additional_images']['tmp_name'])) {
+    $image_count = count($_FILES['additional_images']['tmp_name']);
+    
+    // Get current max order to add new images after
+    $max_order_result = mysqli_query($conn, "SELECT MAX(urutan) as max_order FROM produk_gambar WHERE id_produk = $id");
+    $max_order = 0;
+    if ($max_order_result) {
+        $row = mysqli_fetch_assoc($max_order_result);
+        $max_order = ($row['max_order'] !== null) ? (int)$row['max_order'] : 0;
+    }
+    
+    for ($i = 0; $i < $image_count; $i++) {
+        if ($_FILES['additional_images']['error'][$i] === UPLOAD_ERR_OK) {
+            $tmp_file = $_FILES['additional_images']['tmp_name'][$i];
+            $file_name = $_FILES['additional_images']['name'][$i];
+            $file_type = $_FILES['additional_images']['type'][$i];
+            
+            // Create a temporary array to use with handle_file_upload
+            $tmp_file_array = [
+                'name' => $file_name,
+                'type' => $file_type,
+                'tmp_name' => $tmp_file,
+                'error' => UPLOAD_ERR_OK,
+                'size' => $_FILES['additional_images']['size'][$i]
+            ];
+            
+            $filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
+            if ($filename) {
+                $order = $max_order + $i + 1;
+                add_product_image($id, $filename, $order, 0, $conn);
+            }
+        }
+    }
+}
+
 redirect('products.php');

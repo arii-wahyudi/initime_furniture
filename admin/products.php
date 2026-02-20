@@ -45,12 +45,25 @@ include __DIR__ . '/partials/header.php';
                             </thead>
                             <tbody>
                                 <?php if (!empty($rows)): $i = 1;
-                                    foreach ($rows as $row): ?>
+                                    foreach ($rows as $row): 
+                                        // Get primary image from produk_gambar, fallback to old gambar column
+                                        $primary_img = get_product_primary_image($row['id'], $conn);
+                                        if ($primary_img) {
+                                            $rimg = resolve_image_info($primary_img['gambar'] ?? '', 'products');
+                                        } else {
+                                            $rimg = resolve_image_info($row['gambar'] ?? '', 'products');
+                                        }
+                                        $rthumb = htmlspecialchars($rimg['url']);
+                                        $img_count = count_product_images($row['id'], $conn);
+                                    ?>
                                         <tr>
                                             <td><?= $i++ ?></td>
-                                            <?php $rimg = resolve_image_info($row['gambar'] ?? '', 'products');
-                                            $rthumb = htmlspecialchars($rimg['url']); ?>
-                                            <td><img src="<?= $rthumb ?>" style="width:56px;height:40px;object-fit:cover;border-radius:4px;border:1px solid #eee"></td>
+                                            <td style="position:relative;">
+                                                <img src="<?= $rthumb ?>" style="width:56px;height:40px;object-fit:cover;border-radius:4px;border:1px solid #eee">
+                                                <?php if ($img_count > 1): ?>
+                                                <span class="badge bg-info" style="position:absolute;top:-5px;right:-5px;font-size:0.7rem;"><?= $img_count ?></span>
+                                                <?php endif; ?>
+                                            </td>
                                             <td><?= htmlspecialchars($row['nama_produk']) ?></td>
                                             <td class="d-none d-md-table-cell"><?= htmlspecialchars($row['nama_kategori'] ?? '-') ?></td>
                                             <td class="d-none d-md-table-cell">Rp <?= number_format($row['harga'], 0, ',', '.') ?></td>
@@ -73,17 +86,26 @@ include __DIR__ . '/partials/header.php';
                     <!-- Mobile list (compact cards) -->
                     <div class="d-block d-sm-none">
                         <?php if (!empty($rows)): foreach ($rows as $row):
-                                $ri = resolve_image_info($row['gambar'] ?? '', 'products');
+                                $primary_img = get_product_primary_image($row['id'], $conn);
+                                if ($primary_img) {
+                                    $ri = resolve_image_info($primary_img['gambar'] ?? '', 'products');
+                                } else {
+                                    $ri = resolve_image_info($row['gambar'] ?? '', 'products');
+                                }
                                 $thumb = $ri['url'] ?: 'assets/img/furniture-img.png';
                                 $thumb = htmlspecialchars($thumb);
                                 $status = htmlspecialchars($row['status'] ?? '');
+                                $img_count = count_product_images($row['id'], $conn);
                         ?>
                                 <div class="card mb-2 admin-mobile-product-card">
                                     <div class="row g-0 align-items-center">
-                                        <div class="col-4">
+                                        <div class="col-4" style="position:relative;">
                                             <div class="ratio ratio-1x1 rounded-start overflow-hidden">
                                                 <img src="<?= $thumb ?>" alt="<?= htmlspecialchars($row['nama_produk']) ?>" class="object-fit-cover">
                                             </div>
+                                            <?php if ($img_count > 1): ?>
+                                            <span class="badge bg-info" style="position:absolute;top:3px;right:3px;font-size:0.7rem;"><?= $img_count ?></span>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="col-8">
                                             <div class="card-body py-2 px-3">

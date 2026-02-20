@@ -81,6 +81,57 @@ include __DIR__ . '/partials/header.php';
                             <label class="form-label">Deskripsi</label>
                             <textarea name="deskripsi" class="form-control" rows="4"><?= htmlspecialchars($product['deskripsi'] ?? '') ?></textarea>
                         </div>
+
+                        <!-- Multiple Images Section -->
+                        <?php if ($id): ?>
+                        <hr>
+                        <h6 class="mb-3">Kelola Gambar Produk</h6>
+                        
+                        <!-- Existing Images -->
+                        <?php
+                        $product_images = get_product_images($id, $conn);
+                        if (!empty($product_images)):
+                        ?>
+                        <div class="mb-4">
+                            <label class="form-label">Gambar yang Sudah Ada</label>
+                            <div class="row g-3">
+                                <?php foreach ($product_images as $img_item): ?>
+                                <div class="col-6 col-md-4">
+                                    <div class="card">
+                                        <div class="ratio ratio-1x1">
+                                            <img src="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>" 
+                                                 class="object-fit-cover" 
+                                                 alt="Product image">
+                                        </div>
+                                        <div class="card-body p-2">
+                                            <?php if ($img_item['is_primary']): ?>
+                                            <span class="badge bg-primary mb-2">Gambar Utama</span>
+                                            <?php endif; ?>
+                                            <div class="btn-group d-flex gap-1" role="group" style="font-size:0.85rem;">
+                                                <?php if (!$img_item['is_primary']): ?>
+                                                <a href="product_image_action.php?action=set_primary&id=<?= (int)$img_item['id'] ?>&product_id=<?= (int)$id ?>" 
+                                                   class="btn btn-sm btn-outline-info flex-fill">Set Utama</a>
+                                                <?php endif; ?>
+                                                <a href="product_image_action.php?action=delete&id=<?= (int)$img_item['id'] ?>&product_id=<?= (int)$id ?>" 
+                                                   class="btn btn-sm btn-outline-danger flex-fill"
+                                                   onclick="return confirm('Hapus gambar ini?')">Hapus</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+
+                        <!-- Upload Additional Images -->
+                        <div class="mb-4">
+                            <label class="form-label">Upload Gambar Tambahan</label>
+                            <input type="file" name="additional_images[]" class="form-control" accept="image/*" multiple>
+                            <small class="form-text text-muted">Pilih 1 atau lebih gambar untuk ditambahkan ke produk ini</small>
+                        </div>
+                        <?php endif; ?>
+
                         <button class="btn btn-primary">Simpan</button>
                         <a href="products.php" class="btn btn-secondary">Batal</a>
                     </form>
