@@ -126,9 +126,18 @@ include __DIR__ . '/partials/header.php';
 
                         <!-- Upload Additional Images -->
                         <div class="mb-4">
-                            <label class="form-label">Upload Gambar Tambahan</label>
+                            <label class="form-label">Upload Gambar Tambahan <?= !$id ? '(Opsional)' : '' ?></label>
                             <input type="file" name="additional_images[]" class="form-control" accept="image/*" multiple>
                             <small class="form-text text-muted">Pilih 1 atau lebih gambar untuk ditambahkan ke produk ini</small>
+                        </div>
+                        <?php else: ?>
+                        <!-- For new product, allow multiple images upload from start -->
+                        <hr>
+                        <h6 class="mb-3">Gambar Tambahan (Opsional)</h6>
+                        <div class="mb-4">
+                            <label class="form-label">Upload Gambar Tambahan</label>
+                            <input type="file" name="additional_images[]" class="form-control" accept="image/*" multiple>
+                            <small class="form-text text-muted">Anda bisa menambahkan multiple gambar. Semuanya akan disimpan setelah produk dibuat</small>
                         </div>
                         <?php endif; ?>
 
