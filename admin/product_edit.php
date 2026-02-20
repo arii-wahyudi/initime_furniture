@@ -103,12 +103,12 @@ include __DIR__ . '/partials/header.php';
                                                  class="object-fit-cover" 
                                                  alt="Product image">
                                         </div>
-                                        <div class="card-body p-2">
-                                            <?php if ($img_item['is_primary']): ?>
+                        <div class="card-body p-2">
+                                            <?php if ($img_item['urutan'] == 0): ?>
                                             <span class="badge bg-primary mb-2">Gambar Utama</span>
                                             <?php endif; ?>
                                             <div class="btn-group d-flex gap-1" role="group" style="font-size:0.85rem;">
-                                                <?php if (!$img_item['is_primary']): ?>
+                                                <?php if ($img_item['urutan'] != 0): ?>
                                                 <a href="product_image_action.php?action=set_primary&id=<?= (int)$img_item['id'] ?>&product_id=<?= (int)$id ?>" 
                                                    class="btn btn-sm btn-outline-info flex-fill">Set Utama</a>
                                                 <?php endif; ?>

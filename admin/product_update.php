@@ -42,14 +42,6 @@ db_update(
 if (isset($_FILES['additional_images']) && is_array($_FILES['additional_images']['tmp_name'])) {
     $image_count = count($_FILES['additional_images']['tmp_name']);
     
-    // Get current max order to add new images after
-    $max_order_result = mysqli_query($conn, "SELECT MAX(urutan) as max_order FROM produk_gambar WHERE id_produk = $id");
-    $max_order = 0;
-    if ($max_order_result) {
-        $row = mysqli_fetch_assoc($max_order_result);
-        $max_order = ($row['max_order'] !== null) ? (int)$row['max_order'] : 0;
-    }
-    
     for ($i = 0; $i < $image_count; $i++) {
         if ($_FILES['additional_images']['error'][$i] === UPLOAD_ERR_OK) {
             $tmp_file = $_FILES['additional_images']['tmp_name'][$i];
@@ -67,8 +59,7 @@ if (isset($_FILES['additional_images']) && is_array($_FILES['additional_images']
             
             $filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
             if ($filename) {
-                $order = $max_order + $i + 1;
-                add_product_image($id, $filename, $order, 0, $conn);
+                add_product_image($id, $filename, null, $conn);
             }
         }
     }
