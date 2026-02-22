@@ -52,30 +52,46 @@ if (!empty($preview_ai) && $removebg) {
     }
     log_debug('AI preview processed', ['filename' => $final_filename]);
 } else {
-    if (!isset($_FILES['gambar']) || $_FILES['gambar']['error'] !== UPLOAD_ERR_OK) {
-        $error = 'Gambar diperlukan atau error upload: ' . ($_FILES['gambar']['error'] ?? 'File not provided');
-        log_error($error, ['file_error' => $_FILES['gambar']['error'] ?? null]);
-        die($error);
-    }
+    $used_first_additional_as_main = false;
+    // If main image provided, process it. Otherwise try to use first additional image as main.
+    if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+        log_debug('Processing uploaded main image', [
+            'filename' => $_FILES['gambar']['name'],
+            'size' => $_FILES['gambar']['size'],
+            'type' => $_FILES['gambar']['type']
+        ]);
 
-    // Tambahan debug upload
-    echo '<div style="color:red;font-weight:bold">Error upload gambar: ' . ($_FILES['gambar']['error'] ?? 'File not provided') . '</div>';
-    var_dump($_FILES);
-    die();
-
-    log_debug('Processing uploaded image', [
-        'filename' => $_FILES['gambar']['name'],
-        'size' => $_FILES['gambar']['size'],
-        'type' => $_FILES['gambar']['type']
-    ]);
-    
-    $final_filename = handle_file_upload($_FILES['gambar'], $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
-    if (!$final_filename) {
-        $error = 'Gagal menyimpan file';
-        log_error($error);
-        die($error);
+        $final_filename = handle_file_upload($_FILES['gambar'], $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
+        if (!$final_filename) {
+            $error = 'Gagal menyimpan file utama';
+            log_error($error);
+            die($error);
+        }
+        log_debug('Main file uploaded successfully', ['filename' => $final_filename]);
+    } elseif (isset($_FILES['additional_images']) && !empty($_FILES['additional_images']['tmp_name'][0]) && $_FILES['additional_images']['error'][0] === UPLOAD_ERR_OK) {
+        // Use first additional image as main
+        $tmp_file = $_FILES['additional_images']['tmp_name'][0];
+        $file_name = $_FILES['additional_images']['name'][0];
+        $file_type = $_FILES['additional_images']['type'][0];
+        $file_size = $_FILES['additional_images']['size'][0];
+        $tmp_file_array = [
+            'name' => $file_name,
+            'type' => $file_type,
+            'tmp_name' => $tmp_file,
+            'error' => UPLOAD_ERR_OK,
+            'size' => $file_size
+        ];
+        $final_filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
+        if ($final_filename) {
+            $used_first_additional_as_main = true;
+            log_debug('Used first additional image as main', ['filename' => $final_filename]);
+        } else {
+            log_error('Gagal menyimpan first additional as main');
+        }
+    } else {
+        // No main image provided; final_filename remains null (allowed)
+        log_debug('No main image provided, continuing with null main image');
     }
-    log_debug('File uploaded successfully', ['filename' => $final_filename]);
 }
 
 $slug = slugify($nama) . '-' . bin2hex(random_bytes(4));
@@ -106,6 +122,11 @@ if ($inserted_id && isset($_FILES['additional_images']) && is_array($_FILES['add
     log_debug('Processing additional images', ['count' => $image_count]);
     
     for ($i = 0; $i < $image_count; $i++) {
+        // Skip index 0 if it was used as main
+        if (!empty($used_first_additional_as_main) && $i === 0) {
+            log_debug('Skipping additional image 0 because it was used as main');
+            continue;
+        }
         if ($_FILES['additional_images']['error'][$i] === UPLOAD_ERR_OK) {
             $tmp_file = $_FILES['additional_images']['tmp_name'][$i];
             $file_name = $_FILES['additional_images']['name'][$i];

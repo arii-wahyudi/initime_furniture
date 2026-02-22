@@ -55,11 +55,7 @@ include __DIR__ . '/partials/header.php';
                             <input type="hidden" name="harga" id="harga" value="0">
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Gambar Utama (jpg/png)</label>
-                            <input type="file" name="gambar" id="gambarInput" class="form-control" accept="image/*" required>
-                            <img id="gambarPreview" src="#" style="display:none;width:60px;height:60px;margin-top:10px;object-fit:cover;border-radius:8px;" alt="Preview">
-                        </div>
+                        <!-- main image removed; using additional images grid instead -->
 
                         <div class="mb-3">
                             <label class="form-label">Gambar (jpg/png)</label>
@@ -187,6 +183,7 @@ include __DIR__ . '/partials/header.php';
             });
 
             function renderImageCard(obj) {
+                console.log('renderImageCard for', obj.id, obj.file.name);
                 // obj: { id, file, url }
                 const cardCol = document.createElement('div');
                 cardCol.className = 'col-6 col-md-3';
@@ -210,6 +207,7 @@ include __DIR__ . '/partials/header.php';
                 `;
                 // Insert before add button
                 imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
+                console.log('inserted card for', obj.id, 'into imageGrid children:', imageGrid.children.length);
 
                 // Remove handler
                 cardCol.querySelector('.btn-remove-image').addEventListener('click', function() {
