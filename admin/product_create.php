@@ -153,9 +153,9 @@ include __DIR__ . '/partials/header.php';
                         return;
                     }
                     const id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-                    const url = URL.createObjectURL(file);
-                    selectedFiles.push({id, file, url});
-                    renderImageCard({id, file, url});
+                    // store only file reference to avoid creating object URLs
+                    selectedFiles.push({id, file});
+                    renderImageCard({id, file});
                 });
                 updateFileInput();
             }
@@ -184,67 +184,35 @@ include __DIR__ . '/partials/header.php';
 
             function renderImageCard(obj) {
                 console.log('renderImageCard for', obj.id, obj.file.name);
-                // obj: { id, file, url }
+                // obj: { id, file }
                 const cardCol = document.createElement('div');
-                cardCol.className = 'col-6 col-md-3';
-                // ensure column has visible height if CSS missing
-                cardCol.style.minHeight = '140px';
+                cardCol.className = 'col-12 col-md-6';
                 cardCol.dataset.id = obj.id;
+                // lightweight card: show filename and size only (avoid rendering image data)
+                const fileSizeKb = Math.round(obj.file.size / 1024);
                 cardCol.innerHTML = `
-                    <div class="card position-relative h-100" style="overflow:hidden;">
-                        <div class="ratio ratio-1x1">
-                            <img src="${obj.url}" alt="${obj.file.name}" style="width:100%;height:100%;object-fit:cover;display:block;">
+                    <div class="card p-2 d-flex align-items-center" style="gap:10px;">
+                        <div style="width:56px;height:56px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#6c757d;font-size:24px;">
+                            <i class="fas fa-image"></i>
                         </div>
-                        <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
+                        <div style="flex:1;">
+                            <div class="fw-bold">${escapeHtml(obj.file.name)}</div>
+                            <div class="text-muted" style="font-size:0.85rem">${fileSizeKb} KB</div>
+                        </div>
+                        <div>
                             <button type="button" class="btn btn-sm btn-danger btn-remove-image">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
-                        <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
-                            <button type="button" class="btn btn-sm btn-light w-100 btn-removebg" data-id="${obj.id}">
-                                <i class="fas fa-wand-magic-sparkles"></i> Remove BG
-                            </button>
-                        </div>
                     </div>
                 `;
-                // Insert before add button
                 imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
-                console.log('inserted card for', obj.id, 'into imageGrid children:', imageGrid.children.length);
 
                 // Remove handler
                 cardCol.querySelector('.btn-remove-image').addEventListener('click', function() {
-                    // revoke object URL
-                    URL.revokeObjectURL(obj.url);
-                    // remove from DOM
                     cardCol.remove();
-                    // remove from selectedFiles
                     selectedFiles = selectedFiles.filter(item => item.id !== obj.id);
                     updateFileInput();
-                });
-
-                // Remove BG handler (sends file to preview remove bg)
-                cardCol.querySelector('.btn-removebg').addEventListener('click', function() {
-                    const btn = this;
-                    const item = selectedFiles.find(i => i.id === obj.id);
-                    if (!item) return;
-                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
-                    const fd = new FormData();
-                    fd.append('image', item.file);
-                    fetch('product_preview_removebg.php', { method: 'POST', body: fd, credentials: 'same-origin' })
-                        .then(r => r.json())
-                        .then(j => {
-                            btn.disabled = false;
-                            if (j.ok) {
-                                // update image src with returned data
-                                cardCol.querySelector('img').src = j.data;
-                            } else {
-                                alert('Error: ' + (j.error || 'unknown'));
-                            }
-                            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                        }).catch(err => {
-                            btn.disabled = false; btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                            alert('Network error: ' + err.message);
-                        });
                 });
             }
 
