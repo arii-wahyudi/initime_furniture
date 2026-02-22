@@ -58,6 +58,11 @@ if (!empty($preview_ai) && $removebg) {
         die($error);
     }
 
+    // Tambahan debug upload
+    echo '<div style="color:red;font-weight:bold">Error upload gambar: ' . ($_FILES['gambar']['error'] ?? 'File not provided') . '</div>';
+    var_dump($_FILES);
+    die();
+
     log_debug('Processing uploaded image', [
         'filename' => $_FILES['gambar']['name'],
         'size' => $_FILES['gambar']['size'],
