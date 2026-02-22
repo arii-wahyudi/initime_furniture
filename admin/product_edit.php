@@ -76,7 +76,7 @@ include __DIR__ . '/partials/header.php';
                         <div class="mb-3">
                             <label class="form-label">Gambar (jpg/png)</label>
                             <input id="gambarInput" type="file" name="gambar" class="form-control" accept="image/*">
-                            <div class="form-text">Pilih gambar baru untuk mengganti, biarkan kosong jika tidak ingin mengubah</div>
+                            <div class="form-text">Pilih gambar baru untuk mengganti gambar utama produk</div>
                             <div class="mt-3 text-center">
                                 <?php if (!empty($product['gambar'])): ?>
                                     <img id="previewImage" src="<?= htmlspecialchars(
@@ -89,6 +89,69 @@ include __DIR__ . '/partials/header.php';
                             <input type="hidden" name="removebg" id="removebg_hidden" value="0">
                             <input type="hidden" name="preview_ai_data" id="preview_ai_data" value="">
                             <input type="hidden" name="existing_gambar" value="<?= htmlspecialchars($product['gambar'] ?? '') ?>">
+                        </div>
+
+                        <!-- Multi Images Upload Grid -->
+                        <div class="mb-3">
+                            <label class="form-label">Galeri Gambar Produk</label>
+                            <div class="row g-2" id="imageGrid">
+                                <!-- Existing images (if edit) -->
+                                <?php
+                                $product_images = [];
+                                try {
+                                    if (function_exists('get_product_images')) {
+                                        $product_images = get_product_images($id, $conn);
+                                    }
+                                } catch (Exception $e) {
+                                    // Silently fail
+                                }
+                                
+                                foreach ($product_images as $img_item):
+                                ?>
+                                <div class="col-6 col-md-3" data-image-id="<?= (int)$img_item['id'] ?>">
+                                    <div class="card position-relative h-100" style="overflow:hidden;">
+                                        <div class="ratio ratio-1x1">
+                                            <img src="<?= htmlspecialchars(
+                                                (function_exists('public_image_url')) ? public_image_url($img_item['gambar'] ?? '') : ('../uploads/products/' . ($img_item['gambar'] ?? ''))
+                                            ) ?>" 
+                                                 class="object-fit-cover image-preview" 
+                                                 alt="Product image">
+                                        </div>
+                                        <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
+                                            <button type="button" class="btn btn-sm btn-danger btn-remove" 
+                                                    onclick="removeImage(<?= (int)$img_item['id'] ?>, <?= (int)$id ?>)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
+                                            <button type="button" class="btn btn-sm btn-light w-100 btn-removebg"
+                                                    data-img="<?= htmlspecialchars($img_item['gambar']) ?>"
+                                                    onclick="removeBGImage(this)">
+                                                <i class="fas fa-wand-magic-sparkles"></i> Remove BG
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+
+                                <!-- Add More Button -->
+                                <div class="col-6 col-md-3">
+                                    <div class="card h-100 d-flex align-items-center justify-content-center" 
+                                         id="addImageBtn"
+                                         style="cursor:pointer;border:2px dashed #0d6efd;min-height:200px;background:#f8f9ff;transition:all 0.3s ease;">
+                                        <div class="text-center">
+                                            <i class="fas fa-plus" style="font-size:2.5rem;color:#0d6efd;"></i>
+                                            <p class="mt-2 mb-0"><small class="fw-500">Tambah Gambar</small></p>
+                                        </div>
+                                        <input type="file" id="additionalImagesInput" name="additional_images[]" 
+                                               class="d-none" accept="image/*" multiple>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <small class="form-text text-muted d-block mt-2">
+                                <i class="fas fa-info-circle"></i> Klik + untuk tambah gambar, atau drag ke sini
+                            </small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Deskripsi</label>
@@ -104,6 +167,7 @@ include __DIR__ . '/partials/header.php';
     </main>
 
     <?php 
+    <?php 
     // Safely include scripts
     if (file_exists(__DIR__ . '/partials/scripts.php')) {
         try {
@@ -117,10 +181,6 @@ include __DIR__ . '/partials/header.php';
         (function() {
             const input = document.getElementById('gambarInput');
             const preview = document.getElementById('previewImage');
-            const btnHapus = document.getElementById('btnHapusBg');
-            const removeHidden = document.getElementById('removebg_hidden');
-            const previewField = document.getElementById('preview_ai_data');
-            const aiStatus = document.getElementById('aiStatus');
             const hargaDisplay = document.getElementById('harga_display');
             const hargaHidden = document.getElementById('harga');
 
@@ -144,83 +204,27 @@ include __DIR__ . '/partials/header.php';
                 this.selectionStart = this.selectionEnd = pos;
             });
 
-            function showFilePreview(file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'inline-block';
-                };
-                reader.readAsDataURL(file);
-            }
-
             input.addEventListener('change', function() {
                 const f = input.files && input.files[0];
-                if (previewField) previewField.value = '';
-                if (removeHidden) removeHidden.value = '0';
-                aiStatus.textContent = '';
                 if (f) {
-                    showFilePreview(f);
-                }
-            });
-
-            btnHapus && btnHapus.addEventListener('click', function() {
-                // if a file input has selection, preview that file processed; otherwise try to process existing image by fetching file URL
-                const f = input.files && input.files[0];
-                aiStatus.textContent = 'Memproses...';
-                btnHapus.disabled = true;
-
-                const fd = new FormData();
-                if (f) fd.append('image', f);
-                else {
-                    const existing = document.querySelector('input[name="existing_gambar"]').value || '';
-                    if (!existing) {
-                        btnHapus.disabled = false;
-                        aiStatus.textContent = 'Tidak ada gambar untuk diproses';
-                        return;
-                    }
-                    fetch('../uploads/products/' + existing).then(r => r.blob()).then(b => {
-                        fd.append('image', b, existing);
-                        sendPreview(fd);
-                    }).catch(err => {
-                        btnHapus.disabled = false;
-                        aiStatus.textContent = 'Gagal mengambil gambar';
-                    });
-                    return;
-                }
-                sendPreview(fd);
-
-                function sendPreview(fd) {
-                    fetch('product_preview_removebg.php', {
-                            method: 'POST',
-                            body: fd,
-                            credentials: 'same-origin'
-                        })
-                        .then(r => r.json())
-                        .then(j => {
-                            btnHapus.disabled = false;
-                            if (j.ok) {
-                                preview.src = j.data;
-                                preview.style.display = 'inline-block';
-                                aiStatus.textContent = 'Preview siap';
-                                if (previewField) previewField.value = j.data;
-                                if (removeHidden) removeHidden.value = '1';
-                            } else {
-                                aiStatus.textContent = 'Error: ' + (j.error || 'unknown');
-                            }
-                        }).catch(err => {
-                            btnHapus.disabled = false;
-                            aiStatus.textContent = 'Network error';
-                        });
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'inline-block';
+                    };
+                    reader.readAsDataURL(f);
                 }
             });
         })();
 
-        // Multiple Images Upload Handler - Grid Style (Shopee Seller)
+        // Multiple Images Upload Handler
         (function() {
             const imageGrid = document.getElementById('imageGrid');
             const addImageBtn = document.getElementById('addImageBtn');
             const fileInput = document.getElementById('additionalImagesInput');
             let selectedFiles = [];
+
+            if (!addImageBtn) return; // Skip if grid doesn't exist
 
             // Click button to open file dialog
             addImageBtn.addEventListener('click', () => {
@@ -348,7 +352,7 @@ include __DIR__ . '/partials/header.php';
             });
         }
 
-        // Remove BG for new image (preview)
+        // Remove BG for new image
         function removeBGNewImage(btn, base64Img) {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;

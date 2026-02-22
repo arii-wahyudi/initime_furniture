@@ -51,13 +51,26 @@ include __DIR__ . '/partials/header.php';
 
                         <div class="mb-3">
                             <label class="form-label">Gambar (jpg/png)</label>
-                            <input id="gambarInput" type="file" name="gambar" class="form-control" accept="image/*" required>
-                            <div class="form-text">Upload gambar untuk produk baru</div>
-                            <div class="mt-3 text-center">
-                                <img id="previewImage" src="" alt="Preview" style="max-width:100%; max-height:360px; display:none; border:1px solid #eee; padding:6px; background:#fff;">
+                            <div class="row g-2" id="imageGrid">
+                                <!-- Add More Button -->
+                                <div class="col-6 col-md-3">
+                                    <div class="card h-100 d-flex align-items-center justify-content-center" 
+                                         id="addImageBtn"
+                                         style="cursor:pointer;border:2px dashed #0d6efd;min-height:200px;background:#f8f9ff;transition:all 0.3s ease;">
+                                        <div class="text-center">
+                                            <i class="fas fa-plus" style="font-size:2.5rem;color:#0d6efd;"></i>
+                                            <p class="mt-2 mb-0"><small class="fw-500">Tambah Gambar</small></p>
+                                        </div>
+                                        <input type="file" id="additionalImagesInput" name="additional_images[]" 
+                                               class="d-none" accept="image/*" multiple>
+                                    </div>
+                                </div>
                             </div>
-                            <input type="hidden" name="removebg" id="removebg_hidden" value="0">
-                            <input type="hidden" name="preview_ai_data" id="preview_ai_data" value="">
+
+                            <small class="form-text text-muted d-block mt-2">
+                                <i class="fas fa-info-circle"></i> Klik + untuk tambah gambar, atau drag ke sini
+                            </small>
+                            <input type="hidden" name="additional_images[]" value="">
                         </div>
 
                         <div class="mb-3">
@@ -76,8 +89,6 @@ include __DIR__ . '/partials/header.php';
     <?php include __DIR__ . '/partials/scripts.php'; ?>
     <script>
         (function() {
-            const input = document.getElementById('gambarInput');
-            const preview = document.getElementById('previewImage');
             const hargaDisplay = document.getElementById('harga_display');
             const hargaHidden = document.getElementById('harga');
 
@@ -100,19 +111,137 @@ include __DIR__ . '/partials/header.php';
                 updateHargaFields();
                 this.selectionStart = this.selectionEnd = pos;
             });
+        })();
 
-            input.addEventListener('change', function() {
-                const f = input.files && input.files[0];
-                if (f) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'inline-block';
-                    };
-                    reader.readAsDataURL(f);
+        // Multiple Images Upload Handler
+        (function() {
+            const imageGrid = document.getElementById('imageGrid');
+            const addImageBtn = document.getElementById('addImageBtn');
+            const fileInput = document.getElementById('additionalImagesInput');
+            let selectedFiles = [];
+
+            // Click button to open file dialog
+            addImageBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Drag over grid
+            imageGrid.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                imageGrid.style.backgroundColor = '#e7f1ff';
+            });
+
+            imageGrid.addEventListener('dragleave', () => {
+                imageGrid.style.backgroundColor = '';
+            });
+
+            // Drop files
+            imageGrid.addEventListener('drop', (e) => {
+                e.preventDefault();
+                imageGrid.style.backgroundColor = '';
+                handleFiles(e.dataTransfer.files);
+            });
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+
+            function handleFiles(files) {
+                const arr = Array.from(files);
+                
+                arr.forEach(file => {
+                    if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
+                        selectedFiles.push(file);
+                        renderImageCard(file);
+                    } else if (!file.type.startsWith('image/')) {
+                        alert('File bukan gambar: ' + file.name);
+                    } else {
+                        alert('File terlalu besar (> 5MB): ' + file.name);
+                    }
+                });
+
+                updateFileInput();
+            }
+
+            function renderImageCard(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const cardCol = document.createElement('div');
+                    cardCol.className = 'col-6 col-md-3';
+                    cardCol.innerHTML = `
+                        <div class="card position-relative h-100" style="overflow:hidden;">
+                            <div class="ratio ratio-1x1">
+                                <img src="${e.target.result}" class="object-fit-cover image-preview" alt="${file.name}">
+                            </div>
+                            <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.col-6').remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
+                                <button type="button" class="btn btn-sm btn-light w-100 btn-removebg" 
+                                        onclick="removeBGNewImage(this, '${e.target.result}')">
+                                    <i class="fas fa-wand-magic-sparkles"></i> Remove BG
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Insert before add button
+                    imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function updateFileInput() {
+                const dataTransfer = new DataTransfer();
+                selectedFiles.forEach(file => {
+                    dataTransfer.items.add(file);
+                });
+                fileInput.files = dataTransfer.files;
+            }
+
+            // Keep add button always at end
+            const observer = new MutationObserver(() => {
+                if (addImageBtn && addImageBtn.parentElement && imageGrid.contains(addImageBtn.parentElement)) {
+                    imageGrid.appendChild(addImageBtn.parentElement);
                 }
             });
+            observer.observe(imageGrid, { childList: true });
         })();
+
+        // Remove BG for new image
+        function removeBGNewImage(btn, base64Img) {
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('image', base64Img);
+
+            fetch('product_preview_removebg.php', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.ok) {
+                    btn.closest('.card').querySelector('img').src = data.data;
+                    btn.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
+                    }, 1500);
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown'));
+                }
+                btn.disabled = false;
+            })
+            .catch(err => {
+                alert('Error: ' + err.message);
+                btn.disabled = false;
+            });
+        }
     </script>
 </body>
 
