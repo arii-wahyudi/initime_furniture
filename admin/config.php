@@ -2,6 +2,12 @@
 // Admin config: session, CSRF token, DB connection and helpers.
 session_start();
 
+// Enable error logging
+define('DEBUG_MODE', true); // Set ke false di production
+ini_set('display_errors', '0'); // Jangan tampilkan di layar
+ini_set('log_errors', '1');
+ini_set('error_log', __DIR__ . '/../../logs/php-error.log');
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -45,6 +51,7 @@ $ADMIN_USERNAME = 'admin';
 $ADMIN_PASSWORD = 'admin123';
 
 // Load utility functions
+require __DIR__ . '/utilities/logger.php';
 require __DIR__ . '/utilities/database.php';
 require __DIR__ . '/utilities/file-handler.php';
 require __DIR__ . '/utilities/validation.php';
