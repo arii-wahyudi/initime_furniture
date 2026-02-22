@@ -133,21 +133,23 @@ include __DIR__ . '/partials/header.php';
 
                 function handleFiles(files) {
                     const arr = Array.from(files);
-                    const maxImages = 10;
-                    if (selectedFiles.length + arr.length > maxImages) {
-                        alert('Maksimal upload 10 gambar!');
+                    // TEST: Preview hanya 1 gambar dulu
+                    if (arr.length > 1) {
+                        alert('Untuk tes, upload 1 gambar dulu!');
                         return;
                     }
-                    arr.forEach(file => {
-                        if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
-                            selectedFiles.push(file);
-                            renderImageCard(file);
-                        } else if (!file.type.startsWith('image/')) {
-                            alert('File bukan gambar: ' + file.name);
-                        } else {
-                            alert('File terlalu besar (> 5MB): ' + file.name);
-                        }
-                    });
+                    const file = arr[0];
+                    if (!file) return;
+                    if (!file.type.startsWith('image/')) {
+                        alert('File bukan gambar: ' + file.name);
+                        return;
+                    }
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('File terlalu besar (> 2MB): ' + file.name);
+                        return;
+                    }
+                    selectedFiles.push(file);
+                    renderImageCard(file);
                     updateFileInput();
                 }
 
