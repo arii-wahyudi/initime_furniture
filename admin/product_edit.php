@@ -1,15 +1,29 @@
 <?php
-require __DIR__ . '/config.php';
-require_admin();
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+try {
+    require __DIR__ . '/config.php';
+    require_admin();
+} catch (Exception $e) {
+    die('Error: ' . htmlspecialchars($e->getMessage()));
+}
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $product = null;
 if ($id) {
-    $q = mysqli_prepare($conn, "SELECT * FROM produk WHERE id = ? LIMIT 1");
-    mysqli_stmt_bind_param($q, 'i', $id);
-    mysqli_stmt_execute($q);
-    $res = mysqli_stmt_get_result($q);
-    $product = mysqli_fetch_assoc($res);
+    try {
+        $q = mysqli_prepare($conn, "SELECT * FROM produk WHERE id = ? LIMIT 1");
+        if (!$q) throw new Exception("Prepare failed: " . mysqli_error($conn));
+        
+        mysqli_stmt_bind_param($q, 'i', $id);
+        if (!mysqli_stmt_execute($q)) throw new Exception("Execute failed: " . mysqli_error($conn));
+        
+        $res = mysqli_stmt_get_result($q);
+        $product = mysqli_fetch_assoc($res);
+    } catch (Exception $e) {
+        echo "Error loading product: " . htmlspecialchars($e->getMessage());
+    }
 }
 
 $title = $id ? 'Edit Produk - Admin' : 'Tambah Produk - Admin';
