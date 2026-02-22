@@ -10,6 +10,12 @@ include __DIR__ . '/partials/header.php';
 ?>
 
 <body class="bg-light">
+    <div id="loadingOverlay" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;">
+        <div style="text-align:center;">
+            <div class="spinner-border text-primary" style="width:3rem;height:3rem;"></div>
+            <div class="mt-3 fw-bold">Sedang memproses...</div>
+        </div>
+    </div>
     <?php include __DIR__ . '/partials/sidebar.php'; ?>
     <?php include __DIR__ . '/partials/topbar.php'; ?>
 
@@ -20,7 +26,7 @@ include __DIR__ . '/partials/header.php';
                     <h5 class="card-title">Tambah Produk Baru</h5>
                 </div>
                 <div class="card-body">
-                    <form action="product_store.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="product_store.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate onsubmit="showLoadingOverlay()">
                         
                         <div class="mb-3">
                             <label class="form-label">Nama Produk</label>
@@ -185,6 +191,7 @@ include __DIR__ . '/partials/header.php';
             }
 
             function renderImageCard(file) {
+                showLoadingOverlay();
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const cardCol = document.createElement('div');
@@ -210,7 +217,9 @@ include __DIR__ . '/partials/header.php';
                     
                     // Insert before add button
                     imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
+                    hideLoadingOverlay();
                 };
+                reader.onerror = function() { hideLoadingOverlay(); };
                 reader.readAsDataURL(file);
             }
 
@@ -261,6 +270,13 @@ include __DIR__ . '/partials/header.php';
                 alert('Error: ' + err.message);
                 btn.disabled = false;
             });
+        }
+
+        function showLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        function hideLoadingOverlay() {
+            document.getElementById('loadingOverlay').style.display = 'none';
         }
     </script>
 </body>
