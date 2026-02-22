@@ -186,23 +186,6 @@ include __DIR__ . '/partials/header.php';
                 handleFiles(e.target.files);
             });
 
-            function handleFiles(files) {
-                const arr = Array.from(files);
-                
-                arr.forEach(file => {
-                    if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
-                        selectedFiles.push(file);
-                        renderImageCard(file);
-                    } else if (!file.type.startsWith('image/')) {
-                        alert('File bukan gambar: ' + file.name);
-                    } else {
-                        alert('File terlalu besar (> 5MB): ' + file.name);
-                    }
-                });
-
-                updateFileInput();
-            }
-
             function renderImageCard(obj) {
                 // obj: { id, file, url }
                 const cardCol = document.createElement('div');
