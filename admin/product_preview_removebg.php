@@ -29,13 +29,17 @@ curl_setopt($ch, CURLOPT_POST, true);
 $cfile = new CURLFile($tmp, mime_content_type($tmp), basename($_FILES['image']['name']));
 curl_setopt($ch, CURLOPT_POSTFIELDS, ['image_file' => $cfile, 'size' => 'auto']);
 curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-Api-Key: ' . $REMOVE_BG_API_KEY]);
+curl_setopt($ch, CURLOPT_TIMEOUT, 15); // 15 detik timeout
 $result = curl_exec($ch);
 $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $err = curl_error($ch);
 curl_close($ch);
 
 if ($http !== 200 || !$result) {
-    echo json_encode(['ok' => 0, 'error' => 'Remove.bg error', 'http' => $http, 'curl_error' => $err]);
+    $msg = 'Remove.bg error';
+    if ($err) $msg .= ' (curl: ' . $err . ')';
+    if ($http !== 200) $msg .= ' (HTTP: ' . $http . ')';
+    echo json_encode(['ok' => 0, 'error' => $msg, 'http' => $http, 'curl_error' => $err]);
     exit;
 }
 
