@@ -9,20 +9,41 @@ try {
     die('Error: ' . htmlspecialchars($e->getMessage()));
 }
 
+// Fallback: cek apakah function get_product_images ada
+if (!function_exists('get_product_images')) {
+    function get_product_images($id_produk, $conn) {
+        return []; // Return empty jika function tidak ada
+    }
+}
+
+if (!function_exists('public_image_url')) {
+    function public_image_url($img, $subdir = 'products') {
+        if (strpos($img, 'http') === 0) return $img;
+        return (strpos($img, 'uploads/') === 0) ? $img : ('uploads/' . $subdir . '/' . $img);
+    }
+}
+
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $product = null;
+
 if ($id) {
     try {
         $q = mysqli_prepare($conn, "SELECT * FROM produk WHERE id = ? LIMIT 1");
-        if (!$q) throw new Exception("Prepare failed: " . mysqli_error($conn));
+        if (!$q) {
+            throw new Exception("Prepare failed: " . mysqli_error($conn));
+        }
         
         mysqli_stmt_bind_param($q, 'i', $id);
-        if (!mysqli_stmt_execute($q)) throw new Exception("Execute failed: " . mysqli_error($conn));
+        if (!mysqli_stmt_execute($q)) {
+            throw new Exception("Execute failed: " . mysqli_error($conn));
+        }
         
         $res = mysqli_stmt_get_result($q);
         $product = mysqli_fetch_assoc($res);
+        mysqli_stmt_close($q);
     } catch (Exception $e) {
         echo "Error loading product: " . htmlspecialchars($e->getMessage());
+        $product = null;
     }
 }
 
@@ -103,7 +124,13 @@ include __DIR__ . '/partials/header.php';
                         
                         <!-- Existing Images -->
                         <?php
-                        $product_images = get_product_images($id, $conn);
+                        $product_images = [];
+                        try {
+                            $product_images = get_product_images($id, $conn);
+                        } catch (Exception $e) {
+                            // Silently fail - tabel mungkin belum ada
+                        }
+                        
                         if (!empty($product_images)):
                         ?>
                         <div class="mb-4">
@@ -117,12 +144,12 @@ include __DIR__ . '/partials/header.php';
                                                  class="object-fit-cover" 
                                                  alt="Product image">
                                         </div>
-                        <div class="card-body p-2">
-                                            <?php if ($img_item['urutan'] == 0): ?>
+                                        <div class="card-body p-2">
+                                            <?php if (isset($img_item['urutan']) && $img_item['urutan'] == 0): ?>
                                             <span class="badge bg-primary mb-2">Gambar Utama</span>
                                             <?php endif; ?>
                                             <div class="btn-group d-flex gap-1" role="group" style="font-size:0.85rem;">
-                                                <?php if ($img_item['urutan'] != 0): ?>
+                                                <?php if (!isset($img_item['urutan']) || $img_item['urutan'] != 0): ?>
                                                 <a href="product_image_action.php?action=set_primary&id=<?= (int)$img_item['id'] ?>&product_id=<?= (int)$id ?>" 
                                                    class="btn btn-sm btn-outline-info flex-fill">Set Utama</a>
                                                 <?php endif; ?>
@@ -146,8 +173,14 @@ include __DIR__ . '/partials/header.php';
                                 <!-- Existing images (if edit) -->
                                 <?php if ($id): ?>
                                     <?php
-                                    $product_images = get_product_images($id, $conn);
-                                    foreach ($product_images as $img_item):
+                                    $product_images_grid = [];
+                                    try {
+                                        $product_images_grid = get_product_images($id, $conn);
+                                    } catch (Exception $e) {
+                                        // Silently fail
+                                    }
+                                    
+                                    foreach ($product_images_grid as $img_item):
                                     ?>
                                     <div class="col-6 col-md-3" data-image-id="<?= (int)$img_item['id'] ?>">
                                         <div class="card position-relative h-100" style="overflow:hidden;">
