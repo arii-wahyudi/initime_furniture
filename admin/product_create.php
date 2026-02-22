@@ -26,7 +26,7 @@ include __DIR__ . '/partials/header.php';
                     <h5 class="card-title">Tambah Produk Baru</h5>
                 </div>
                 <div class="card-body">
-                    <form action="product_store.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate onsubmit="showLoadingOverlay()">
+                    <form id="productForm" action="product_store.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                         
                         <div class="mb-3">
                             <label class="form-label">Nama Produk</label>
@@ -132,45 +132,29 @@ include __DIR__ . '/partials/header.php';
                 .replace(/'/g, '&#39;');
         }
 
-        // Multiple Images Upload Handler
+        // Multiple Images Upload Handler - Simplified & Robust
         (function() {
             const imageGrid = document.getElementById('imageGrid');
             const addImageBtn = document.getElementById('addImageBtn');
             const fileInput = document.getElementById('additionalImagesInput');
-            // selectedFiles stores objects: { id: string, file: File, url: string }
-            let selectedFiles = [];
+            const form = document.getElementById('productForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            const MAX_IMAGES = 10;
+            const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+            const selectedFiles = new Map(); // id => File
 
             // Click button to open file dialog
-                addImageBtn.addEventListener('click', () => {
-                    fileInput.click();
-                });
+            addImageBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
 
-            function handleFiles(files) {
-                const arr = Array.from(files);
-                const maxImages = 10;
-                if (selectedFiles.length + arr.length > maxImages) {
-                    alert('Maksimal upload 10 gambar!');
-                    return;
-                }
-                arr.forEach(file => {
-                    if (!file) return;
-                    if (!file.type.startsWith('image/')) {
-                        alert('File bukan gambar: ' + file.name);
-                        return;
-                    }
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert('File terlalu besar (> 2MB): ' + file.name);
-                        return;
-                    }
-                    const id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-                    // store only file reference to avoid creating object URLs
-                    selectedFiles.push({id, file});
-                    renderImageCard({id, file});
-                });
-                updateFileInput();
-            }
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
 
-            // Drag over grid
+            // Drag and drop
             imageGrid.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 imageGrid.style.backgroundColor = '#e7f1ff';
@@ -180,71 +164,128 @@ include __DIR__ . '/partials/header.php';
                 imageGrid.style.backgroundColor = '';
             });
 
-            // Drop files
             imageGrid.addEventListener('drop', (e) => {
                 e.preventDefault();
                 imageGrid.style.backgroundColor = '';
                 handleFiles(e.dataTransfer.files);
             });
 
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-            });
+            function handleFiles(files) {
+                const arr = Array.from(files);
+                
+                // Validate total count
+                if (selectedFiles.size + arr.length > MAX_IMAGES) {
+                    alert(`Maksimal ${MAX_IMAGES} gambar! Saat ini: ${selectedFiles.size}`);
+                    return;
+                }
 
-            function renderImageCard(obj) {
-                // renderImageCard for id: obj.id
-                // obj: { id, file }
+                let validCount = 0;
+                arr.forEach(file => {
+                    if (!file.type.startsWith('image/')) {
+                        alert(`❌ ${file.name}: Bukan file gambar`);
+                        return;
+                    }
+                    if (file.size > MAX_FILE_SIZE) {
+                        alert(`❌ ${file.name}: Terlalu besar (> 5MB)`);
+                        return;
+                    }
+                    
+                    const id = 'img_' + Date.now() + '_' + validCount;
+                    selectedFiles.set(id, file);
+                    renderImageCard(id, file);
+                    validCount++;
+                });
+            }
+
+            function renderImageCard(id, file) {
                 const cardCol = document.createElement('div');
-                cardCol.className = 'col-12 col-md-6';
-                cardCol.dataset.id = obj.id;
-                // lightweight card: show filename and size only (avoid rendering image data)
-                const fileSizeKb = Math.round(obj.file.size / 1024);
+                cardCol.className = 'col-6 col-md-3';
+                cardCol.dataset.id = id;
+                
+                const sizeKb = Math.round(file.size / 1024);
+                const preview = file.type === 'image/jpeg' || file.type === 'image/png' ? 
+                    '📷' : '🖼️';
+                
                 cardCol.innerHTML = `
-                    <div class="card p-2 d-flex align-items-center" style="gap:10px;">
-                        <div style="width:56px;height:56px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;border-radius:6px;color:#6c757d;font-size:24px;">
-                            <i class="fas fa-image"></i>
+                    <div class="card h-100 position-relative" style="overflow:hidden;">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height:150px;">
+                            <div class="text-center">
+                                <div style="font-size:40px;">${preview}</div>
+                                <small class="text-muted d-block text-truncate px-2">${escapeHtml(file.name)}</small>
+                                <small class="text-muted">${sizeKb}KB</small>
+                            </div>
                         </div>
-                        <div style="flex:1;">
-                            <div class="fw-bold">${escapeHtml(obj.file.name)}</div>
-                            <div class="text-muted" style="font-size:0.85rem">${fileSizeKb} KB</div>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-sm btn-danger btn-remove-image">
+                        <div class="position-absolute top-0 end-0">
+                            <button type="button" class="btn btn-sm btn-danger btn-remove-image" 
+                                    onclick="removeImageCard('${id}')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                     </div>
                 `;
+                
                 imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
-
-                // Remove handler
-                cardCol.querySelector('.btn-remove-image').addEventListener('click', function() {
-                    cardCol.remove();
-                    selectedFiles = selectedFiles.filter(item => item.id !== obj.id);
-                    updateFileInput();
-                });
             }
 
-            function updateFileInput() {
-                const dataTransfer = new DataTransfer();
-                selectedFiles.forEach(item => {
-                    dataTransfer.items.add(item.file);
-                });
-                fileInput.files = dataTransfer.files;
-                console.log('updateFileInput set', fileInput.files.length, fileInput.files);
-            }
+            window.removeImageCard = function(id) {
+                selectedFiles.delete(id);
+                document.querySelector(`[data-id="${id}"]`)?.remove();
+            };
 
-            // Keep add button always at end
-            const observer = new MutationObserver(() => {
-                if (addImageBtn && addImageBtn.parentElement && imageGrid.contains(addImageBtn.parentElement)) {
-                    imageGrid.appendChild(addImageBtn.parentElement);
+            // Form submit handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (selectedFiles.size === 0) {
+                    alert('Pilih minimal 1 gambar');
+                    return;
                 }
+
+                // Build FormData dari form
+                const formData = new FormData(form);
+                
+                // Clear existing file input
+                formData.delete('additional_images[]');
+                
+                // Add selected files properly
+                selectedFiles.forEach((file) => {
+                    formData.append('additional_images[]', file);
+                });
+
+                // Show loading
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'flex';
+                }
+
+                // Submit form
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Server error: ' + response.status);
+                    return response.text();
+                })
+                .then(html => {
+                    // Check for error messages
+                    if (html.includes('Gagal') || html.includes('Error') || html.includes('error')) {
+                        alert('⚠️ Terjadi kesalahan. Cek console untuk detail.');
+                        console.error('Server response:', html.substring(0, 500));
+                        if (loadingOverlay) loadingOverlay.style.display = 'none';
+                    } else {
+                        // Success - redirect
+                        window.location.href = 'products.php';
+                    }
+                })
+                .catch(err => {
+                    alert('❌ Network error: ' + err.message);
+                    console.error(err);
+                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+                });
             });
-            observer.observe(imageGrid, { childList: true });
         })();
 
-        // Remove BG for new image
+        // Remove BG for new image (if needed)
         function removeBGNewImage(btn, base64Img) {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;
@@ -274,13 +315,6 @@ include __DIR__ . '/partials/header.php';
                 alert('Error: ' + err.message);
                 btn.disabled = false;
             });
-        }
-
-        function showLoadingOverlay() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
-        function hideLoadingOverlay() {
-            document.getElementById('loadingOverlay').style.display = 'none';
         }
     </script>
 </body>
