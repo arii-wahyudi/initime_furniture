@@ -2,52 +2,34 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-try {
-    require __DIR__ . '/config.php';
-    require_admin();
-} catch (Exception $e) {
-    die('Error: ' . htmlspecialchars($e->getMessage()));
-}
-
-// Fallback: cek apakah function get_product_images ada
-if (!function_exists('get_product_images')) {
-    function get_product_images($id_produk, $conn) {
-        return []; // Return empty jika function tidak ada
-    }
-}
-
-if (!function_exists('public_image_url')) {
-    function public_image_url($img, $subdir = 'products') {
-        if (strpos($img, 'http') === 0) return $img;
-        return (strpos($img, 'uploads/') === 0) ? $img : ('uploads/' . $subdir . '/' . $img);
-    }
-}
+require __DIR__ . '/config.php';
+require_admin();
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$product = null;
-
-if ($id) {
-    try {
-        $q = mysqli_prepare($conn, "SELECT * FROM produk WHERE id = ? LIMIT 1");
-        if (!$q) {
-            throw new Exception("Prepare failed: " . mysqli_error($conn));
-        }
-        
-        mysqli_stmt_bind_param($q, 'i', $id);
-        if (!mysqli_stmt_execute($q)) {
-            throw new Exception("Execute failed: " . mysqli_error($conn));
-        }
-        
-        $res = mysqli_stmt_get_result($q);
-        $product = mysqli_fetch_assoc($res);
-        mysqli_stmt_close($q);
-    } catch (Exception $e) {
-        echo "Error loading product: " . htmlspecialchars($e->getMessage());
-        $product = null;
-    }
+if (!$id) {
+    die('ID produk tidak valid. <a href="products.php">Kembali ke daftar produk</a>');
 }
 
-$title = $id ? 'Edit Produk - Admin' : 'Tambah Produk - Admin';
+// Fetch product
+$q = mysqli_prepare($conn, "SELECT * FROM produk WHERE id = ? LIMIT 1");
+if (!$q) {
+    die('Database error: ' . htmlspecialchars(mysqli_error($conn)));
+}
+
+mysqli_stmt_bind_param($q, 'i', $id);
+if (!mysqli_stmt_execute($q)) {
+    die('Database error: ' . htmlspecialchars(mysqli_error($conn)));
+}
+
+$res = mysqli_stmt_get_result($q);
+$product = mysqli_fetch_assoc($res);
+mysqli_stmt_close($q);
+
+if (!$product) {
+    die('Produk tidak ditemukan. <a href="products.php">Kembali ke daftar produk</a>');
+}
+
+$title = 'Edit Produk - Admin';
 include __DIR__ . '/partials/header.php';
 ?>
 
@@ -59,10 +41,10 @@ include __DIR__ . '/partials/header.php';
         <div class="container-fluid py-4" style="max-width:900px;">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title"><?= $id ? 'Edit Produk' : 'Tambah Produk' ?></h5>
+                    <h5 class="card-title">Edit Produk: <?= htmlspecialchars($product['nama_produk']) ?></h5>
                 </div>
                 <div class="card-body">
-                    <form action="<?= $id ? 'product_update.php' : 'product_store.php' ?>" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <form action="product_update.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                         
                         <input type="hidden" name="id" value="<?= (int)$id ?>">
 
@@ -94,19 +76,15 @@ include __DIR__ . '/partials/header.php';
                         <div class="mb-3">
                             <label class="form-label">Gambar (jpg/png)</label>
                             <input id="gambarInput" type="file" name="gambar" class="form-control" accept="image/*">
-                            <div class="form-text">Pilih gambar baru untuk mengganti, atau gunakan tombol Hapus BG untuk memproses gambar saat ini.</div>
+                            <div class="form-text">Pilih gambar baru untuk mengganti, biarkan kosong jika tidak ingin mengubah</div>
                             <div class="mt-3 text-center">
                                 <?php if (!empty($product['gambar'])): ?>
                                     <img id="previewImage" src="<?= htmlspecialchars(
-                                                                    (strpos($product['gambar'], 'http') === 0) ? $product['gambar'] : ('../uploads/products/' . $product['gambar'])
-                                                                ) ?>" alt="Preview" style="max-width:100%; max-height:360px; display:inline-block; border:1px solid #eee; padding:6px; background:#fff;">
+                                        (strpos($product['gambar'], 'http') === 0) ? $product['gambar'] : ('../uploads/products/' . $product['gambar'])
+                                    ) ?>" alt="Preview" style="max-width:100%; max-height:360px; display:inline-block; border:1px solid #eee; padding:6px; background:#fff;">
                                 <?php else: ?>
                                     <img id="previewImage" src="" alt="Preview" style="max-width:100%; max-height:360px; display:none; border:1px solid #eee; padding:6px; background:#fff;">
                                 <?php endif; ?>
-                                <div class="mt-2">
-                                    <button id="btnHapusBg" type="button" class="btn btn-sm btn-outline-primary">Hapus BG</button>
-                                    <span id="aiStatus" class="small text-muted ms-2"></span>
-                                </div>
                             </div>
                             <input type="hidden" name="removebg" id="removebg_hidden" value="0">
                             <input type="hidden" name="preview_ai_data" id="preview_ai_data" value="">
@@ -117,126 +95,24 @@ include __DIR__ . '/partials/header.php';
                             <textarea name="deskripsi" class="form-control" rows="4"><?= htmlspecialchars($product['deskripsi'] ?? '') ?></textarea>
                         </div>
 
-                        <!-- Multiple Images Section -->
-                        <?php if ($id): ?>
-                        <hr>
-                        <h6 class="mb-3">Kelola Gambar Produk</h6>
-                        
-                        <!-- Existing Images -->
-                        <?php
-                        $product_images = [];
-                        try {
-                            $product_images = get_product_images($id, $conn);
-                        } catch (Exception $e) {
-                            // Silently fail - tabel mungkin belum ada
-                        }
-                        
-                        if (!empty($product_images)):
-                        ?>
-                        <div class="mb-4">
-                            <label class="form-label">Gambar yang Sudah Ada</label>
-                            <div class="row g-3">
-                                <?php foreach ($product_images as $img_item): ?>
-                                <div class="col-6 col-md-4">
-                                    <div class="card">
-                                        <div class="ratio ratio-1x1">
-                                            <img src="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>" 
-                                                 class="object-fit-cover" 
-                                                 alt="Product image">
-                                        </div>
-                                        <div class="card-body p-2">
-                                            <?php if (isset($img_item['urutan']) && $img_item['urutan'] == 0): ?>
-                                            <span class="badge bg-primary mb-2">Gambar Utama</span>
-                                            <?php endif; ?>
-                                            <div class="btn-group d-flex gap-1" role="group" style="font-size:0.85rem;">
-                                                <?php if (!isset($img_item['urutan']) || $img_item['urutan'] != 0): ?>
-                                                <a href="product_image_action.php?action=set_primary&id=<?= (int)$img_item['id'] ?>&product_id=<?= (int)$id ?>" 
-                                                   class="btn btn-sm btn-outline-info flex-fill">Set Utama</a>
-                                                <?php endif; ?>
-                                                <a href="product_image_action.php?action=delete&id=<?= (int)$img_item['id'] ?>&product_id=<?= (int)$id ?>" 
-                                                   class="btn btn-sm btn-outline-danger flex-fill"
-                                                   onclick="return confirm('Hapus gambar ini?')">Hapus</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-
-                        <!-- Upload Images - Grid Style Shopee Seller -->
-                        <div class="mb-4">
-                            <label class="form-label">Gambar</label>
-                            
-                            <div class="row g-2" id="imageGrid">
-                                <!-- Existing images (if edit) -->
-                                <?php if ($id): ?>
-                                    <?php
-                                    $product_images_grid = [];
-                                    try {
-                                        $product_images_grid = get_product_images($id, $conn);
-                                    } catch (Exception $e) {
-                                        // Silently fail
-                                    }
-                                    
-                                    foreach ($product_images_grid as $img_item):
-                                    ?>
-                                    <div class="col-6 col-md-3" data-image-id="<?= (int)$img_item['id'] ?>">
-                                        <div class="card position-relative h-100" style="overflow:hidden;">
-                                            <div class="ratio ratio-1x1">
-                                                <img src="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>" 
-                                                     class="object-fit-cover image-preview" 
-                                                     alt="Product image">
-                                            </div>
-                                            <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
-                                                <button type="button" class="btn btn-sm btn-danger btn-remove" 
-                                                        onclick="removeImage(<?= (int)$img_item['id'] ?>, <?= (int)$id ?>)">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                            <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
-                                                <button type="button" class="btn btn-sm btn-light w-100 btn-removebg"
-                                                        data-img="<?= htmlspecialchars($img_item['gambar']) ?>"
-                                                        onclick="removeBGImage(this)">
-                                                    <i class="fas fa-wand-magic-sparkles"></i> Remove BG
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-
-                                <!-- Add More Button -->
-                                <div class="col-6 col-md-3">
-                                    <div class="card h-100 d-flex align-items-center justify-content-center" 
-                                         id="addImageBtn"
-                                         style="cursor:pointer;border:2px dashed #0d6efd;min-height:200px;background:#f8f9ff;transition:all 0.3s ease;">
-                                        <div class="text-center">
-                                            <i class="fas fa-plus" style="font-size:2.5rem;color:#0d6efd;"></i>
-                                            <p class="mt-2 mb-0"><small class="fw-500">Tambah Gambar</small></p>
-                                        </div>
-                                        <input type="file" id="additionalImagesInput" name="additional_images[]" 
-                                               class="d-none" accept="image/*" multiple>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <small class="form-text text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i> Klik + untuk tambah gambar, atau drag ke sini
-                            </small>
-                        </div>
-
-                        <button class="btn btn-primary">Simpan</button>
+                        <button class="btn btn-primary">Simpan Perubahan</button>
                         <a href="products.php" class="btn btn-secondary">Batal</a>
                     </form>
                 </div>
             </div>
         </div>
-        </div>
     </main>
 
-    <?php include __DIR__ . '/partials/scripts.php'; ?>
+    <?php 
+    // Safely include scripts
+    if (file_exists(__DIR__ . '/partials/scripts.php')) {
+        try {
+            include __DIR__ . '/partials/scripts.php';
+        } catch (Exception $e) {
+            echo "<!-- Error loading scripts: " . htmlspecialchars($e->getMessage()) . " -->";
+        }
+    }
+    ?>
     <script>
         (function() {
             const input = document.getElementById('gambarInput');

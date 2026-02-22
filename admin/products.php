@@ -14,7 +14,7 @@ include __DIR__ . '/partials/header.php';
         <div class="container-fluid py-4" style="max-width:1200px;">
             <div class="d-flex justify-content-between align-items-center mb-3" style="margin-left:0;">
                 <h4 class="mb-0">Produk</h4>
-                <a href="product_edit.php" class="btn btn-primary btn-sm">Tambah Produk</a>
+                <a href="product_create.php" class="btn btn-primary btn-sm">Tambah Produk</a>
             </div>
 
             <?php
