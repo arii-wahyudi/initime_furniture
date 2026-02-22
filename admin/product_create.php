@@ -121,6 +121,17 @@ include __DIR__ . '/partials/header.php';
             });
         })();
 
+        // Utility: escape HTML for safe insertion into text nodes
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         // Multiple Images Upload Handler
         (function() {
             const imageGrid = document.getElementById('imageGrid');
@@ -135,7 +146,6 @@ include __DIR__ . '/partials/header.php';
                 });
 
             function handleFiles(files) {
-                console.log('handleFiles called, files:', files);
                 const arr = Array.from(files);
                 const maxImages = 10;
                 if (selectedFiles.length + arr.length > maxImages) {
@@ -183,7 +193,7 @@ include __DIR__ . '/partials/header.php';
             });
 
             function renderImageCard(obj) {
-                console.log('renderImageCard for', obj.id, obj.file.name);
+                // renderImageCard for id: obj.id
                 // obj: { id, file }
                 const cardCol = document.createElement('div');
                 cardCol.className = 'col-12 col-md-6';
