@@ -56,6 +56,12 @@ include __DIR__ . '/partials/header.php';
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Gambar Utama (jpg/png)</label>
+                            <input type="file" name="gambar" id="gambarInput" class="form-control" accept="image/*" required>
+                            <img id="gambarPreview" src="#" style="display:none;width:120px;height:120px;margin-top:10px;object-fit:cover;border-radius:8px;" alt="Preview">
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Gambar (jpg/png)</label>
                             <div class="row g-2" id="imageGrid">
                                 <!-- Add More Button -->
