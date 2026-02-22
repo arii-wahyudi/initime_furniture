@@ -113,7 +113,7 @@ if ($res) {
             <div class="row g-3 mb-4">
                 <div class="col-12 col-md-6">
                     <div class="card p-3 shadow-sm h-100">
-                        <div class="small text-muted">Produk Terbanyak Di-Klik</div>
+                        <div class="small text-muted">Prok Terbanyak Di-Klik</div>
                         <?php if (!empty($top_clicks)): ?>
                             <div class="h5 mb-0"><?= htmlspecialchars($top_clicks[0]['nama_produk']) ?></div>
                             <small class="text-muted"><?= (int)$top_clicks[0]['cnt'] ?> klik</small>
