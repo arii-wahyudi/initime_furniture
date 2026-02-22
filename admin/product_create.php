@@ -187,11 +187,13 @@ include __DIR__ . '/partials/header.php';
                 // obj: { id, file, url }
                 const cardCol = document.createElement('div');
                 cardCol.className = 'col-6 col-md-3';
+                // ensure column has visible height if CSS missing
+                cardCol.style.minHeight = '140px';
                 cardCol.dataset.id = obj.id;
                 cardCol.innerHTML = `
                     <div class="card position-relative h-100" style="overflow:hidden;">
                         <div class="ratio ratio-1x1">
-                            <img src="${obj.url}" class="object-fit-cover image-preview" alt="${obj.file.name}">
+                            <img src="${obj.url}" alt="${obj.file.name}" style="width:100%;height:100%;object-fit:cover;display:block;">
                         </div>
                         <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
                             <button type="button" class="btn btn-sm btn-danger btn-remove-image">
