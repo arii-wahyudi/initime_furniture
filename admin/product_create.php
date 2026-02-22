@@ -27,7 +27,7 @@ include __DIR__ . '/partials/header.php';
                 </div>
                 <div class="card-body">
                     <form id="productForm" action="product_store.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-                        
+
                         <div class="mb-3">
                             <label class="form-label">Nama Produk</label>
                             <input type="text" name="nama_produk" class="form-control" placeholder="Masukkan nama produk" required>
@@ -62,15 +62,15 @@ include __DIR__ . '/partials/header.php';
                             <div class="row g-2" id="imageGrid">
                                 <!-- Add More Button -->
                                 <div class="col-6 col-md-3">
-                                    <div class="card h-100 d-flex align-items-center justify-content-center" 
-                                         id="addImageBtn"
-                                         style="cursor:pointer;border:2px dashed #0d6efd;min-height:200px;background:#f8f9ff;transition:all 0.3s ease;">
+                                    <div class="card h-100 d-flex align-items-center justify-content-center"
+                                        id="addImageBtn"
+                                        style="cursor:pointer;border:2px dashed #0d6efd;min-height:200px;background:#f8f9ff;transition:all 0.3s ease;">
                                         <div class="text-center">
                                             <i class="fas fa-plus" style="font-size:2.5rem;color:#0d6efd;"></i>
                                             <p class="mt-2 mb-0"><small class="fw-500">Tambah Gambar</small></p>
                                         </div>
-                                        <input type="file" id="additionalImagesInput" name="additional_images[]" 
-                                               class="d-none" accept="image/*" multiple>
+                                        <input type="file" id="additionalImagesInput" name="additional_images[]"
+                                            class="d-none" accept="image/*" multiple>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@ include __DIR__ . '/partials/header.php';
             const fileInput = document.getElementById('additionalImagesInput');
             const form = document.getElementById('productForm');
             const loadingOverlay = document.getElementById('loadingOverlay');
-            
+
             const MAX_IMAGES = 10;
             const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
             const selectedFiles = new Map(); // id => File
@@ -172,7 +172,7 @@ include __DIR__ . '/partials/header.php';
 
             function handleFiles(files) {
                 const arr = Array.from(files);
-                
+
                 // Validate total count
                 if (selectedFiles.size + arr.length > MAX_IMAGES) {
                     alert(`Maksimal ${MAX_IMAGES} gambar! Saat ini: ${selectedFiles.size}`);
@@ -189,7 +189,7 @@ include __DIR__ . '/partials/header.php';
                         alert(`❌ ${file.name}: Terlalu besar (> 5MB)`);
                         return;
                     }
-                    
+
                     const id = 'img_' + Date.now() + '_' + validCount;
                     selectedFiles.set(id, file);
                     renderImageCard(id, file);
@@ -201,11 +201,11 @@ include __DIR__ . '/partials/header.php';
                 const cardCol = document.createElement('div');
                 cardCol.className = 'col-6 col-md-3';
                 cardCol.dataset.id = id;
-                
+
                 const sizeKb = Math.round(file.size / 1024);
-                const preview = file.type === 'image/jpeg' || file.type === 'image/png' ? 
+                const preview = file.type === 'image/jpeg' || file.type === 'image/png' ?
                     '📷' : '🖼️';
-                
+
                 cardCol.innerHTML = `
                     <div class="card h-100 position-relative" style="overflow:hidden;">
                         <div class="bg-light d-flex align-items-center justify-content-center" style="height:150px;">
@@ -223,7 +223,7 @@ include __DIR__ . '/partials/header.php';
                         </div>
                     </div>
                 `;
-                
+
                 imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
             }
 
@@ -235,7 +235,7 @@ include __DIR__ . '/partials/header.php';
             // Form submit handler
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 if (selectedFiles.size === 0) {
                     alert('Pilih minimal 1 gambar');
                     return;
@@ -243,10 +243,10 @@ include __DIR__ . '/partials/header.php';
 
                 // Build FormData dari form
                 const formData = new FormData(form);
-                
+
                 // Clear existing file input
                 formData.delete('additional_images[]');
-                
+
                 // Add selected files properly
                 selectedFiles.forEach((file) => {
                     formData.append('additional_images[]', file);
@@ -259,29 +259,29 @@ include __DIR__ . '/partials/header.php';
 
                 // Submit form
                 fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Server error: ' + response.status);
-                    return response.text();
-                })
-                .then(html => {
-                    // Check for error messages
-                    if (html.includes('Gagal') || html.includes('Error') || html.includes('error')) {
-                        alert('⚠️ Terjadi kesalahan. Cek console untuk detail.');
-                        console.error('Server response:', html.substring(0, 500));
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Server error: ' + response.status);
+                        return response.text();
+                    })
+                    .then(html => {
+                        // Check for error messages
+                        if (html.includes('Gagal') || html.includes('Error') || html.includes('error')) {
+                            alert('⚠️ Terjadi kesalahan. Cek console untuk detail.');
+                            console.error('Server response:', html.substring(0, 500));
+                            if (loadingOverlay) loadingOverlay.style.display = 'none';
+                        } else {
+                            // Success - redirect
+                            window.location.href = 'products.php';
+                        }
+                    })
+                    .catch(err => {
+                        alert('❌ Network error: ' + err.message);
+                        console.error(err);
                         if (loadingOverlay) loadingOverlay.style.display = 'none';
-                    } else {
-                        // Success - redirect
-                        window.location.href = 'products.php';
-                    }
-                })
-                .catch(err => {
-                    alert('❌ Network error: ' + err.message);
-                    console.error(err);
-                    if (loadingOverlay) loadingOverlay.style.display = 'none';
-                });
+                    });
             });
         })();
 
@@ -294,27 +294,27 @@ include __DIR__ . '/partials/header.php';
             formData.append('image', base64Img);
 
             fetch('product_preview_removebg.php', {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin'
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.ok) {
-                    btn.closest('.card').querySelector('img').src = data.data;
-                    btn.innerHTML = '<i class="fas fa-check"></i>';
-                    setTimeout(() => {
-                        btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                    }, 1500);
-                } else {
-                    alert('Error: ' + (data.error || 'Unknown'));
-                }
-                btn.disabled = false;
-            })
-            .catch(err => {
-                alert('Error: ' + err.message);
-                btn.disabled = false;
-            });
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin'
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.ok) {
+                        btn.closest('.card').querySelector('img').src = data.data;
+                        btn.innerHTML = '<i class="fas fa-check"></i>';
+                        setTimeout(() => {
+                            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
+                        }, 1500);
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown'));
+                    }
+                    btn.disabled = false;
+                })
+                .catch(err => {
+                    alert('Error: ' + err.message);
+                    btn.disabled = false;
+                });
         }
     </script>
 </body>

@@ -222,7 +222,7 @@ include __DIR__ . '/partials/header.php';
             const addImageBtn = document.getElementById('addImageBtn');
             const fileInput = document.getElementById('additionalImagesInput');
             const form = document.getElementById('productForm');
-            
+
             const MAX_IMAGES = 10;
             const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
             const selectedFiles = new Map(); // id => File
@@ -288,7 +288,7 @@ include __DIR__ . '/partials/header.php';
                 cardCol.dataset.id = id;
 
                 const sizeKb = Math.round(file.size / 1024);
-                const preview = file.type === 'image/jpeg' || file.type === 'image/png' ? 
+                const preview = file.type === 'image/jpeg' || file.type === 'image/png' ?
                     '📷' : '🖼️';
 
                 cardCol.innerHTML = `
@@ -323,10 +323,10 @@ include __DIR__ . '/partials/header.php';
 
                 // Build FormData from form
                 const formData = new FormData(form);
-                
+
                 // Clear existing file input in formdata
                 formData.delete('additional_images[]');
-                
+
                 // Add new selected files
                 selectedFiles.forEach((file) => {
                     formData.append('additional_images[]', file);
@@ -334,27 +334,27 @@ include __DIR__ . '/partials/header.php';
 
                 // Submit with proper error handling
                 fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Server error: ' + response.status);
-                    return response.text();
-                })
-                .then(html => {
-                    // Check for error messages
-                    if (html.includes('Gagal') || html.includes('Error') || html.includes('error')) {
-                        alert('⚠️ Terjadi kesalahan. Cek console untuk detail.');
-                        console.error('Server response:', html.substring(0, 500));
-                    } else {
-                        // Success - redirect
-                        window.location.href = 'products.php';
-                    }
-                })
-                .catch(err => {
-                    alert('❌ Network error: ' + err.message);
-                    console.error(err);
-                });
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Server error: ' + response.status);
+                        return response.text();
+                    })
+                    .then(html => {
+                        // Check for error messages
+                        if (html.includes('Gagal') || html.includes('Error') || html.includes('error')) {
+                            alert('⚠️ Terjadi kesalahan. Cek console untuk detail.');
+                            console.error('Server response:', html.substring(0, 500));
+                        } else {
+                            // Success - redirect
+                            window.location.href = 'products.php';
+                        }
+                    })
+                    .catch(err => {
+                        alert('❌ Network error: ' + err.message);
+                        console.error(err);
+                    });
             });
 
             // Keep add button always at end
