@@ -130,6 +130,7 @@ include __DIR__ . '/partials/header.php';
             const imageGrid = document.getElementById('imageGrid');
             const addImageBtn = document.getElementById('addImageBtn');
             const fileInput = document.getElementById('additionalImagesInput');
+            // selectedFiles stores objects: { id: string, file: File, url: string }
             let selectedFiles = [];
 
             // Click button to open file dialog
@@ -138,6 +139,7 @@ include __DIR__ . '/partials/header.php';
                 });
 
             function handleFiles(files) {
+                console.log('handleFiles called, files:', files);
                 const arr = Array.from(files);
                 const maxImages = 10;
                 if (selectedFiles.length + arr.length > maxImages) {
@@ -145,14 +147,19 @@ include __DIR__ . '/partials/header.php';
                     return;
                 }
                 arr.forEach(file => {
-                    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) {
-                        selectedFiles.push(file);
-                        renderImageCard(file);
-                    } else if (!file.type.startsWith('image/')) {
+                    if (!file) return;
+                    if (!file.type.startsWith('image/')) {
                         alert('File bukan gambar: ' + file.name);
-                    } else {
-                        alert('File terlalu besar (> 2MB): ' + file.name);
+                        return;
                     }
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('File terlalu besar (> 2MB): ' + file.name);
+                        return;
+                    }
+                    const id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+                    const url = URL.createObjectURL(file);
+                    selectedFiles.push({id, file, url});
+                    renderImageCard({id, file, url});
                 });
                 updateFileInput();
             }
@@ -196,45 +203,75 @@ include __DIR__ . '/partials/header.php';
                 updateFileInput();
             }
 
-            function renderImageCard(file) {
-                showLoadingOverlay();
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const cardCol = document.createElement('div');
-                    cardCol.className = 'col-6 col-md-3';
-                    cardCol.innerHTML = `
-                        <div class="card position-relative h-100" style="overflow:hidden;">
-                            <div class="ratio ratio-1x1">
-                                <img src="${e.target.result}" class="object-fit-cover image-preview" alt="${file.name}">
-                            </div>
-                            <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
-                                <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.col-6').remove()">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                            <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
-                                <button type="button" class="btn btn-sm btn-light w-100 btn-removebg" 
-                                        onclick="removeBGNewImage(this, '${e.target.result}')">
-                                    <i class="fas fa-wand-magic-sparkles"></i> Remove BG
-                                </button>
-                            </div>
+            function renderImageCard(obj) {
+                // obj: { id, file, url }
+                const cardCol = document.createElement('div');
+                cardCol.className = 'col-6 col-md-3';
+                cardCol.dataset.id = obj.id;
+                cardCol.innerHTML = `
+                    <div class="card position-relative h-100" style="overflow:hidden;">
+                        <div class="ratio ratio-1x1">
+                            <img src="${obj.url}" class="object-fit-cover image-preview" alt="${obj.file.name}">
                         </div>
-                    `;
-                    
-                    // Insert before add button
-                    imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
-                    hideLoadingOverlay();
-                };
-                reader.onerror = function() { hideLoadingOverlay(); };
-                reader.readAsDataURL(file);
+                        <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
+                            <button type="button" class="btn btn-sm btn-danger btn-remove-image">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
+                            <button type="button" class="btn btn-sm btn-light w-100 btn-removebg" data-id="${obj.id}">
+                                <i class="fas fa-wand-magic-sparkles"></i> Remove BG
+                            </button>
+                        </div>
+                    </div>
+                `;
+                // Insert before add button
+                imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
+
+                // Remove handler
+                cardCol.querySelector('.btn-remove-image').addEventListener('click', function() {
+                    // revoke object URL
+                    URL.revokeObjectURL(obj.url);
+                    // remove from DOM
+                    cardCol.remove();
+                    // remove from selectedFiles
+                    selectedFiles = selectedFiles.filter(item => item.id !== obj.id);
+                    updateFileInput();
+                });
+
+                // Remove BG handler (sends file to preview remove bg)
+                cardCol.querySelector('.btn-removebg').addEventListener('click', function() {
+                    const btn = this;
+                    const item = selectedFiles.find(i => i.id === obj.id);
+                    if (!item) return;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+                    const fd = new FormData();
+                    fd.append('image', item.file);
+                    fetch('product_preview_removebg.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+                        .then(r => r.json())
+                        .then(j => {
+                            btn.disabled = false;
+                            if (j.ok) {
+                                // update image src with returned data
+                                cardCol.querySelector('img').src = j.data;
+                            } else {
+                                alert('Error: ' + (j.error || 'unknown'));
+                            }
+                            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
+                        }).catch(err => {
+                            btn.disabled = false; btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
+                            alert('Network error: ' + err.message);
+                        });
+                });
             }
 
             function updateFileInput() {
                 const dataTransfer = new DataTransfer();
-                selectedFiles.forEach(file => {
-                    dataTransfer.items.add(file);
+                selectedFiles.forEach(item => {
+                    dataTransfer.items.add(item.file);
                 });
                 fileInput.files = dataTransfer.files;
+                console.log('updateFileInput set', fileInput.files.length, fileInput.files);
             }
 
             // Keep add button always at end
