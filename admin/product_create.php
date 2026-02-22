@@ -58,7 +58,7 @@ include __DIR__ . '/partials/header.php';
                         <div class="mb-3">
                             <label class="form-label">Gambar Utama (jpg/png)</label>
                             <input type="file" name="gambar" id="gambarInput" class="form-control" accept="image/*" required>
-                            <img id="gambarPreview" src="#" style="display:none;width:120px;height:120px;margin-top:10px;object-fit:cover;border-radius:8px;" alt="Preview">
+                            <img id="gambarPreview" src="#" style="display:none;width:60px;height:60px;margin-top:10px;object-fit:cover;border-radius:8px;" alt="Preview">
                         </div>
 
                         <div class="mb-3">
@@ -137,27 +137,25 @@ include __DIR__ . '/partials/header.php';
                     fileInput.click();
                 });
 
-                function handleFiles(files) {
-                    const arr = Array.from(files);
-                    // TEST: Preview hanya 1 gambar dulu
-                    if (arr.length > 1) {
-                        alert('Untuk tes, upload 1 gambar dulu!');
-                        return;
-                    }
-                    const file = arr[0];
-                    if (!file) return;
-                    if (!file.type.startsWith('image/')) {
-                        alert('File bukan gambar: ' + file.name);
-                        return;
-                    }
-                    if (file.size > 2 * 1024 * 1024) {
-                        alert('File terlalu besar (> 2MB): ' + file.name);
-                        return;
-                    }
-                    selectedFiles.push(file);
-                    renderImageCard(file);
-                    updateFileInput();
+            function handleFiles(files) {
+                const arr = Array.from(files);
+                const maxImages = 10;
+                if (selectedFiles.length + arr.length > maxImages) {
+                    alert('Maksimal upload 10 gambar!');
+                    return;
                 }
+                arr.forEach(file => {
+                    if (file.type.startsWith('image/') && file.size <= 2 * 1024 * 1024) {
+                        selectedFiles.push(file);
+                        renderImageCard(file);
+                    } else if (!file.type.startsWith('image/')) {
+                        alert('File bukan gambar: ' + file.name);
+                    } else {
+                        alert('File terlalu besar (> 2MB): ' + file.name);
+                    }
+                });
+                updateFileInput();
+            }
 
             // Drag over grid
             imageGrid.addEventListener('dragover', (e) => {
