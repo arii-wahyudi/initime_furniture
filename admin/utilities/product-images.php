@@ -9,6 +9,13 @@
 function get_product_images($id_produk, $conn)
 {
     $id_produk = intval($id_produk);
+    
+    // Cek apakah tabel produk_gambar ada
+    $table_check = mysqli_query($conn, "SHOW TABLES LIKE 'produk_gambar'");
+    if (!$table_check || mysqli_num_rows($table_check) == 0) {
+        return []; // Tabel belum ada, return empty
+    }
+    
     $result = mysqli_query($conn, "
         SELECT * FROM produk_gambar 
         WHERE id_produk = $id_produk 
@@ -33,6 +40,13 @@ function get_product_images($id_produk, $conn)
 function get_product_primary_image($id_produk, $conn)
 {
     $id_produk = intval($id_produk);
+    
+    // Cek apakah tabel produk_gambar ada
+    $table_check = mysqli_query($conn, "SHOW TABLES LIKE 'produk_gambar'");
+    if (!$table_check || mysqli_num_rows($table_check) == 0) {
+        return null; // Tabel belum ada
+    }
+    
     // Gambar yang urutan=0 adalah gambar utama
     $result = mysqli_query($conn, "
         SELECT * FROM produk_gambar 
