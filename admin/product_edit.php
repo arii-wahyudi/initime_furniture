@@ -463,7 +463,6 @@ include __DIR__ . '/partials/header.php';
             window.location.href = 'product_image_action.php?action=delete&id=' + imageId + '&product_id=' + productId;
         }
     </script>
-    </script>
 </body>
 
 </html>
