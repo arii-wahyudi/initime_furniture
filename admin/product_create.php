@@ -121,9 +121,29 @@ include __DIR__ . '/partials/header.php';
             let selectedFiles = [];
 
             // Click button to open file dialog
-            addImageBtn.addEventListener('click', () => {
-                fileInput.click();
-            });
+                addImageBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+
+                function handleFiles(files) {
+                    const arr = Array.from(files);
+                    const maxImages = 10;
+                    if (selectedFiles.length + arr.length > maxImages) {
+                        alert('Maksimal upload 10 gambar!');
+                        return;
+                    }
+                    arr.forEach(file => {
+                        if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
+                            selectedFiles.push(file);
+                            renderImageCard(file);
+                        } else if (!file.type.startsWith('image/')) {
+                            alert('File bukan gambar: ' + file.name);
+                        } else {
+                            alert('File terlalu besar (> 5MB): ' + file.name);
+                        }
+                    });
+                    updateFileInput();
+                }
 
             // Drag over grid
             imageGrid.addEventListener('dragover', (e) => {
