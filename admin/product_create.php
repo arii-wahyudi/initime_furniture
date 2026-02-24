@@ -29,7 +29,7 @@ include __DIR__ . '/partials/header.php';
                     <form action="product_store.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate onsubmit="showLoadingOverlay()">
                         
                         <div class="mb-3">
-                            <label class="form-label">Nama Produk</label>
+                            <label class="form-label">Namas Produk</label>
                             <input type="text" name="nama_produk" class="form-control" placeholder="Masukkan nama produk" required>
                         </div>
 
