@@ -57,7 +57,7 @@ include __DIR__ . '/partials/header.php';
 
                         <!-- Gambar slots: 5 kotak, slot 0 = Utama. Tidak wajib diisi. -->
                         <div class="mb-3">
-                            <label class="form-label">Gambar (jpg/png)</label>
+                            <label class="form-label">Gambaar (jpg/png)</label>
                             <div class="row g-2" id="imageSlotsRow">
                                 <?php for ($i = 0; $i < 5; $i++): ?>
                                     <div class="col-12 col-md-6">
