@@ -58,6 +58,12 @@ include __DIR__ . '/partials/header.php';
                         <!-- Gambar slots: 5 kotak, slot 0 = Utama. Tidak wajib diisi. -->
                         <div class="mb-3">
                             <label class="form-label">Gambaar (jpg/png)</label>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <button type="button" id="btnMultiUpload" class="btn btn-sm btn-info">Upload Banyak</button>
+                                <input type="file" id="multiUploadInput" class="d-none" accept="image/*" multiple>
+                                <small class="text-muted">(Pilih beberapa gambar sekaligus — akan terisi ke slot berurutan)</small>
+                            </div>
+
                             <div class="row g-2" id="imageSlotsRow">
                                 <?php for ($i = 0; $i < 5; $i++): ?>
                                     <div class="col-4 col-sm-4 col-md-3 col-lg-2">
@@ -94,9 +100,7 @@ include __DIR__ . '/partials/header.php';
                                                 <div class="d-flex gap-2 mt-2 align-items-center slot-actions">
                                                     <input type="file" name="images[]" accept="image/*" class="d-none image-input" data-index="<?= $i ?>">
                                                     <button type="button" class="btn btn-sm btn-primary btn-select-file" data-index="<?= $i ?>">Pilih Gambar</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-remove-bg" data-index="<?= $i ?>">
-                                                        <i class="fas fa-wand-magic-sparkles"></i> Remove BG
-                                                    </button>
+                                                    <!-- Remove BG button removed to simplify upload flow -->
                                                     <small class="text-muted ms-auto align-self-center">jpg/png, max 2MB</small>
                                                 </div>
                                             </div>
@@ -189,12 +193,11 @@ include __DIR__ . '/partials/header.php';
                 .replace(/'/g, '&#39;');
         }
 
-        // Per-slot image handlers for 5 slots
+        // Per-slot image handlers for 5 slots (simplified) + multi-upload
         (function() {
             const inputs = document.querySelectorAll('.image-input');
             const selects = document.querySelectorAll('.btn-select-file');
             const clears = document.querySelectorAll('.btn-clear-file');
-            const removeBtns = document.querySelectorAll('.btn-remove-bg');
 
             function getPreviewByIndex(i) {
                 return document.querySelector('.img-preview[data-index="' + i + '"]');
@@ -256,78 +259,39 @@ include __DIR__ . '/partials/header.php';
                 });
             });
 
-            removeBtns.forEach(btn => {
-                const idx = btn.dataset.index;
-                const input = document.querySelector('.image-input[data-index="' + idx + '"]');
-                const preview = getPreviewByIndex(idx);
-                btn.addEventListener('click', () => {
-                    if (input.files && input.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            const base64 = ev.target.result;
-                            removeBGNewImage(btn, base64);
-                        };
-                        reader.readAsDataURL(input.files[0]);
-                    } else if (preview && preview.src) {
-                        // fetch blob then convert
-                        fetch(preview.src).then(r => r.blob()).then(blob => {
-                            const r2 = new FileReader();
-                            r2.onload = e => removeBGNewImage(btn, e.target.result);
-                            r2.readAsDataURL(blob);
-                        }).catch(() => alert('Tidak dapat membaca gambar untuk diproses'));
-                    } else {
-                        alert('Pilih gambar dulu sebelum Remove BG.');
-                    }
+            // Multi-upload: distribute selected files into slots in order
+            const multiBtn = document.getElementById('btnMultiUpload');
+            const multiInput = document.getElementById('multiUploadInput');
+            if (multiBtn && multiInput) {
+                multiBtn.addEventListener('click', () => multiInput.click());
+                multiInput.addEventListener('change', (e) => {
+                    const files = Array.from(e.target.files || []);
+                    files.slice(0, 5).forEach((file, i) => {
+                        const slotInput = document.querySelector('.image-input[data-index="' + i + '"]');
+                        if (!slotInput) return;
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        slotInput.files = dt.files;
+                        // trigger change to render preview
+                        slotInput.dispatchEvent(new Event('change'));
+                    });
+                    // clear selection
+                    multiInput.value = '';
                 });
-            });
+            }
         })();
 
-        // Remove BG for new image
-        function removeBGNewImage(btn, base64Img) {
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
+        function showLoadingOverlay() {
+            const el = document.getElementById('loadingOverlay');
+            if (el) el.style.display = 'flex';
+        }
+        function hideLoadingOverlay() {
+            const el = document.getElementById('loadingOverlay');
+            if (el) el.style.display = 'none';
+        }
+    </script>
+</body>
 
-            const formData = new FormData();
-            formData.append('image', base64Img);
+</html>
 
-            fetch('product_preview_removebg.php', {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin'
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.ok) {
-                    btn.closest('.card').querySelector('img').src = data.data;
-                    btn.innerHTML = '<i class="fas fa-check"></i>';
-                    setTimeout(() => {
-                        btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                    <style>
-                        /* Clean card-style slots */
-                        #imageSlotsRow { display:flex; gap:12px; flex-wrap:wrap; }
-                        #imageSlotsRow > div { box-sizing:border-box; padding:0; }
-                        .image-slot-card { background:#fff; border:1px solid #eef2f6; border-radius:8px; padding:10px; box-shadow:0 1px 2px rgba(23,23,23,0.03); display:flex; flex-direction:column; gap:8px; }
 
-                        /* Responsive columns: 5 / 4 / 3 / 2 / 1 depending on width */
-                        @media (min-width:1200px) { #imageSlotsRow > div { flex:0 0 calc(20% - 9.6px); max-width:calc(20% - 9.6px); } }
-                        @media (min-width:992px) and (max-width:1199.98px) { #imageSlotsRow > div { flex:0 0 calc(25% - 9.6px); max-width:calc(25% - 9.6px); } }
-                        @media (min-width:768px) and (max-width:991.98px) { #imageSlotsRow > div { flex:0 0 calc(33.333% - 9.6px); max-width:calc(33.333% - 9.6px); } }
-                        @media (min-width:576px) and (max-width:767.98px) { #imageSlotsRow > div { flex:0 0 calc(50% - 9.6px); max-width:calc(50% - 9.6px); } }
-                        @media (max-width:575.98px) { #imageSlotsRow > div { flex:0 0 100%; max-width:100%; } }
-
-                        .image-preview-wrapper { position:relative; width:100%; padding-top:100%; background:#fafbfc; border-radius:6px; overflow:hidden; border:1px solid #f0f3f6; }
-                        .image-preview-wrapper .img-preview { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
-                        .image-preview-wrapper .placeholder { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#8391a1; }
-
-                        .file-meta { display:flex; flex-direction:column; gap:2px; padding:8px; background:#fbfffb; border-radius:6px; border:1px solid #eef7ee; }
-                        .file-meta .file-name { font-weight:600; font-size:0.9rem; color:#223; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-                        .file-meta .file-size { font-size:0.78rem; color:#6c757d; }
-
-                        .slot-actions { display:flex; gap:8px; align-items:center; }
-                        .slot-actions .btn-select-file { min-width:110px; }
-                        .slot-actions .btn-remove-bg { white-space:nowrap; }
-                        .btn-clear-file { background:transparent; border:1px solid #f5c6cb; color:#d9534f; }
-
-                        /* make preview clickable */
-                        .image-preview-wrapper { cursor:pointer; }
-                    </style>
