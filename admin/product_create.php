@@ -91,7 +91,7 @@ include __DIR__ . '/partials/header.php';
                                                     <div class="file-size text-muted" data-index-size="<?= $i ?>" style="font-size:0.75rem;"></div>
                                                 </div>
 
-                                                <div class="d-flex gap-2 mt-2 align-items-center">
+                                                <div class="d-flex gap-2 mt-2 align-items-center slot-actions">
                                                     <input type="file" name="images[]" accept="image/*" class="d-none image-input" data-index="<?= $i ?>">
                                                     <button type="button" class="btn btn-sm btn-primary btn-select-file" data-index="<?= $i ?>">Pilih Gambar</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary btn-remove-bg" data-index="<?= $i ?>">
@@ -302,25 +302,32 @@ include __DIR__ . '/partials/header.php';
                     btn.innerHTML = '<i class="fas fa-check"></i>';
                     setTimeout(() => {
                         btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                    }, 1500);
-                } else {
-                    alert('Error: ' + (data.error || 'Unknown'));
-                }
-                btn.disabled = false;
-            })
-            .catch(err => {
-                alert('Error: ' + err.message);
-                btn.disabled = false;
-            });
-        }
+                    <style>
+                        /* Clean card-style slots */
+                        #imageSlotsRow { display:flex; gap:12px; flex-wrap:wrap; }
+                        #imageSlotsRow > div { box-sizing:border-box; padding:0; }
+                        .image-slot-card { background:#fff; border:1px solid #eef2f6; border-radius:8px; padding:10px; box-shadow:0 1px 2px rgba(23,23,23,0.03); display:flex; flex-direction:column; gap:8px; }
 
-        function showLoadingOverlay() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
-        function hideLoadingOverlay() {
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }
-    </script>
-</body>
+                        /* Responsive columns: 5 / 4 / 3 / 2 / 1 depending on width */
+                        @media (min-width:1200px) { #imageSlotsRow > div { flex:0 0 calc(20% - 9.6px); max-width:calc(20% - 9.6px); } }
+                        @media (min-width:992px) and (max-width:1199.98px) { #imageSlotsRow > div { flex:0 0 calc(25% - 9.6px); max-width:calc(25% - 9.6px); } }
+                        @media (min-width:768px) and (max-width:991.98px) { #imageSlotsRow > div { flex:0 0 calc(33.333% - 9.6px); max-width:calc(33.333% - 9.6px); } }
+                        @media (min-width:576px) and (max-width:767.98px) { #imageSlotsRow > div { flex:0 0 calc(50% - 9.6px); max-width:calc(50% - 9.6px); } }
+                        @media (max-width:575.98px) { #imageSlotsRow > div { flex:0 0 100%; max-width:100%; } }
 
-</html>
+                        .image-preview-wrapper { position:relative; width:100%; padding-top:100%; background:#fafbfc; border-radius:6px; overflow:hidden; border:1px solid #f0f3f6; }
+                        .image-preview-wrapper .img-preview { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
+                        .image-preview-wrapper .placeholder { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#8391a1; }
+
+                        .file-meta { display:flex; flex-direction:column; gap:2px; padding:8px; background:#fbfffb; border-radius:6px; border:1px solid #eef7ee; }
+                        .file-meta .file-name { font-weight:600; font-size:0.9rem; color:#223; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+                        .file-meta .file-size { font-size:0.78rem; color:#6c757d; }
+
+                        .slot-actions { display:flex; gap:8px; align-items:center; }
+                        .slot-actions .btn-select-file { min-width:110px; }
+                        .slot-actions .btn-remove-bg { white-space:nowrap; }
+                        .btn-clear-file { background:transparent; border:1px solid #f5c6cb; color:#d9534f; }
+
+                        /* make preview clickable */
+                        .image-preview-wrapper { cursor:pointer; }
+                    </style>
