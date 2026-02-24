@@ -54,7 +54,7 @@ if (!empty($preview_ai) && $removebg) {
 } else {
     $used_first_additional_as_main = false;
     // If main image provided, process it. Otherwise try to use first additional image as main.
-    if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+       if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
         log_debug('Processing uploaded main image', [
             'filename' => $_FILES['gambar']['name'],
             'size' => $_FILES['gambar']['size'],
@@ -88,6 +88,27 @@ if (!empty($preview_ai) && $removebg) {
         } else {
             log_error('Gagal menyimpan first additional as main');
         }
+       } elseif (isset($_FILES['images']) && is_array($_FILES['images']['tmp_name']) && !empty($_FILES['images']['tmp_name'][0]) && $_FILES['images']['error'][0] === UPLOAD_ERR_OK) {
+           // Support new form field name 'images[]' (used by admin/product_create.php)
+           // Use first images[] as main
+           $tmp_file = $_FILES['images']['tmp_name'][0];
+           $file_name = $_FILES['images']['name'][0];
+           $file_type = $_FILES['images']['type'][0];
+           $file_size = $_FILES['images']['size'][0];
+           $tmp_file_array = [
+               'name' => $file_name,
+               'type' => $file_type,
+               'tmp_name' => $tmp_file,
+               'error' => UPLOAD_ERR_OK,
+               'size' => $file_size
+           ];
+           $final_filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
+           if ($final_filename) {
+               $used_first_additional_as_main = true;
+               log_debug('Used first images[] as main', ['filename' => $final_filename]);
+           } else {
+               log_error('Gagal menyimpan first images[] as main');
+           }
     } else {
         // No main image provided; final_filename remains null (allowed)
         log_debug('No main image provided, continuing with null main image');
@@ -116,56 +137,73 @@ if (!$inserted_id) {
 
 log_debug('Product created successfully', ['product_id' => $inserted_id]);
 
-// Handle additional images upload (multiple images support)
-if ($inserted_id && isset($_FILES['additional_images']) && is_array($_FILES['additional_images']['tmp_name'])) {
-    $image_count = count($_FILES['additional_images']['tmp_name']);
-    log_debug('Processing additional images', ['count' => $image_count]);
+// Handle slot uploads: prefer 'images[]' (new admin form) then fallback to 'additional_images' (old compat)
+if ($inserted_id) {
+    $filesArr = null;
+    if (isset($_FILES['images']) && is_array($_FILES['images']['tmp_name'])) {
+        $filesArr = &$_FILES['images'];
+        log_debug('Using images[] array for multi-upload', []);
+    } elseif (isset($_FILES['additional_images']) && is_array($_FILES['additional_images']['tmp_name'])) {
+        $filesArr = &$_FILES['additional_images'];
+        log_debug('Using additional_images array for multi-upload', []);
+    }
     
-    for ($i = 0; $i < $image_count; $i++) {
-        // Skip index 0 if it was used as main
-        if (!empty($used_first_additional_as_main) && $i === 0) {
-            log_debug('Skipping additional image 0 because it was used as main');
-            continue;
-        }
-        if ($_FILES['additional_images']['error'][$i] === UPLOAD_ERR_OK) {
-            $tmp_file = $_FILES['additional_images']['tmp_name'][$i];
-            $file_name = $_FILES['additional_images']['name'][$i];
-            $file_type = $_FILES['additional_images']['type'][$i];
+    if ($filesArr && is_array($filesArr['tmp_name'])) {
+        $image_count = count($filesArr['tmp_name']);
+        log_debug('Processing all images', ['count' => $image_count, 'used_first_as_main' => !empty($used_first_additional_as_main)]);
+        
+        for ($i = 0; $i < $image_count; $i++) {
+            // Skip index 0 if it was already used as main product image
+            if (!empty($used_first_additional_as_main) && $i === 0) {
+                log_debug("Skipping slot {$i} - already used as main product image");
+                continue;
+            }
             
-            log_debug("Processing additional image {$i}", [
-                'filename' => $file_name,
-                'type' => $file_type
-            ]);
-            
-            // Create a temporary array to use with handle_file_upload
-            $tmp_file_array = [
-                'name' => $file_name,
-                'type' => $file_type,
-                'tmp_name' => $tmp_file,
-                'error' => UPLOAD_ERR_OK,
-                'size' => $_FILES['additional_images']['size'][$i]
-            ];
-            
-            $filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
-            if ($filename) {
-                $result = add_product_image($inserted_id, $filename, $conn);
-                if ($result) {
-                    log_debug("Additional image {$i} saved", ['filename' => $filename]);
+            if ($filesArr['error'][$i] === UPLOAD_ERR_OK) {
+                $tmp_file = $filesArr['tmp_name'][$i];
+                $file_name = $filesArr['name'][$i];
+                $file_type = $filesArr['type'][$i];
+                $file_size = $filesArr['size'][$i];
+                
+                log_debug("Processing image slot {$i}", [
+                    'filename' => $file_name,
+                    'size' => $file_size,
+                    'type' => $file_type
+                ]);
+                
+                $tmp_file_array = [
+                    'name' => $file_name,
+                    'type' => $file_type,
+                    'tmp_name' => $tmp_file,
+                    'error' => UPLOAD_ERR_OK,
+                    'size' => $file_size
+                ];
+                
+                $filename = handle_file_upload($tmp_file_array, $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
+                if ($filename) {
+                    // Save to produk_gambar with urutan = slot index
+                    $result = add_product_image($inserted_id, $filename, $conn, $i);
+                    if ($result) {
+                        log_debug("Image slot {$i} saved to database", ['filename' => $filename, 'urutan' => $i]);
+                    } else {
+                        log_error("Failed to add image slot {$i} to produk_gambar", [
+                            'filename' => $filename,
+                            'product_id' => $inserted_id,
+                            'urutan' => $i
+                        ]);
+                    }
                 } else {
-                    log_error("Failed to add image to database for product {$inserted_id}", [
-                        'filename' => $filename,
-                        'index' => $i
+                    log_error("Failed to save image slot {$i} to filesystem", [
+                        'filename' => $file_name,
+                        'size' => $file_size
                     ]);
                 }
             } else {
-                log_error("Failed to process additional image {$i}", [
-                    'filename' => $file_name,
-                    'size' => $_FILES['additional_images']['size'][$i]
-                ]);
+                log_debug("Skipping image slot {$i} - upload error code: " . $filesArr['error'][$i]);
             }
-        } else {
-            log_debug("Skipping additional image {$i} - upload error: " . $_FILES['additional_images']['error'][$i]);
         }
+    } else {
+        log_debug('No additional images to process', []);
     }
 }
 

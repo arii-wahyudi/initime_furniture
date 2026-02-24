@@ -77,15 +77,8 @@ include __DIR__ . '/partials/header.php';
                             <label class="form-label">Gambar (jpg/png)</label>
                             <input id="gambarInput" type="file" name="gambar" class="form-control" accept="image/*">
                             <div class="form-text">Pilih gambar baru untuk mengganti gambar utama produk</div>
-                            <div class="mt-3 text-center">
-                                <?php if (!empty($product['gambar'])): ?>
-                                    <img id="previewImage" src="<?= htmlspecialchars(
-                                                                    (strpos($product['gambar'], 'http') === 0) ? $product['gambar'] : ('../uploads/products/' . $product['gambar'])
-                                                                ) ?>" alt="Preview" style="max-width:100%; max-height:360px; display:inline-block; border:1px solid #eee; padding:6px; background:#fff;">
-                                <?php else: ?>
-                                    <img id="previewImage" src="" alt="Preview" style="max-width:100%; max-height:360px; display:none; border:1px solid #eee; padding:6px; background:#fff;">
-                                <?php endif; ?>
-                            </div>
+                                <!-- Top large preview removed: edit uses slot previews below as canonical -->
+                                <div class="mt-2 text-muted small">Gunakan kotak di bawah untuk mengatur gambar utama (Slot 1) dan gambar tambahan.</div>
                             <input type="hidden" name="removebg" id="removebg_hidden" value="0">
                             <input type="hidden" name="preview_ai_data" id="preview_ai_data" value="">
                             <input type="hidden" name="existing_gambar" value="<?= htmlspecialchars($product['gambar'] ?? '') ?>">
@@ -111,6 +104,19 @@ include __DIR__ . '/partials/header.php';
                                     $product_images = [];
                                 }
 
+                                // If product has a main image stored in produk.gambar and it's not present
+                                // in the produk_gambar rows, make it occupy slot 0 so admin sees it in Slot 1.
+                                if (!empty($product['gambar'])) {
+                                    $mainBasename = basename($product['gambar']);
+                                    $found = false;
+                                    foreach ($product_images as $pi) {
+                                        if (basename($pi['gambar'] ?? '') === $mainBasename) { $found = true; break; }
+                                    }
+                                    if (!$found) {
+                                        array_unshift($product_images, ['id' => 0, 'gambar' => $product['gambar'], 'urutan' => 0, 'is_primary' => 1]);
+                                    }
+                                }
+
                                 for ($i = 0; $i < 5; $i++):
                                     $slot = isset($product_images[$i]) ? $product_images[$i] : null;
                                     $previewSrc = '';
@@ -132,28 +138,29 @@ include __DIR__ . '/partials/header.php';
                                     }
                                 ?>
                                     <div class="col-4 col-sm-4 col-md-3 col-lg-2">
-                                        <div class="card p-2 h-100 image-slot-card">
+                                        <div class="card h-100 image-slot-card" style="padding:12px;">
                                             <div class="d-flex flex-column h-100">
-                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
                                                     <div>
                                                         <?php if ($i === 0): ?>
-                                                            <span class="badge bg-primary">Gambar Utama</span>
+                                                            <span class="badge bg-primary">Slot 1 (Utama)</span>
                                                         <?php else: ?>
-                                                            <span class="text-muted">Slot <?= $i + 1 ?></span>
+                                                            <span class="text-muted small">Slot <?= $i + 1 ?></span>
                                                         <?php endif; ?>
                                                     </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-sm btn-outline-danger btn-clear-file" data-index="<?= $i ?>" title="Hapus file">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-danger btn-clear-file" data-index="<?= $i ?>" title="Hapus file" style="padding:4px 8px;">
+                                                        <i class="fas fa-trash" style="font-size:0.85rem;"></i>
+                                                    </button>
                                                 </div>
 
                                                 <div class="image-preview-wrapper mb-2" data-index-wrapper="<?= $i ?>">
                                                     <img src="<?= htmlspecialchars($previewSrc) ?>" alt="preview" class="img-preview" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:block"' : '' ?> />
                                                     <div class="placeholder text-center text-muted" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:none"' : '' ?> >
-                                                        <i class="fas fa-image" style="font-size:1.6rem;"></i>
+                                                        <i class="fas fa-image"></i>
                                                         <div class="mt-1 small">Klik untuk pilih gambar</div>
+                                                    </div>
+                                                    <div class="overlay-clear" style="display:<?= $previewSrc ? 'block' : 'none' ?>;position:absolute;top:6px;right:6px;">
+                                                        <button type="button" class="btn btn-sm btn-danger btn-clear-file" data-index="<?= $i ?>" title="Hapus file"><i class="fas fa-trash"></i></button>
                                                     </div>
                                                 </div>
 
@@ -318,6 +325,35 @@ include __DIR__ . '/partials/header.php';
             window.location.href = 'product_image_action.php?action=delete&id=' + imageId + '&product_id=' + productId;
         }
     </script>
+    <style>
+        /* Edit page image slots styling */
+        .image-slot-card { padding: 14px; background: #fff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border: 1px solid #e8ecf1; }
+        .image-preview-wrapper { position: relative; width: 100%; padding-top: 100%; background: #f5f7fc; border: 1px dashed #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+        .image-preview-wrapper:hover { border-color: #94a3b8; background: #f0f4fa; }
+        .image-preview-wrapper .img-preview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+        .image-preview-wrapper .placeholder { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #7a8597; }
+        .image-preview-wrapper .placeholder i { font-size: 2rem; color: #a0afc2; margin-bottom: 8px; }
+        .image-preview-wrapper .placeholder .small { font-size: 0.8rem; text-align: center; }
+        .file-meta { background: #f0f5fb; padding: 10px; border-radius: 6px; border: 1px solid #e0e8f2; font-size: 0.8rem; margin-bottom: 12px; }
+        .image-slot-card .btn-select-file-edit { font-size: 0.85rem; padding: 8px 12px; width: 100%; }
+        .image-slot-card .btn-clear-file { opacity: 0.85; padding: 6px 10px; }
+        .overlay-clear { position: absolute; top: 8px; right: 8px; z-index: 10; }
+        
+        #imageSlotsEdit { gap: 1rem; }
+        .col-4, .col-sm-4, .col-md-3, .col-lg-2 { padding-right: 0.5rem; padding-left: 0.5rem; }
+        
+        @media (max-width: 575.98px) {
+            #imageSlotsEdit { gap: 0.75rem; }
+            .col-4 { flex: 0 0 50%; max-width: 50%; }
+            .image-slot-card { padding: 12px; }
+            .slot-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+            .slot-actions .btn { width: 100%; font-size: 0.9rem; padding: 10px 8px; }
+            .slot-actions small { display: block; margin-top: 8px; text-align: center; font-size: 0.75rem; }
+        }
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .col-sm-4 { flex: 0 0 50%; max-width: 50%; }
+        }
+    </style>
 </body>
 
 </html>

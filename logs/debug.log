@@ -20,3 +20,84 @@
 [2026-02-22 16:22:13] [DEBUG] [IP: ::1] Skipping additional image 0 because it was used as main
 [2026-02-22 16:22:13] [DEBUG] [IP: ::1] Processing additional image 1 | Context: {"filename":"prod2.jpg","type":"image\/jpeg"}
 [2026-02-22 16:22:13] [DEBUG] [IP: ::1] Additional image 1 saved | Context: {"filename":"5aec86ce795f0a5d.jpg"}
+[2026-02-24 14:23:58] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"yukjygkjj","id_kategori":"3","harga":"987987","deskripsi":"ytukuyku"}
+  FILES: {"images":{"name":["ayam-laga.webp","background.jpg","","",""],"size":[119062,125622,0,0,0],"error":[0,0,4,4,4]}}
+[2026-02-24 14:23:58] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"yukjygkjj","id_kategori":3,"harga":987987,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 14:23:58] [DEBUG] [IP: ::1] No main image provided, continuing with null main image
+[2026-02-24 14:23:58] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"yukjygkjj-43290bae","nama":"yukjygkjj"}
+[2026-02-24 14:23:58] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":9}
+[2026-02-24 14:45:28] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"6579878","id_kategori":"3","harga":"6576758","deskripsi":"erterters"}
+  FILES: {"images":{"name":["ayam-laga.webp","hipwee-7A2B3DA1-A26E-4415-96C8-ADCC0A7F2060-1225x640.jpeg","","",""],"size":[119062,71164,0,0,0],"error":[0,0,4,4,4]}}
+[2026-02-24 14:45:28] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"6579878","id_kategori":3,"harga":6576758,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 14:45:28] [DEBUG] [IP: ::1] Used first images[] as main | Context: {"filename":"0868d4572cadf31d.webp"}
+[2026-02-24 14:45:28] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"6579878-9277fdb8","nama":"6579878"}
+[2026-02-24 14:45:28] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":10}
+[2026-02-24 14:55:49] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"ytukyuk","id_kategori":"3","harga":"45678","deskripsi":"hjgkghj"}
+  FILES: {"images":{"name":["","ayam-laga.webp","background.jpg","","",""],"size":[0,119062,125622,0,0,0],"error":[4,0,0,4,4,4]}}
+[2026-02-24 14:55:49] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"ytukyuk","id_kategori":3,"harga":45678,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 14:55:49] [DEBUG] [IP: ::1] No main image provided, continuing with null main image
+[2026-02-24 14:55:49] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"ytukyuk-8bf73628","nama":"ytukyuk"}
+[2026-02-24 14:55:49] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":11}
+[2026-02-24 14:58:11] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"876yui","id_kategori":"3","harga":"789897","deskripsi":"uyklyuil"}
+  FILES: {"images":{"name":["","hipwee-7A2B3DA1-A26E-4415-96C8-ADCC0A7F2060-1225x640.jpeg","unnamed.jpg","","",""],"size":[0,71164,108261,0,0,0],"error":[4,0,0,4,4,4]}}
+[2026-02-24 14:58:11] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"876yui","id_kategori":3,"harga":789897,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 14:58:11] [DEBUG] [IP: ::1] No main image provided, continuing with null main image
+[2026-02-24 14:58:11] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"876yui-e3cdfaec","nama":"876yui"}
+[2026-02-24 14:58:11] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":12}
+[2026-02-24 15:04:20] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"gfjghj","id_kategori":"3","harga":"4536477","deskripsi":"tryurtyu"}
+  FILES: {"images":{"name":["hipwee-7A2B3DA1-A26E-4415-96C8-ADCC0A7F2060-1225x640.jpeg","unnamed.jpg","","",""],"size":[71164,108261,0,0,0],"error":[0,0,4,4,4]}}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"gfjghj","id_kategori":3,"harga":4536477,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Used first images[] as main | Context: {"filename":"c29c017acee9d060.jpeg"}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"gfjghj-853485c4","nama":"gfjghj"}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":13}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Using images[] array for multi-upload
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Processing all images | Context: {"count":5,"used_first_as_main":true}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Skipping slot 0 - already used as main product image
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Processing image slot 1 | Context: {"filename":"unnamed.jpg","size":108261,"type":"image\/jpeg"}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Image slot 1 saved to database | Context: {"filename":"197ce5420ee0a887.jpg","urutan":1}
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Skipping image slot 2 - upload error code: 4
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Skipping image slot 3 - upload error code: 4
+[2026-02-24 15:04:20] [DEBUG] [IP: ::1] Skipping image slot 4 - upload error code: 4
+[2026-02-24 15:23:19] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"test1","id_kategori":"4","harga":"300000","deskripsi":"hjkhjkk"}
+  FILES: {"images":{"name":["ayam-laga.webp","background.jpg","","",""],"size":[119062,125622,0,0,0],"error":[0,0,4,4,4]}}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"test1","id_kategori":4,"harga":300000,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Used first images[] as main | Context: {"filename":"95eb3f9690f27655.webp"}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"test1-d15567de","nama":"test1"}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":14}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Using images[] array for multi-upload
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Processing all images | Context: {"count":5,"used_first_as_main":true}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Skipping slot 0 - already used as main product image
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Processing image slot 1 | Context: {"filename":"background.jpg","size":125622,"type":"image\/jpeg"}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Image slot 1 saved to database | Context: {"filename":"3a02057f1cf6e2b9.jpg","urutan":1}
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Skipping image slot 2 - upload error code: 4
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Skipping image slot 3 - upload error code: 4
+[2026-02-24 15:23:19] [DEBUG] [IP: ::1] Skipping image slot 4 - upload error code: 4
+[2026-02-24 15:31:08] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"test2","id_kategori":"4","harga":"789897","deskripsi":"gfh"}
+  FILES: {"images":{"name":["hipwee-7A2B3DA1-A26E-4415-96C8-ADCC0A7F2060-1225x640.jpeg","Logo_Universitas_Indraprasta_PGRI_(UNINDRA).png","","",""],"size":[71164,377894,0,0,0],"error":[0,0,4,4,4]}}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"test2","id_kategori":4,"harga":789897,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Used first images[] as main | Context: {"filename":"4e2dc0050405e7cb.jpeg"}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"test2-afc85440","nama":"test2"}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":15}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Using images[] array for multi-upload
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Processing all images | Context: {"count":5,"used_first_as_main":true}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Skipping slot 0 - already used as main product image
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Processing image slot 1 | Context: {"filename":"Logo_Universitas_Indraprasta_PGRI_(UNINDRA).png","size":377894,"type":"image\/png"}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Image slot 1 saved to database | Context: {"filename":"fd7139d93b9f2567.png","urutan":1}
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Skipping image slot 2 - upload error code: 4
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Skipping image slot 3 - upload error code: 4
+[2026-02-24 15:31:08] [DEBUG] [IP: ::1] Skipping image slot 4 - upload error code: 4
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Processing edit image slot 2 | Context: {"filename":"Gemini_Generated_Image_1vr2fz1vr2fz1vr2.png","type":"image\/png","size":1231869}
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Edit slot 2 - added new image | Context: {"filename":"17bc65a4f752f912.png","urutan":2}
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-24 15:43:56] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4

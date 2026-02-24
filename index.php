@@ -435,28 +435,38 @@ include 'partials/header.php';
           <div class="card-body">
             <h5 class="fw-bold">Kirim Pesan</h5>
             <p>Isi form di bawah ini dan kami akan segera menghubungi Anda</p>
-            <form action="">
+            <?php if (!empty($_GET['sent']) && $_GET['sent'] == '1'): ?>
+              <div class="alert alert-success">Pesan berhasil dikirim. Kami akan segera menghubungi Anda.</div>
+            <?php elseif (!empty($_GET['sent']) && $_GET['sent'] == '0'): ?>
+              <div class="alert alert-danger">Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.</div>
+            <?php endif; ?>
+
+            <form action="contact_send.php" method="post">
               <input
+                name="name"
                 class="form-control mb-3"
                 type="text"
                 placeholder="Nama Lengkap"
                 required />
               <input
+                name="email"
                 class="form-control mb-3"
                 type="email"
                 placeholder="Email"
                 required />
               <input
+                name="phone"
                 class="form-control mb-3"
                 type="text"
                 placeholder="Nomor Telepon"
                 required />
               <textarea
+                name="message"
                 class="form-control mb-4"
                 rows="2"
                 placeholder="Pesan"></textarea>
               <button type="submit" class="btn btn-success w-100">
-                <i class="far fa-paper-plane me-2"></i> Kirim Via WhatsApp
+                <i class="far fa-paper-plane me-2"></i> Kirim Via Email
               </button>
             </form>
           </div>

@@ -58,10 +58,8 @@ include __DIR__ . '/partials/header.php';
                         <!-- Gambar slots: 5 kotak, slot 0 = Utama. Tidak wajib diisi. -->
                         <div class="mb-3">
                             <label class="form-label">Gambaar (jpg/png)</label>
-                            <div class="d-flex align-items-center gap-2 mb-2">
-                                <button type="button" id="btnMultiUpload" class="btn btn-sm btn-info">Upload Banyak</button>
-                                <input type="file" id="multiUploadInput" class="d-none" accept="image/*" multiple>
-                                <small class="text-muted">(Pilih beberapa gambar sekaligus — akan terisi ke slot berurutan)</small>
+                            <div class="mb-2">
+                                <small class="text-muted">Pilih gambar per slot — klik kotak untuk memilih gambar.</small>
                             </div>
 
                             <div class="row g-2" id="imageSlotsRow">
@@ -129,40 +127,44 @@ include __DIR__ . '/partials/header.php';
     <?php include __DIR__ . '/partials/scripts.php'; ?>
     <style>
         /* Image slots - square thumbnails and responsive grid */
-        #imageSlotsRow { --gap: .5rem; }
-        .image-slot-card { padding: 0.25rem; }
+        #imageSlotsRow { --gap: 1rem; }
+        .image-slot-card { padding: 14px; background:#fff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); border:1px solid #e8ecf1; }
         /* make a strict 5-column layout on wide screens, responsive down to 3/2/1 */
         @media (min-width:1200px) {
-            #imageSlotsRow { display:flex; gap:0.5rem; flex-wrap:wrap; }
-            #imageSlotsRow > div { flex: 0 0 calc(20% - 0.5rem); max-width: calc(20% - 0.5rem); }
+            #imageSlotsRow { display:flex; gap:1rem; flex-wrap:wrap; }
+            #imageSlotsRow > div { flex: 0 0 calc(20% - 1rem); max-width: calc(20% - 1rem); }
         }
         @media (min-width:992px) and (max-width:1199.98px) {
-            #imageSlotsRow { display:flex; gap:0.5rem; flex-wrap:wrap; }
-            #imageSlotsRow > div { flex: 0 0 calc(25% - 0.5rem); max-width: calc(25% - 0.5rem); }
+            #imageSlotsRow { display:flex; gap:0.75rem; flex-wrap:wrap; }
+            #imageSlotsRow > div { flex: 0 0 calc(25% - 0.75rem); max-width: calc(25% - 0.75rem); }
         }
-        @media (min-width:768px) and (max-width:991.98px) { #imageSlotsRow > div { flex: 0 0 33.3333%; max-width:33.3333%; } }
-        .image-preview-wrapper { position: relative; width: 100%; padding-top: 100%; background:#f8f9ff; border:1px dashed #d6dde6; border-radius:8px; overflow:hidden; }
+        @media (min-width:768px) and (max-width:991.98px) { #imageSlotsRow > div { flex: 0 0 32%; max-width:32%; } }
+        .image-preview-wrapper { position: relative; width: 100%; padding-top: 100%; background:#f5f7fc; border:1px dashed #cbd5e1; border-radius:8px; overflow:hidden; margin-bottom:12px; }
         .image-preview-wrapper .img-preview { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:none; }
-        .image-preview-wrapper .placeholder { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#6c757d; }
-        .file-meta { margin-top:6px; }
-        .image-slot-card .btn-select-file, .image-slot-card .btn-remove-bg { font-size:0.75rem; }
-        .image-slot-card .btn-clear-file { opacity:0.9; }
+        .image-preview-wrapper .placeholder { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#7a8597; }
+        .image-preview-wrapper .placeholder i { font-size:2rem; color:#a0afc2; margin-bottom:8px; }
+        .image-preview-wrapper .placeholder .small { font-size:0.8rem; text-align:center; }
+        .file-meta { background:#f0f5fb; padding:10px; border-radius:6px; border:1px solid #e0e8f2; font-size:0.8rem; margin-bottom:12px; }
+        .image-slot-card .btn-select-file { font-size:0.85rem; padding:8px 12px; width:100%; }
+        .image-slot-card .btn-clear-file { opacity:0.85; padding:6px 10px; }
+        .image-preview-wrapper { cursor: pointer; transition:all 0.2s; }
+        .image-preview-wrapper:hover { border-color:#94a3b8; background:#f0f4fa; }
+        
         @media (max-width:575.98px) {
-            .col-4 { flex: 0 0 33.3333%; max-width:33.3333%; }
+            .col-4 { flex: 0 0 50%; max-width:50%; }
+            #imageSlotsRow > div { margin-bottom:1rem; }
         }
         @media (min-width:576px) and (max-width:767.98px) {
-            .col-sm-4 { flex: 0 0 33.3333%; max-width:33.3333%; }
+            .col-sm-4 { flex: 0 0 50%; max-width:50%; }
         }
-        /* improve tap target: make preview wrapper clickable */
-        .image-preview-wrapper { cursor: pointer; }
 
         /* Mobile behavior: stack action buttons and enlarge tap targets */
         @media (max-width:575.98px) {
-            .slot-actions { flex-direction:column; align-items:stretch; }
-            .slot-actions .btn-select-file, .btn-clear-file { width:100%; }
-            .slot-actions small { display:block; margin-top:6px; }
-            .image-slot-card { padding:8px; }
-            .image-preview-wrapper { padding-top:100%; }
+            .slot-actions { flex-direction:column; align-items:stretch; gap:8px; }
+            .slot-actions .btn-select-file, .btn-clear-file { width:100%; font-size:0.9rem; padding:10px 8px; }
+            .slot-actions small { display:block; margin-top:8px; text-align:center; font-size:0.75rem; }
+            .image-slot-card { padding:12px; }
+            .file-meta { margin-bottom:10px; }
         }
     </style>
     <script>
@@ -268,26 +270,7 @@ include __DIR__ . '/partials/header.php';
                 });
             });
 
-            // Multi-upload: distribute selected files into slots in order
-            const multiBtn = document.getElementById('btnMultiUpload');
-            const multiInput = document.getElementById('multiUploadInput');
-            if (multiBtn && multiInput) {
-                multiBtn.addEventListener('click', () => multiInput.click());
-                multiInput.addEventListener('change', (e) => {
-                    const files = Array.from(e.target.files || []);
-                    files.slice(0, 5).forEach((file, i) => {
-                        const slotInput = document.querySelector('.image-input[data-index="' + i + '"]');
-                        if (!slotInput) return;
-                        const dt = new DataTransfer();
-                        dt.items.add(file);
-                        slotInput.files = dt.files;
-                        // trigger change to render preview
-                        slotInput.dispatchEvent(new Event('change'));
-                    });
-                    // clear selection
-                    multiInput.value = '';
-                });
-            }
+            // Multi-upload removed: select images per slot by clicking a box
         })();
 
         function showLoadingOverlay() {

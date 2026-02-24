@@ -64,7 +64,18 @@ if (!$product) {
 }
 
 // Load gambar produk (multiple images support)
-$product_images = get_product_images($product['id'], $conn);
+ $product_images = get_product_images($product['id'], $conn);
+// Ensure produk.gambar (legacy main image) is included as slot 0 when not present
+if (!empty($product['gambar'])) {
+  $mainBasename = basename($product['gambar']);
+  $found = false;
+  foreach ($product_images as $pi) {
+    if (basename($pi['gambar'] ?? '') === $mainBasename) { $found = true; break; }
+  }
+  if (!$found) {
+    array_unshift($product_images, ['id' => 0, 'gambar' => $product['gambar'], 'urutan' => 0, 'is_primary' => 1]);
+  }
+}
 if (empty($product_images)) {
   // Fallback ke gambar lama jika belum migrasi
   if (!empty($product['gambar'])) {
@@ -116,23 +127,27 @@ include 'partials/header.php';
       <div class="col-lg-6">
         <!-- Product Image Gallery -->
         <div class="product-gallery">
-          <div class="gallery-main card shadow-sm">
+          <div class="gallery-main card shadow-sm border-0 mb-4">
             <div class="ratio ratio-1x1">
-              <img id="mainImage" src="<?= htmlspecialchars($img) ?>" alt="<?= $title ?>" class="w-100 object-fit-cover" />
+              <img id="mainImage" src="<?= htmlspecialchars($img) ?>" alt="<?= $title ?>" class="w-100 object-fit-cover rounded" style="max-height:500px; min-height:350px;" />
             </div>
           </div>
 
           <!-- Thumbnails (if multiple images) -->
           <?php if (count($product_images) > 1): ?>
-          <div class="gallery-thumbnails mt-3">
-            <div class="d-flex gap-2 flex-wrap">
+          <div class="gallery-thumbnails">
+            <p class="text-muted small mb-3">Klik gambar untuk melihat lebih besar</p>
+            <div class="row g-2">
               <?php foreach ($product_images as $index => $img_item): ?>
-              <img src="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>"
-                   alt="<?= $title ?>"
-                   class="thumbnail-img <?= $index === 0 ? 'active' : '' ?>"
-                   onclick="changeMainImage(this)"
-                   style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease;"
-                   data-image-url="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>">
+              <div class="col-auto">
+                <img src="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>"
+                     alt="<?= $title ?>"
+                     class="thumbnail-img <?= $index === 0 ? 'active' : '' ?>"
+                     onclick="changeMainImage(this)"
+                     data-image-url="<?= htmlspecialchars(public_image_url($img_item['gambar'] ?? '')) ?>"
+                     style="width: 90px; height: 90px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.25s;"
+                     title="Klik untuk melihat gambar">
+              </div>
               <?php endforeach; ?>
             </div>
           </div>
@@ -192,15 +207,18 @@ include 'partials/header.php';
   <?php include 'partials/footer.php'; ?>
   <?php include 'partials/scripts.php'; ?>
   <style>
-    .product-gallery .gallery-main .ratio { max-height: 600px; overflow: hidden; }
-    .product-gallery .gallery-thumbnails { margin-top: 12px; }
-    .thumbnail-img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.25s ease; }
-    .thumbnail-img.active { border-color: #007bff; box-shadow: 0 0 0 4px rgba(0,123,255,0.06); }
+    .product-gallery { margin-bottom: 1rem; }
+    .product-gallery .gallery-main { border: 1px solid #e8ecf1; border-radius: 8px; overflow: hidden; }
+    .product-gallery .gallery-main .ratio { max-height: 500px; min-height: 350px; overflow: hidden; }
+    .product-gallery .gallery-thumbnails { margin-top: 16px; padding-top: 12px; }
+    .thumbnail-img { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid #e8ecf1; transition: all 0.25s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .thumbnail-img:hover { border-color: #cbd5e1; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transform: translateY(-1px); }
+    .thumbnail-img.active { border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.1), 0 2px 8px rgba(0,123,255,0.15); }
 
     @media (max-width: 767.98px) {
-      .product-gallery .gallery-main .ratio { max-height: 420px; }
-      .gallery-thumbnails .d-flex { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .thumbnail-img { width: 72px; height: 72px; }
+      .product-gallery .gallery-main .ratio { max-height: 420px; min-height: 300px; }
+      .gallery-thumbnails { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .thumbnail-img { width: 80px; height: 80px; flex-shrink: 0; }
     }
   </style>
 
