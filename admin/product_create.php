@@ -60,8 +60,8 @@ include __DIR__ . '/partials/header.php';
                             <label class="form-label">Gambaar (jpg/png)</label>
                             <div class="row g-2" id="imageSlotsRow">
                                 <?php for ($i = 0; $i < 5; $i++): ?>
-                                    <div class="col-12 col-md-6">
-                                        <div class="card p-2 h-100" style="min-height:200px;">
+                                    <div class="col-4 col-sm-4 col-md-3 col-lg-2">
+                                        <div class="card p-2 h-100 image-slot-card" style="min-height:0;border:0;background:transparent;">
                                             <div class="d-flex flex-column h-100">
                                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                                     <div>
@@ -78,11 +78,11 @@ include __DIR__ . '/partials/header.php';
                                                     </div>
                                                 </div>
 
-                                                <div class="d-flex align-items-center justify-content-center mb-2" style="flex:1;">
-                                                    <img src="" alt="preview" class="img-preview" data-index="<?= $i ?>" style="max-width:100%;max-height:140px;object-fit:contain;display:none;border-radius:6px;background:#f8f9ff;padding:8px;" />
-                                                    <div class="placeholder text-center text-muted" data-index="<?= $i ?>" style="width:100%;">
-                                                        <i class="fas fa-image" style="font-size:2rem;"></i>
-                                                        <div class="mt-1">Klik untuk pilih gambar</div>
+                                                <div class="image-preview-wrapper mb-2">
+                                                    <img src="" alt="preview" class="img-preview" data-index="<?= $i ?>" />
+                                                    <div class="placeholder text-center text-muted" data-index="<?= $i ?>">
+                                                        <i class="fas fa-image" style="font-size:1.6rem;"></i>
+                                                        <div class="mt-1 small">Klik untuk pilih gambar</div>
                                                     </div>
                                                 </div>
 
@@ -118,6 +118,22 @@ include __DIR__ . '/partials/header.php';
     </main>
 
     <?php include __DIR__ . '/partials/scripts.php'; ?>
+    <style>
+        /* Image slots - square thumbnails and responsive grid */
+        #imageSlotsRow { --gap: .5rem; }
+        .image-slot-card { padding: 0.25rem; }
+        .image-preview-wrapper { position: relative; width: 100%; padding-top: 100%; background:#f8f9ff; border:1px dashed #d6dde6; border-radius:8px; overflow:hidden; }
+        .image-preview-wrapper .img-preview { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:none; }
+        .image-preview-wrapper .placeholder { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#6c757d; }
+        .image-slot-card .btn-select-file, .image-slot-card .btn-remove-bg { font-size:0.75rem; }
+        .image-slot-card .btn-clear-file { opacity:0.9; }
+        @media (max-width:575.98px) {
+            .col-4 { flex: 0 0 33.3333%; max-width:33.3333%; }
+        }
+        @media (min-width:576px) and (max-width:767.98px) {
+            .col-sm-4 { flex: 0 0 33.3333%; max-width:33.3333%; }
+        }
+    </style>
     <script>
         (function() {
             const hargaDisplay = document.getElementById('harga_display');
