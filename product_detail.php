@@ -76,7 +76,6 @@ if (empty($product_images)) {
 
 $primary_image = !empty($product_images) ? $product_images[0] : null;
 $img = $primary_image ? public_image_url($primary_image['gambar'] ?? '') : public_image_url($product['gambar'] ?? '');
-$img = str_replace('/project/', '', $img);
 
 $price = isset($product['harga']) ? number_format((float)$product['harga'], 0, ',', '.') : '-';
 $category = htmlspecialchars($product['nama_kategori'] ?? '');
@@ -173,7 +172,7 @@ include 'partials/header.php';
                 <div class="col-6 col-md-3">
                   <a href="product_detail.php?slug=<?= urlencode($rp['slug']) ?>" class="text-decoration-none text-dark">
                     <div class="card h-100 shadow-sm">
-                      <img src="uploads/products/<?= $rimg ?>" class="card-img-top object-fit-cover" style="height:120px;" alt="<?= htmlspecialchars($rp['nama_produk']) ?>">
+                      <img src="<?= htmlspecialchars(public_image_url($rimg ?? '')) ?>" class="card-img-top object-fit-cover" style="height:120px;" alt="<?= htmlspecialchars($rp['nama_produk']) ?>">
                       <div class="card-body p-2">
                         <div class="small fw-bold"><?= htmlspecialchars($rp['nama_produk']) ?></div>
                         <div class="small text-success">Rp <?= $rprice ?></div>

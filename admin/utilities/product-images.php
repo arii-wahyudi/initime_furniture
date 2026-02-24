@@ -108,9 +108,24 @@ function delete_product_image($id_gambar, $conn)
     
     // Hapus file jika ada
     if ($deleted && !empty($gambar['gambar'])) {
-        $file_path = dirname(__DIR__) . '/../' . $gambar['gambar'];
-        if (file_exists($file_path)) {
-            @unlink($file_path);
+        // Compute likely filesystem path for the stored filename
+        $filename = $gambar['gambar'];
+        // If database stored a full path (uploads/products/...), try to resolve it first
+        $candidatePaths = [];
+        // 1) If value already contains uploads/ path, try project root + that path
+        if (strpos($filename, 'uploads/') !== false) {
+            $candidatePaths[] = dirname(__DIR__) . '/../' . $filename;
+        }
+        // 2) Standard uploads/products location
+        $candidatePaths[] = dirname(__DIR__) . '/../uploads/products/' . basename($filename);
+        // 3) Fallback: project root + basename
+        $candidatePaths[] = dirname(__DIR__) . '/../' . basename($filename);
+
+        foreach ($candidatePaths as $file_path) {
+            if (file_exists($file_path) && is_file($file_path)) {
+                @unlink($file_path);
+                break;
+            }
         }
     }
     
