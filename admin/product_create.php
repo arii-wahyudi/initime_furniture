@@ -155,6 +155,15 @@ include __DIR__ . '/partials/header.php';
         }
         /* improve tap target: make preview wrapper clickable */
         .image-preview-wrapper { cursor: pointer; }
+
+        /* Mobile behavior: stack action buttons and enlarge tap targets */
+        @media (max-width:575.98px) {
+            .slot-actions { flex-direction:column; align-items:stretch; }
+            .slot-actions .btn-select-file, .btn-clear-file { width:100%; }
+            .slot-actions small { display:block; margin-top:6px; }
+            .image-slot-card { padding:8px; }
+            .image-preview-wrapper { padding-top:100%; }
+        }
     </style>
     <script>
         (function() {

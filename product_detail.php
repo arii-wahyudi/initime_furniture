@@ -185,28 +185,38 @@ include 'partials/header.php';
 
   <?php include 'partials/footer.php'; ?>
   <?php include 'partials/scripts.php'; ?>
+  <style>
+    .product-gallery .gallery-main .ratio { max-height: 600px; overflow: hidden; }
+    .product-gallery .gallery-thumbnails { margin-top: 12px; }
+    .thumbnail-img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; transition: all 0.25s ease; }
+    .thumbnail-img.active { border-color: #007bff; box-shadow: 0 0 0 4px rgba(0,123,255,0.06); }
+
+    @media (max-width: 767.98px) {
+      .product-gallery .gallery-main .ratio { max-height: 420px; }
+      .gallery-thumbnails .d-flex { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .thumbnail-img { width: 72px; height: 72px; }
+    }
+  </style>
 
   <script>
-    // Gallery thumbnail navigation
+    // Gallery thumbnail navigation (uses 'active' class)
     function changeMainImage(thumbnailElement) {
       const mainImage = document.getElementById('mainImage');
       const imageUrl = thumbnailElement.getAttribute('data-image-url') || thumbnailElement.src;
+      if (!mainImage || !imageUrl) return;
       mainImage.src = imageUrl;
-      
+
       // Update active thumbnail styling
-      document.querySelectorAll('.thumbnail-img').forEach(img => {
-        img.style.borderColor = 'transparent';
-      });
-      thumbnailElement.style.borderColor = '#007bff';
+      document.querySelectorAll('.thumbnail-img').forEach(img => img.classList.remove('active'));
+      thumbnailElement.classList.add('active');
     }
 
     // Keyboard navigation for gallery
     document.addEventListener('keydown', function(e) {
-      const thumbnails = document.querySelectorAll('.thumbnail-img');
+      const thumbnails = Array.from(document.querySelectorAll('.thumbnail-img'));
       if (thumbnails.length === 0) return;
-      
-      const activeIndex = Array.from(thumbnails).findIndex(img => img.style.borderColor === 'rgb(0, 123, 255)');
-      
+      const activeIndex = thumbnails.findIndex(img => img.classList.contains('active'));
+
       if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
         if (activeIndex > 0) changeMainImage(thumbnails[activeIndex - 1]);
       } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {

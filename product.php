@@ -182,7 +182,7 @@ include 'partials/header.php';
                     <p class="text-center">Belum ada produk.</p>
                 </div>
             <?php else: ?>
-                <?php foreach ($products as $p):
+                                <?php foreach ($products as $p):
                     // Get primary image from produk_gambar table if available, fallback to old gambar column
                     $primary_img = get_product_primary_image($p['id'], $conn);
                     if ($primary_img) {
@@ -190,6 +190,10 @@ include 'partials/header.php';
                     } else {
                       $img = public_image_url($p['gambar'] ?? '');
                     }
+                                        // count images for badge
+                                        $img_count = 0;
+                                        $tmp_imgs = get_product_images($p['id'], $conn);
+                                        if (!empty($tmp_imgs) && is_array($tmp_imgs)) $img_count = count($tmp_imgs);
                     
                     $price = isset($p['harga']) ? number_format((float)$p['harga'], 0, ',', '.') : '-';
                     $category = isset($p['nama_kategori']) ? htmlspecialchars($p['nama_kategori']) : '';
@@ -200,11 +204,14 @@ include 'partials/header.php';
                 ?>
                     <div class="col-6 col-lg-2 g-3">
                         <div class="card shadow h-100">
-                            <div class="card-body m-0 p-0">
-                                <div class="ratio ratio-1x1">
-                                    <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="object-fit-cover" />
+                                <div class="card-body m-0 p-0">
+                                    <div class="ratio ratio-1x1 position-relative">
+                                        <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="object-fit-cover" />
+                                        <?php if ($img_count > 1): ?>
+                                          <div class="position-absolute bottom-0 start-0 m-2 px-2 py-1 bg-dark text-white small rounded"><?= $img_count ?> gambar</div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                            </div>
                             <div class="card-footer py-3">
                                 <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
                                 <span class="badge text-bg-secondary"><?= $category ?></span>

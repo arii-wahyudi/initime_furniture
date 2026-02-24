@@ -91,67 +91,77 @@ include __DIR__ . '/partials/header.php';
                             <input type="hidden" name="existing_gambar" value="<?= htmlspecialchars($product['gambar'] ?? '') ?>">
                         </div>
 
-                        <!-- Multi Images Upload Grid -->
+                        <!-- Galeri Gambar (5 slot, mendukung existing + upload baru) -->
                         <div class="mb-3">
                             <label class="form-label">Galeri Gambar Produk</label>
-                            <div class="row g-2" id="imageGrid">
-                                <!-- Existing images (if edit) -->
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <button type="button" id="btnMultiUploadEdit" class="btn btn-sm btn-info">Upload Banyak</button>
+                                <input type="file" id="multiUploadInputEdit" class="d-none" accept="image/*" multiple>
+                                <small class="text-muted">Pilih beberapa gambar sekaligus — akan mengisi slot berurutan</small>
+                            </div>
+
+                            <div class="row g-2" id="imageSlotsEdit">
                                 <?php
                                 $product_images = [];
                                 try {
                                     if (function_exists('get_product_images')) {
-                                        $product_images = get_product_images($id, $conn);
+                                        $product_images = array_values(get_product_images($id, $conn));
                                     }
                                 } catch (Exception $e) {
-                                    // Silently fail
+                                    $product_images = [];
                                 }
 
-                                foreach ($product_images as $img_item):
+                                for ($i = 0; $i < 5; $i++):
+                                    $slot = isset($product_images[$i]) ? $product_images[$i] : null;
+                                    $previewSrc = '';
+                                    $existingId = '';
+                                    if ($slot) {
+                                        $previewSrc = (function_exists('public_image_url')) ? public_image_url($slot['gambar']) : ('../uploads/products/' . ($slot['gambar'] ?? ''));
+                                        $existingId = (int)$slot['id'];
+                                    }
                                 ?>
-                                    <div class="col-6 col-md-3" data-image-id="<?= (int)$img_item['id'] ?>">
-                                        <div class="card position-relative h-100" style="overflow:hidden;">
-                                            <div class="ratio ratio-1x1">
-                                                <img src="<?= htmlspecialchars(
-                                                                (function_exists('public_image_url')) ? public_image_url($img_item['gambar'] ?? '') : ('../uploads/products/' . ($img_item['gambar'] ?? ''))
-                                                            ) ?>"
-                                                    class="object-fit-cover image-preview"
-                                                    alt="Product image">
-                                            </div>
-                                            <div class="position-absolute top-0 end-0 p-2" style="z-index:10;">
-                                                <button type="button" class="btn btn-sm btn-danger btn-remove"
-                                                    onclick="removeImage(<?= (int)$img_item['id'] ?>, <?= (int)$id ?>)">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                            <div class="position-absolute bottom-0 start-0 end-0 p-2" style="background:rgba(0,0,0,0.4);z-index:9;">
-                                                <button type="button" class="btn btn-sm btn-light w-100 btn-removebg"
-                                                    data-img="<?= htmlspecialchars($img_item['gambar']) ?>"
-                                                    onclick="removeBGImage(this)">
-                                                    <i class="fas fa-wand-magic-sparkles"></i> Remove BG
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
+                                    <div class="col-4 col-sm-4 col-md-3 col-lg-2">
+                                        <div class="card p-2 h-100 image-slot-card">
+                                            <div class="d-flex flex-column h-100">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <?php if ($i === 0): ?>
+                                                            <span class="badge bg-primary">Gambar Utama</span>
+                                                        <?php else: ?>
+                                                            <span class="text-muted">Slot <?= $i + 1 ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-sm btn-outline-danger btn-clear-file" data-index="<?= $i ?>" title="Hapus file">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
 
-                                <!-- Add More Button -->
-                                <div class="col-6 col-md-3">
-                                    <div class="card h-100 d-flex align-items-center justify-content-center"
-                                        id="addImageBtn"
-                                        style="cursor:pointer;border:2px dashed #0d6efd;min-height:200px;background:#f8f9ff;transition:all 0.3s ease;">
-                                        <div class="text-center">
-                                            <i class="fas fa-plus" style="font-size:2.5rem;color:#0d6efd;"></i>
-                                            <p class="mt-2 mb-0"><small class="fw-500">Tambah Gambar</small></p>
+                                                <div class="image-preview-wrapper mb-2" data-index-wrapper="<?= $i ?>">
+                                                    <img src="<?= htmlspecialchars($previewSrc) ?>" alt="preview" class="img-preview" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:block"' : '' ?> />
+                                                    <div class="placeholder text-center text-muted" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:none"' : '' ?> >
+                                                        <i class="fas fa-image" style="font-size:1.6rem;"></i>
+                                                        <div class="mt-1 small">Klik untuk pilih gambar</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="file-meta small text-muted mb-2" data-index-meta="<?= $i ?>" style="<?= $previewSrc ? 'display:block' : 'display:none' ?>;background:#f6fbf8;padding:6px;border-radius:6px;border:1px solid #eef6ef;">
+                                                    <div class="file-name" data-index-name="<?= $i ?>"><?= $slot ? htmlspecialchars(basename($slot['gambar'])) : '' ?></div>
+                                                    <div class="file-size text-muted" data-index-size="<?= $i ?>" style="font-size:0.75rem;"></div>
+                                                </div>
+
+                                                <div class="d-flex gap-2 mt-2 align-items-center slot-actions">
+                                                    <input type="file" name="images[]" accept="image/*" class="d-none image-input-edit" data-index="<?= $i ?>">
+                                                    <input type="hidden" name="existing_image_ids[]" value="<?= $existingId ?>" data-index-hidden="<?= $i ?>">
+                                                    <button type="button" class="btn btn-sm btn-primary btn-select-file-edit" data-index="<?= $i ?>">Pilih Gambar</button>
+                                                    <small class="text-muted ms-auto align-self-center">jpg/png, max 2MB</small>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <input type="file" id="additionalImagesInput" name="additional_images[]"
-                                            class="d-none" accept="image/*" multiple>
                                     </div>
-                                </div>
+                                <?php endfor; ?>
                             </div>
-
-                            <small class="form-text text-muted d-block mt-2">
-                                <i class="fas fa-info-circle"></i> Klik + untuk tambah gambar, atau drag ke sini
-                            </small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Deskripsi</label>
@@ -216,224 +226,80 @@ include __DIR__ . '/partials/header.php';
             });
         })();
 
-        // Multiple Images Upload Handler - Simplified & Robust
+        // Per-slot editable gallery handlers + multi-upload (edit)
         (function() {
-            const imageGrid = document.getElementById('imageGrid');
-            const addImageBtn = document.getElementById('addImageBtn');
-            const fileInput = document.getElementById('additionalImagesInput');
-            const form = document.getElementById('productForm');
+            const inputs = document.querySelectorAll('.image-input-edit');
+            const selects = document.querySelectorAll('.btn-select-file-edit');
+            const clears = document.querySelectorAll('.btn-clear-file');
+            const multiBtn = document.getElementById('btnMultiUploadEdit');
+            const multiInput = document.getElementById('multiUploadInputEdit');
 
-            const MAX_IMAGES = 10;
-            const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-            const selectedFiles = new Map(); // id => File
+            function getPreview(i) { return document.querySelector('.img-preview[data-index="' + i + '"]'); }
+            function getPlaceholder(i) { return document.querySelector('.placeholder[data-index="' + i + '"]'); }
+            function getMeta(i) { return document.querySelector('[data-index-meta="' + i + '"]'); }
+            function getHidden(i) { return document.querySelector('input[data-index-hidden="' + i + '"]'); }
 
-            if (!addImageBtn) return; // Skip if grid doesn't exist
-
-            // Click button to open file dialog
-            addImageBtn.addEventListener('click', () => {
-                fileInput.click();
+            selects.forEach(btn => {
+                const idx = btn.dataset.index;
+                const input = document.querySelector('.image-input-edit[data-index="' + idx + '"]');
+                btn.addEventListener('click', () => input.click());
             });
 
-            // Drag and drop
-            imageGrid.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                imageGrid.style.backgroundColor = '#e7f1ff';
+            document.querySelectorAll('.image-preview-wrapper').forEach(wrapper => {
+                const idx = wrapper.getAttribute('data-index-wrapper');
+                const input = document.querySelector('.image-input-edit[data-index="' + idx + '"]');
+                wrapper.addEventListener('click', () => input.click());
             });
 
-            imageGrid.addEventListener('dragleave', () => {
-                imageGrid.style.backgroundColor = '';
-            });
-
-            imageGrid.addEventListener('drop', (e) => {
-                e.preventDefault();
-                imageGrid.style.backgroundColor = '';
-                handleFiles(e.dataTransfer.files);
-            });
-
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                handleFiles(e.target.files);
-            });
-
-            function handleFiles(files) {
-                const arr = Array.from(files);
-
-                // Validate total count
-                if (selectedFiles.size + arr.length > MAX_IMAGES) {
-                    alert(`Maksimal ${MAX_IMAGES} gambar! Saat ini: ${selectedFiles.size}`);
-                    return;
-                }
-
-                let validCount = 0;
-                arr.forEach(file => {
-                    if (!file.type.startsWith('image/')) {
-                        alert(`❌ ${file.name}: Bukan file gambar`);
-                        return;
-                    }
-                    if (file.size > MAX_FILE_SIZE) {
-                        alert(`❌ ${file.name}: Terlalu besar (> 5MB)`);
-                        return;
-                    }
-
-                    const id = 'new_img_' + Date.now() + '_' + validCount;
-                    selectedFiles.set(id, file);
-                    renderImageCard(id, file);
-                    validCount++;
+            inputs.forEach(input => {
+                const idx = input.dataset.index;
+                const preview = getPreview(idx);
+                const placeholder = getPlaceholder(idx);
+                input.addEventListener('change', (e) => {
+                    const f = e.target.files[0];
+                    if (!f) return;
+                    if (!f.type.startsWith('image/')) { alert('File bukan gambar'); input.value = ''; return; }
+                    if (f.size > 5 * 1024 * 1024) { alert('File terlalu besar (>5MB)'); input.value = ''; return; }
+                    const url = URL.createObjectURL(f);
+                    if (preview) { preview.src = url; preview.style.display = 'block'; }
+                    if (placeholder) placeholder.style.display = 'none';
+                    const meta = getMeta(idx);
+                    if (meta) { meta.style.display = 'block'; meta.querySelector('[data-index-name="' + idx + '"]').textContent = f.name; meta.querySelector('[data-index-size="' + idx + '"]').textContent = Math.round(f.size/1024) + ' KB'; }
+                    // clear existing id marker
+                    const hidden = getHidden(idx);
+                    if (hidden) hidden.value = '';
                 });
-            }
+            });
 
-            function renderImageCard(id, file) {
-                const cardCol = document.createElement('div');
-                cardCol.className = 'col-6 col-md-3';
-                cardCol.dataset.id = id;
-
-                const sizeKb = Math.round(file.size / 1024);
-                const preview = file.type === 'image/jpeg' || file.type === 'image/png' ?
-                    '📷' : '🖼️';
-
-                cardCol.innerHTML = `
-                    <div class="card h-100 position-relative" style="overflow:hidden;">
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height:150px;">
-                            <div class="text-center">
-                                <div style="font-size:40px;">${preview}</div>
-                                <small class="text-muted d-block text-truncate px-2">${escapeHtml(file.name)}</small>
-                                <small class="text-muted">${sizeKb}KB</small>
-                            </div>
-                        </div>
-                        <div class="position-absolute top-0 end-0">
-                            <button type="button" class="btn btn-sm btn-danger" 
-                                    onclick="removeNewImageCard('${id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                imageGrid.insertBefore(cardCol, addImageBtn.parentElement);
-            }
-
-            window.removeNewImageCard = function(id) {
-                selectedFiles.delete(id);
-                document.querySelector(`[data-id="${id}"]`)?.remove();
-            };
-
-            // Form submit handler
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Build FormData from form
-                const formData = new FormData(form);
-
-                // Clear existing file input in formdata
-                formData.delete('additional_images[]');
-
-                // Add new selected files
-                selectedFiles.forEach((file) => {
-                    formData.append('additional_images[]', file);
+            clears.forEach(btn => {
+                const idx = btn.dataset.index;
+                const input = document.querySelector('.image-input-edit[data-index="' + idx + '"]');
+                const preview = getPreview(idx);
+                const placeholder = getPlaceholder(idx);
+                btn.addEventListener('click', () => {
+                    // clear file input
+                    if (input) input.value = '';
+                    if (preview) { preview.src = ''; preview.style.display = 'none'; }
+                    if (placeholder) placeholder.style.display = 'block';
+                    const meta = getMeta(idx); if (meta) meta.style.display = 'none';
+                    const hidden = getHidden(idx); if (hidden) hidden.value = '';
                 });
+            });
 
-                // Submit with proper error handling
-                fetch(form.action, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Server error: ' + response.status);
-                        return response.text();
-                    })
-                    .then(html => {
-                        // Check for error messages
-                        if (html.includes('Gagal') || html.includes('Error') || html.includes('error')) {
-                            alert('⚠️ Terjadi kesalahan. Cek console untuk detail.');
-                            console.error('Server response:', html.substring(0, 500));
-                        } else {
-                            // Success - redirect
-                            window.location.href = 'products.php';
-                        }
-                    })
-                    .catch(err => {
-                        alert('❌ Network error: ' + err.message);
-                        console.error(err);
+            if (multiBtn && multiInput) {
+                multiBtn.addEventListener('click', () => multiInput.click());
+                multiInput.addEventListener('change', (e) => {
+                    const files = Array.from(e.target.files || []);
+                    files.slice(0,5).forEach((file, i) => {
+                        const slotInput = document.querySelector('.image-input-edit[data-index="' + i + '"]');
+                        if (!slotInput) return;
+                        const dt = new DataTransfer(); dt.items.add(file); slotInput.files = dt.files;
+                        slotInput.dispatchEvent(new Event('change'));
                     });
-            });
-
-            // Keep add button always at end
-            const observer = new MutationObserver(() => {
-                if (addImageBtn && addImageBtn.parentElement && imageGrid.contains(addImageBtn.parentElement)) {
-                    imageGrid.appendChild(addImageBtn.parentElement);
-                }
-            });
-            observer.observe(imageGrid, {
-                childList: true
-            });
+                    multiInput.value = '';
+                });
+            }
         })();
-
-        // Remove BG for existing image
-        function removeBGImage(btn) {
-            const imgPath = btn.getAttribute('data-img');
-            if (!imgPath || !confirm('Remove background dari gambar ini?')) return;
-
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
-
-            const formData = new FormData();
-            formData.append('image_path', imgPath);
-
-            fetch('product_remove_bg_existing.php', {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'same-origin'
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.ok) {
-                        btn.closest('.card').querySelector('img').src = data.url;
-                        btn.innerHTML = '<i class="fas fa-check"></i>';
-                        setTimeout(() => {
-                            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                        }, 1500);
-                    } else {
-                        alert('Error: ' + (data.error || 'Unknown'));
-                    }
-                    btn.disabled = false;
-                })
-                .catch(err => {
-                    alert('Network error');
-                    btn.disabled = false;
-                });
-        }
-
-        // Remove BG for new image
-        function removeBGNewImage(btn, base64Img) {
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
-
-            const formData = new FormData();
-            formData.append('image', base64Img);
-
-            fetch('product_preview_removebg.php', {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'same-origin'
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.ok) {
-                        btn.closest('.card').querySelector('img').src = data.data;
-                        btn.innerHTML = '<i class="fas fa-check"></i>';
-                        setTimeout(() => {
-                            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Remove BG';
-                        }, 1500);
-                    } else {
-                        alert('Error: ' + (data.error || 'Unknown'));
-                    }
-                    btn.disabled = false;
-                })
-                .catch(err => {
-                    alert('Error: ' + err.message);
-                    btn.disabled = false;
-                });
-        }
 
         // Remove image (existing)
         function removeImage(imageId, productId) {
