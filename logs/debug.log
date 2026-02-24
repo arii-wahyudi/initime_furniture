@@ -1,0 +1,22 @@
+[2026-02-22 16:04:20] POST /intime_furniture_host/admin/product_store.php
+  POST: {"nama_produk":"P1","id_kategori":"3","harga":"1440000","deskripsi":"LOREM ISPUM"}
+  FILES: {"additional_images":{"name":["prod4.jpg","prod3.jpg"],"size":[229842,90749],"error":[0,0]}}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"P1","id_kategori":3,"harga":1440000,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Used first additional image as main | Context: {"filename":"3c18232d03c36e78.jpg"}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"p1-b812b8f7","nama":"P1"}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":7}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Processing additional images | Context: {"count":2}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Skipping additional image 0 because it was used as main
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Processing additional image 1 | Context: {"filename":"prod3.jpg","type":"image\/jpeg"}
+[2026-02-22 16:04:20] [DEBUG] [IP: ::1] Additional image 1 saved | Context: {"filename":"711f82e58a350866.jpg"}
+[2026-02-22 16:22:13] POST /intime_furniture_host/admin/product_store.php
+  POST: {"nama_produk":"prod3","id_kategori":"3","harga":"1400000","deskripsi":"lorem123"}
+  FILES: {"additional_images":{"name":["cat2-ruangmakan.jpg","prod2.jpg"],"size":[152184,150773],"error":[0,0]}}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"prod3","id_kategori":3,"harga":1400000,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Used first additional image as main | Context: {"filename":"44a6082c747650a3.jpg"}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"prod3-be5d71a3","nama":"prod3"}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":8}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Processing additional images | Context: {"count":2}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Skipping additional image 0 because it was used as main
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Processing additional image 1 | Context: {"filename":"prod2.jpg","type":"image\/jpeg"}
+[2026-02-22 16:22:13] [DEBUG] [IP: ::1] Additional image 1 saved | Context: {"filename":"5aec86ce795f0a5d.jpg"}
