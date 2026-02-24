@@ -116,8 +116,19 @@ include __DIR__ . '/partials/header.php';
                                     $previewSrc = '';
                                     $existingId = '';
                                     if ($slot) {
-                                        $previewSrc = (function_exists('public_image_url')) ? public_image_url($slot['gambar']) : ('../uploads/products/' . ($slot['gambar'] ?? ''));
+                                        $rawName = $slot['gambar'] ?? '';
                                         $existingId = (int)$slot['id'];
+                                        // Try to resolve public URL first; fallback to admin relative uploads path
+                                        if (function_exists('public_image_url')) {
+                                            $tmp = public_image_url($rawName);
+                                            if (!empty($tmp) && (strpos($tmp, 'http') === 0 || strpos($tmp, '/') === 0)) {
+                                                $previewSrc = $tmp;
+                                            } else {
+                                                $previewSrc = '../uploads/products/' . $rawName;
+                                            }
+                                        } else {
+                                            $previewSrc = '../uploads/products/' . $rawName;
+                                        }
                                     }
                                 ?>
                                     <div class="col-4 col-sm-4 col-md-3 col-lg-2">

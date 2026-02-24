@@ -147,7 +147,14 @@ include 'partials/header.php';
         <h3 class="fw-bold text-success">Rp <?= $price ?></h3>
 
         <div class="mt-3">
-          <?= nl2br(htmlspecialchars($product['deskripsi'] ?? '')) ?>
+          <?php $desc_raw = htmlspecialchars($product['deskripsi'] ?? ''); ?>
+          <?php if (mb_strlen($desc_raw) > 400): ?>
+            <div id="descShort"><?= nl2br(mb_substr($desc_raw, 0, 400)) ?>...</div>
+            <div id="descFull" style="display:none"><?= nl2br($desc_raw) ?></div>
+            <button id="btnToggleDesc" class="btn btn-link p-0 mt-2">Tampilkan selengkapnya</button>
+          <?php else: ?>
+            <div id="descShort"><?= nl2br($desc_raw) ?></div>
+          <?php endif; ?>
         </div>
 
         <div class="mt-4 d-flex gap-2">
