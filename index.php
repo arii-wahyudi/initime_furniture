@@ -134,6 +134,19 @@ include 'partials/header.php';
   </div>
   <!-- CAROUSEL SECTION END -->
 
+  <style>
+    /* Reduce carousel height and caption size on small screens */
+    @media (max-width: 767.98px) {
+      #carouselExampleCaptions .ratio.ratio-21x9 { padding-top: 56.25%; }
+      #carouselExampleCaptions .carousel-inner { max-height: 220px; overflow: hidden; }
+      #carouselExampleCaptions img.object-fit-cover { width:100%; height:100%; object-fit:cover; }
+      #carouselExampleCaptions .carousel-caption { padding: 0.5rem 0.75rem; align-items: flex-end; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.25) 100%); }
+      #carouselExampleCaptions .capt-title { font-size: 1rem; }
+      #carouselExampleCaptions .capt-desc { font-size: 0.85rem; }
+      #carouselExampleCaptions { padding-left: 0.5rem; padding-right: 0.5rem; }
+    }
+  </style>
+
 
   <!-- ABOUT US SECTION START -->
   <div class="container-lg mb-5">

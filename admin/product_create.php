@@ -78,7 +78,7 @@ include __DIR__ . '/partials/header.php';
                                                     </div>
                                                 </div>
 
-                                                <div class="image-preview-wrapper mb-2">
+                                                <div class="image-preview-wrapper mb-2" data-index-wrapper="<?= $i ?>">
                                                     <img src="" alt="preview" class="img-preview" data-index="<?= $i ?>" />
                                                     <div class="placeholder text-center text-muted" data-index="<?= $i ?>">
                                                         <i class="fas fa-image" style="font-size:1.6rem;"></i>
@@ -86,7 +86,12 @@ include __DIR__ . '/partials/header.php';
                                                     </div>
                                                 </div>
 
-                                                <div class="d-flex gap-2 mt-2">
+                                                <div class="file-meta small text-muted mb-2" data-index-meta="<?= $i ?>" style="display:none;background:#f6fbf8;padding:6px;border-radius:6px;border:1px solid #eef6ef;">
+                                                    <div class="file-name" data-index-name="<?= $i ?>"></div>
+                                                    <div class="file-size text-muted" data-index-size="<?= $i ?>" style="font-size:0.75rem;"></div>
+                                                </div>
+
+                                                <div class="d-flex gap-2 mt-2 align-items-center">
                                                     <input type="file" name="images[]" accept="image/*" class="d-none image-input" data-index="<?= $i ?>">
                                                     <button type="button" class="btn btn-sm btn-primary btn-select-file" data-index="<?= $i ?>">Pilih Gambar</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary btn-remove-bg" data-index="<?= $i ?>">
@@ -122,9 +127,20 @@ include __DIR__ . '/partials/header.php';
         /* Image slots - square thumbnails and responsive grid */
         #imageSlotsRow { --gap: .5rem; }
         .image-slot-card { padding: 0.25rem; }
+        /* make a strict 5-column layout on wide screens, responsive down to 3/2/1 */
+        @media (min-width:1200px) {
+            #imageSlotsRow { display:flex; gap:0.5rem; flex-wrap:wrap; }
+            #imageSlotsRow > div { flex: 0 0 calc(20% - 0.5rem); max-width: calc(20% - 0.5rem); }
+        }
+        @media (min-width:992px) and (max-width:1199.98px) {
+            #imageSlotsRow { display:flex; gap:0.5rem; flex-wrap:wrap; }
+            #imageSlotsRow > div { flex: 0 0 calc(25% - 0.5rem); max-width: calc(25% - 0.5rem); }
+        }
+        @media (min-width:768px) and (max-width:991.98px) { #imageSlotsRow > div { flex: 0 0 33.3333%; max-width:33.3333%; } }
         .image-preview-wrapper { position: relative; width: 100%; padding-top: 100%; background:#f8f9ff; border:1px dashed #d6dde6; border-radius:8px; overflow:hidden; }
         .image-preview-wrapper .img-preview { position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:none; }
         .image-preview-wrapper .placeholder { position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#6c757d; }
+        .file-meta { margin-top:6px; }
         .image-slot-card .btn-select-file, .image-slot-card .btn-remove-bg { font-size:0.75rem; }
         .image-slot-card .btn-clear-file { opacity:0.9; }
         @media (max-width:575.98px) {
@@ -133,6 +149,8 @@ include __DIR__ . '/partials/header.php';
         @media (min-width:576px) and (max-width:767.98px) {
             .col-sm-4 { flex: 0 0 33.3333%; max-width:33.3333%; }
         }
+        /* improve tap target: make preview wrapper clickable */
+        .image-preview-wrapper { cursor: pointer; }
     </style>
     <script>
         (function() {
@@ -191,6 +209,13 @@ include __DIR__ . '/partials/header.php';
                 btn.addEventListener('click', () => input.click());
             });
 
+            // allow clicking the preview wrapper to open file dialog
+            document.querySelectorAll('.image-preview-wrapper').forEach(wrapper => {
+                const idx = wrapper.getAttribute('data-index-wrapper');
+                const input = document.querySelector('.image-input[data-index="' + idx + '"]');
+                wrapper.addEventListener('click', () => input.click());
+            });
+
             inputs.forEach(input => {
                 const idx = input.dataset.index;
                 const preview = getPreviewByIndex(idx);
@@ -205,6 +230,15 @@ include __DIR__ . '/partials/header.php';
                     preview.src = url;
                     preview.style.display = 'block';
                     if (placeholder) placeholder.style.display = 'none';
+                    // show meta (name + size)
+                    const meta = document.querySelector('[data-index-meta="' + idx + '"]');
+                    const nameEl = document.querySelector('[data-index-name="' + idx + '"]');
+                    const sizeEl = document.querySelector('[data-index-size="' + idx + '"]');
+                    if (meta && nameEl && sizeEl) {
+                        nameEl.textContent = f.name;
+                        sizeEl.textContent = Math.round(f.size/1024) + ' KB';
+                        meta.style.display = 'block';
+                    }
                 });
             });
 
@@ -217,6 +251,8 @@ include __DIR__ . '/partials/header.php';
                     input.value = '';
                     if (preview) { preview.src = ''; preview.style.display = 'none'; }
                     if (placeholder) placeholder.style.display = 'block';
+                    const meta = document.querySelector('[data-index-meta="' + idx + '"]');
+                    if (meta) meta.style.display = 'none';
                 });
             });
 
