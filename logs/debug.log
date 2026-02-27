@@ -101,3 +101,33 @@
 [2026-02-24 15:43:56] [DEBUG] [IP: ::1] Edit slot 2 - added new image | Context: {"filename":"17bc65a4f752f912.png","urutan":2}
 [2026-02-24 15:43:56] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
 [2026-02-24 15:43:56] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-27 13:48:19] POST /intime_furniture_host/admin/product_store.php
+  POST: {"nama_produk":"prod1","id_kategori":"3","harga":"1440000","deskripsi":"lost"}
+  FILES: {"images":{"name":["prod1.jpg","","","",""],"size":[184152,0,0,0,0],"error":[0,4,4,4,4]}}
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"prod1","id_kategori":3,"harga":1440000,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Used first images[] as main | Context: {"filename":"6397110469f1cdf1.jpg"}
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"prod1-df4094ce","nama":"prod1"}
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":12}
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Using images[] array for multi-upload
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Processing all images | Context: {"count":5,"used_first_as_main":true}
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Skipping slot 0 - already used as main product image
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Skipping image slot 1 - upload error code: 4
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Skipping image slot 2 - upload error code: 4
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Skipping image slot 3 - upload error code: 4
+[2026-02-27 13:48:19] [DEBUG] [IP: ::1] Skipping image slot 4 - upload error code: 4
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Processing edit image slot 1 | Context: {"filename":"prod2.jpg","type":"image\/jpeg","size":150773}
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Edit slot 1 - added new image | Context: {"filename":"fc72a4da1b9e2fbe.jpg","urutan":1}
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Processing edit image slot 2 | Context: {"filename":"prod4.jpg","type":"image\/jpeg","size":229842}
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Edit slot 2 - added new image | Context: {"filename":"d1fdb0f39b01b80a.jpg","urutan":2}
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-27 16:34:02] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4

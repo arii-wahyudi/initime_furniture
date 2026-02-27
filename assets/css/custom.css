@@ -62,13 +62,15 @@ body {
 /* Jika ingin mempersempit area klik tombol (opsional) */
 .carousel-control-prev,
 .carousel-control-next {
-  width: 11%; /* Defaultnya 15%, diubah jadi 5% agar lebih ramping ke samping */
+  width: 13%; /* Defaultnya 15%, diubah jadi 5% agar lebih ramping ke samping */
 }
 
 .capt-title {
   font-size: 14px;
 }
-
+.capt-desc {
+  font-size: 10px;
+}
 
 
 
@@ -217,19 +219,19 @@ body {
 }
 
 /* Image helpers: ensure consistent sizing and cover behaviour */
-.object-fit-cover {
+/* .object-fit-cover {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
+} */
 
-.img-preview {
+/* .img-preview {
   width: 48px;
   height: 48px;
   object-fit: cover;
   border-radius: 8px;
-}
+} */
 
 /* Stronger selector for about-section icon wrapper to prevent accidental overflow */
 .card .p-3.bg-title .img-preview,
@@ -285,41 +287,8 @@ body {
   .img-preview { width: 40px; height: 40px; }
 }
 
-/* Carousel-specific fixes: keep images constrained and caption contained */
-.carousel-item.ratio {
-  position: relative;
-  overflow: hidden;
-}
-.carousel-item.ratio img.object-fit-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-.carousel-caption {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 1.5rem;
-  z-index: 5;
-}
+
 #product {
   position: relative;
   z-index: auto; /* remove stacking priority so global dropdown can appear above */
 }
-@media (max-width: 992px) {
-  .carousel-caption { width: 70%; padding: 1rem; }
-}
-@media (max-width: 576px) {
-  .carousel-caption { position: relative; width: 100%; padding: 0.75rem; }
-  .carousel-item.ratio img.object-fit-cover { position: relative; height: auto; }
-}
-/* Dropdown tweaks removed for kategori (kategori feature deleted) */

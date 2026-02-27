@@ -97,7 +97,7 @@ include 'partials/header.php';
         <img src="<?= htmlspecialchars($cr1_img) ?>" class="d-block w-100 img-fluid opacity-25 object-fit-cover" alt="<?= htmlspecialchars($cr1_title) ?>" />
         <div class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 reveal px-4">
           <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2"><?= htmlspecialchars($cr1_title) ?></p>
+            <p class="fw-semibold capt-title mb-md-3 mb-2"><?= htmlspecialchars($cr1_title) ?></p>
             <p class="capt-desc"><?= htmlspecialchars($cr1_desc) ?></p>
           </div>
         </div>
@@ -107,7 +107,7 @@ include 'partials/header.php';
         <img src="<?= htmlspecialchars($cr2_img) ?>" class="d-block w-100 img-fluid opacity-25 object-fit-cover" alt="<?= htmlspecialchars($cr2_title) ?>" />
         <div class="carousel-caption w-md-50 w-75 d-flex align-items-center justify-content-start h-100 top-0 start-0 px-4">
           <div class="d-block text-start px-md-5">
-            <p class="mb-1 fw-semibold capt-title mb-md-3 mb-2"><?= htmlspecialchars($cr2_title) ?></p>
+            <p class="fw-semibold capt-title mb-md-3 mb-2"><?= htmlspecialchars($cr2_title) ?></p>
             <p class="capt-desc"><?= htmlspecialchars($cr2_desc) ?></p>
           </div>
         </div>
@@ -134,18 +134,6 @@ include 'partials/header.php';
   </div>
   <!-- CAROUSEL SECTION END -->
 
-  <style>
-    /* Reduce carousel height and caption size on small screens */
-    @media (max-width: 767.98px) {
-      #carouselExampleCaptions .ratio.ratio-21x9 { padding-top: 56.25%; }
-      #carouselExampleCaptions .carousel-inner { max-height: 220px; overflow: hidden; }
-      #carouselExampleCaptions img.object-fit-cover { width:100%; height:100%; object-fit:cover; }
-      #carouselExampleCaptions .carousel-caption { padding: 0.5rem 0.75rem; align-items: flex-end; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.25) 100%); }
-      #carouselExampleCaptions .capt-title { font-size: 1rem; }
-      #carouselExampleCaptions .capt-desc { font-size: 0.85rem; }
-      #carouselExampleCaptions { padding-left: 0.5rem; padding-right: 0.5rem; }
-    }
-  </style>
 
 
   <!-- ABOUT US SECTION START -->
@@ -185,7 +173,7 @@ include 'partials/header.php';
                   <?php $exp_icon = public_image_url($settings['about_exp_icon'] ?? '', 'settings'); ?>
                   <?php if (!empty($settings['about_exp_icon']) && !empty($exp_icon)): ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center">
-                      <img src="<?= htmlspecialchars($exp_icon) ?>" alt="icon" class="img-preview" width="30" height="30">
+                      <img src="<?= htmlspecialchars($exp_icon) ?>" alt="icon" width="30" height="30">
                     </div>
                   <?php else: ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-couch"></i></div>
@@ -201,7 +189,7 @@ include 'partials/header.php';
                 <div class="col-2">
                   <?php $team_icon = public_image_url($settings['about_team_icon'] ?? '', 'settings'); ?>
                   <?php if (!empty($settings['about_team_icon']) && !empty($team_icon)): ?>
-                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($team_icon) ?>" alt="icon" class="img-preview" width="30" height="30"></div>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($team_icon) ?>" alt="icon" width="30" height="30"></div>
                   <?php else: ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-users"></i></div>
                   <?php endif; ?>
@@ -216,7 +204,7 @@ include 'partials/header.php';
                 <div class="col-2">
                   <?php $fast_icon = public_image_url($settings['about_fast_icon'] ?? '', 'settings'); ?>
                   <?php if (!empty($settings['about_fast_icon']) && !empty($fast_icon)): ?>
-                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($fast_icon) ?>" alt="icon" class="img-preview" width="30" height="30"></div>
+                    <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center"><img src="<?= htmlspecialchars($fast_icon) ?>" alt="icon" width="30" height="30"></div>
                   <?php else: ?>
                     <div class="p-3 bg-title rounded-pill d-flex justify-content-center align-items-center fs-2"><i class="fas fa-shipping-fast"></i></div>
                   <?php endif; ?>

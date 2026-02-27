@@ -77,8 +77,8 @@ include __DIR__ . '/partials/header.php';
                             <label class="form-label">Gambar (jpg/png)</label>
                             <input id="gambarInput" type="file" name="gambar" class="form-control" accept="image/*">
                             <div class="form-text">Pilih gambar baru untuk mengganti gambar utama produk</div>
-                                <!-- Top large preview removed: edit uses slot previews below as canonical -->
-                                <div class="mt-2 text-muted small">Gunakan kotak di bawah untuk mengatur gambar utama (Slot 1) dan gambar tambahan.</div>
+                            <!-- Top large preview removed: edit uses slot previews below as canonical -->
+                            <div class="mt-2 text-muted small">Gunakan kotak di bawah untuk mengatur gambar utama (Slot 1) dan gambar tambahan.</div>
                             <input type="hidden" name="removebg" id="removebg_hidden" value="0">
                             <input type="hidden" name="preview_ai_data" id="preview_ai_data" value="">
                             <input type="hidden" name="existing_gambar" value="<?= htmlspecialchars($product['gambar'] ?? '') ?>">
@@ -110,7 +110,10 @@ include __DIR__ . '/partials/header.php';
                                     $mainBasename = basename($product['gambar']);
                                     $found = false;
                                     foreach ($product_images as $pi) {
-                                        if (basename($pi['gambar'] ?? '') === $mainBasename) { $found = true; break; }
+                                        if (basename($pi['gambar'] ?? '') === $mainBasename) {
+                                            $found = true;
+                                            break;
+                                        }
                                     }
                                     if (!$found) {
                                         array_unshift($product_images, ['id' => 0, 'gambar' => $product['gambar'], 'urutan' => 0, 'is_primary' => 1]);
@@ -143,7 +146,7 @@ include __DIR__ . '/partials/header.php';
                                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                                     <div>
                                                         <?php if ($i === 0): ?>
-                                                            <span class="badge bg-primary">Slot 1 (Utama)</span>
+                                                            <span class="badge bg-primary me-1">Slot Utama</span>
                                                         <?php else: ?>
                                                             <span class="text-muted small">Slot <?= $i + 1 ?></span>
                                                         <?php endif; ?>
@@ -155,7 +158,7 @@ include __DIR__ . '/partials/header.php';
 
                                                 <div class="image-preview-wrapper mb-2" data-index-wrapper="<?= $i ?>">
                                                     <img src="<?= htmlspecialchars($previewSrc) ?>" alt="preview" class="img-preview" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:block"' : '' ?> />
-                                                    <div class="placeholder text-center text-muted" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:none"' : '' ?> >
+                                                    <div class="placeholder text-center text-muted" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:none"' : '' ?>>
                                                         <i class="fas fa-image"></i>
                                                         <div class="mt-1 small">Klik untuk pilih gambar</div>
                                                     </div>
@@ -172,8 +175,10 @@ include __DIR__ . '/partials/header.php';
                                                 <div class="d-flex gap-2 mt-2 align-items-center slot-actions">
                                                     <input type="file" name="images[]" accept="image/*" class="d-none image-input-edit" data-index="<?= $i ?>">
                                                     <input type="hidden" name="existing_image_ids[]" value="<?= $existingId ?>" data-index-hidden="<?= $i ?>">
-                                                    <button type="button" class="btn btn-sm btn-primary btn-select-file-edit" data-index="<?= $i ?>">Pilih Gambar</button>
-                                                    <small class="text-muted ms-auto align-self-center">jpg/png, max 2MB</small>
+                                                    <div class="mt-2">
+                                                        <button type="button" class="btn btn-sm btn-primary btn-select-file-edit" data-index="<?= $i ?>">Pilih Gambar</button>
+                                                        <small class="text-muted ms-auto align-self-center">jpg/png, max 2MB</small>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,10 +257,21 @@ include __DIR__ . '/partials/header.php';
             const multiBtn = document.getElementById('btnMultiUploadEdit');
             const multiInput = document.getElementById('multiUploadInputEdit');
 
-            function getPreview(i) { return document.querySelector('.img-preview[data-index="' + i + '"]'); }
-            function getPlaceholder(i) { return document.querySelector('.placeholder[data-index="' + i + '"]'); }
-            function getMeta(i) { return document.querySelector('[data-index-meta="' + i + '"]'); }
-            function getHidden(i) { return document.querySelector('input[data-index-hidden="' + i + '"]'); }
+            function getPreview(i) {
+                return document.querySelector('.img-preview[data-index="' + i + '"]');
+            }
+
+            function getPlaceholder(i) {
+                return document.querySelector('.placeholder[data-index="' + i + '"]');
+            }
+
+            function getMeta(i) {
+                return document.querySelector('[data-index-meta="' + i + '"]');
+            }
+
+            function getHidden(i) {
+                return document.querySelector('input[data-index-hidden="' + i + '"]');
+            }
 
             selects.forEach(btn => {
                 const idx = btn.dataset.index;
@@ -276,13 +292,28 @@ include __DIR__ . '/partials/header.php';
                 input.addEventListener('change', (e) => {
                     const f = e.target.files[0];
                     if (!f) return;
-                    if (!f.type.startsWith('image/')) { alert('File bukan gambar'); input.value = ''; return; }
-                    if (f.size > 5 * 1024 * 1024) { alert('File terlalu besar (>5MB)'); input.value = ''; return; }
+                    if (!f.type.startsWith('image/')) {
+                        alert('File bukan gambar');
+                        input.value = '';
+                        return;
+                    }
+                    if (f.size > 5 * 1024 * 1024) {
+                        alert('File terlalu besar (>5MB)');
+                        input.value = '';
+                        return;
+                    }
                     const url = URL.createObjectURL(f);
-                    if (preview) { preview.src = url; preview.style.display = 'block'; }
+                    if (preview) {
+                        preview.src = url;
+                        preview.style.display = 'block';
+                    }
                     if (placeholder) placeholder.style.display = 'none';
                     const meta = getMeta(idx);
-                    if (meta) { meta.style.display = 'block'; meta.querySelector('[data-index-name="' + idx + '"]').textContent = f.name; meta.querySelector('[data-index-size="' + idx + '"]').textContent = Math.round(f.size/1024) + ' KB'; }
+                    if (meta) {
+                        meta.style.display = 'block';
+                        meta.querySelector('[data-index-name="' + idx + '"]').textContent = f.name;
+                        meta.querySelector('[data-index-size="' + idx + '"]').textContent = Math.round(f.size / 1024) + ' KB';
+                    }
                     // clear existing id marker
                     const hidden = getHidden(idx);
                     if (hidden) hidden.value = '';
@@ -297,10 +328,15 @@ include __DIR__ . '/partials/header.php';
                 btn.addEventListener('click', () => {
                     // clear file input
                     if (input) input.value = '';
-                    if (preview) { preview.src = ''; preview.style.display = 'none'; }
+                    if (preview) {
+                        preview.src = '';
+                        preview.style.display = 'none';
+                    }
                     if (placeholder) placeholder.style.display = 'block';
-                    const meta = getMeta(idx); if (meta) meta.style.display = 'none';
-                    const hidden = getHidden(idx); if (hidden) hidden.value = '';
+                    const meta = getMeta(idx);
+                    if (meta) meta.style.display = 'none';
+                    const hidden = getHidden(idx);
+                    if (hidden) hidden.value = '';
                 });
             });
 
@@ -308,10 +344,12 @@ include __DIR__ . '/partials/header.php';
                 multiBtn.addEventListener('click', () => multiInput.click());
                 multiInput.addEventListener('change', (e) => {
                     const files = Array.from(e.target.files || []);
-                    files.slice(0,5).forEach((file, i) => {
+                    files.slice(0, 5).forEach((file, i) => {
                         const slotInput = document.querySelector('.image-input-edit[data-index="' + i + '"]');
                         if (!slotInput) return;
-                        const dt = new DataTransfer(); dt.items.add(file); slotInput.files = dt.files;
+                        const dt = new DataTransfer();
+                        dt.items.add(file);
+                        slotInput.files = dt.files;
                         slotInput.dispatchEvent(new Event('change'));
                     });
                     multiInput.value = '';
@@ -326,32 +364,159 @@ include __DIR__ . '/partials/header.php';
         }
     </script>
     <style>
-        /* Edit page image slots styling */
-        .image-slot-card { padding: 14px; background: #fff; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border: 1px solid #e8ecf1; }
-        .image-preview-wrapper { position: relative; width: 100%; padding-top: 100%; background: #f5f7fc; border: 1px dashed #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
-        .image-preview-wrapper:hover { border-color: #94a3b8; background: #f0f4fa; }
-        .image-preview-wrapper .img-preview { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
-        .image-preview-wrapper .placeholder { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #7a8597; }
-        .image-preview-wrapper .placeholder i { font-size: 2rem; color: #a0afc2; margin-bottom: 8px; }
-        .image-preview-wrapper .placeholder .small { font-size: 0.8rem; text-align: center; }
-        .file-meta { background: #f0f5fb; padding: 10px; border-radius: 6px; border: 1px solid #e0e8f2; font-size: 0.8rem; margin-bottom: 12px; }
-        .image-slot-card .btn-select-file-edit { font-size: 0.85rem; padding: 8px 12px; width: 100%; }
-        .image-slot-card .btn-clear-file { opacity: 0.85; padding: 6px 10px; }
-        .overlay-clear { position: absolute; top: 8px; right: 8px; z-index: 10; }
-        
-        #imageSlotsEdit { gap: 1rem; }
-        .col-4, .col-sm-4, .col-md-3, .col-lg-2 { padding-right: 0.5rem; padding-left: 0.5rem; }
-        
-        @media (max-width: 575.98px) {
-            #imageSlotsEdit { gap: 0.75rem; }
-            .col-4 { flex: 0 0 50%; max-width: 50%; }
-            .image-slot-card { padding: 12px; }
-            .slot-actions { flex-direction: column; align-items: stretch; gap: 8px; }
-            .slot-actions .btn { width: 100%; font-size: 0.9rem; padding: 10px 8px; }
-            .slot-actions small { display: block; margin-top: 8px; text-align: center; font-size: 0.75rem; }
+        /* Edit page image slots styling - responsive 5-column layout */
+        #imageSlotsEdit {
+            --gap: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
-        @media (min-width: 576px) and (max-width: 767.98px) {
-            .col-sm-4 { flex: 0 0 50%; max-width: 50%; }
+
+        .image-slot-card {
+            padding: 14px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e8ecf1;
+        }
+
+        .image-preview-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            background: #f5f7fc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .image-preview-wrapper:hover {
+            border-color: #94a3b8;
+            background: #f0f4fa;
+        }
+
+        .image-preview-wrapper .img-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .image-preview-wrapper .placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #7a8597;
+        }
+
+        .image-preview-wrapper .placeholder i {
+            font-size: 2rem;
+            color: #a0afc2;
+            margin-bottom: 8px;
+        }
+
+        .image-preview-wrapper .placeholder .small {
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .file-meta {
+            background: #f0f5fb;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #e0e8f2;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+        }
+
+        .image-slot-card .btn-select-file-edit {
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            width: 100%;
+        }
+
+        .image-slot-card .btn-clear-file {
+            opacity: 0.85;
+            padding: 6px 10px;
+        }
+
+        .overlay-clear {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
+        }
+
+        /* Responsive grid: 5 columns on wide, 4 on lg, 3 on md, 2 on sm, 1 on xs */
+        @media (min-width: 1200px) {
+            #imageSlotsEdit>div {
+                flex: 0 0 calc(20% - 1rem);
+                max-width: calc(20% - 1rem);
+            }
+        }
+
+        @media (min-width: 992px) and (max-width: 1199.98px) {
+            #imageSlotsEdit {
+                gap: 0.75rem;
+            }
+
+            #imageSlotsEdit>div {
+                flex: 0 0 calc(25% - 0.75rem);
+                max-width: calc(25% - 0.75rem);
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 991.98px) {
+            #imageSlotsEdit>div {
+                flex: 0 0 calc(33.333% - 0.75rem);
+                max-width: calc(33.333% - 0.75rem);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            #imageSlotsEdit {
+                gap: 0.75rem;
+            }
+
+            #imageSlotsEdit>div {
+                flex: 0 0 calc(50% - 0.375rem);
+                max-width: calc(50% - 0.375rem);
+            }
+
+            .image-slot-card {
+                padding: 12px;
+            }
+
+            .slot-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .slot-actions .btn {
+                width: 100%;
+                font-size: 0.9rem;
+                padding: 10px 8px;
+            }
+
+            .slot-actions small {
+                display: block;
+                margin-top: 8px;
+                text-align: center;
+                font-size: 0.75rem;
+            }
         }
     </style>
 </body>
