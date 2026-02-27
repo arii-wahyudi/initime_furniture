@@ -17,6 +17,30 @@ if ($res) {
     mysqli_free_result($res);
 }
 
+// determine Whatsapp contact number using toko contact if available
+$wa_number = '';
+if (!empty($conn)) {
+    $kt = [];
+    $rk = @mysqli_query($conn, "SELECT telepon FROM kontak_toko ORDER BY id DESC LIMIT 1");
+    if ($rk) {
+        $kt = mysqli_fetch_assoc($rk) ?: [];
+        mysqli_free_result($rk);
+    }
+    $tel_source = $kt['telepon'] ?? ($settings['whatsapp'] ?? '');
+    if (!empty($tel_source)) {
+        // normalize: keep digits and plus, convert leading 0 to 62
+        $tel = preg_replace('/[^0-9+]/', '', $tel_source);
+        if ($tel !== '' && preg_match('/^0/', $tel)) {
+            $tel = '62' . preg_replace('/^0+/', '', $tel);
+        }
+        $wa_number = preg_replace('/[^0-9]/', '', $tel);
+    }
+}
+if ($wa_number === '') {
+    // fallback default
+    $wa_number = '628123456789';
+}
+
 // Load products
 // handle filters: search query and category
 $q = trim((string)($_GET['q'] ?? ''));
@@ -199,14 +223,14 @@ include 'partials/header.php';
                     $category = isset($p['nama_kategori']) ? htmlspecialchars($p['nama_kategori']) : '';
                     $slug = htmlspecialchars($p['slug'] ?? '');
                     $pid = (int)$p['id'];
-                    $wa_number = isset($settings['whatsapp']) ? preg_replace('/[^0-9]/', '', $settings['whatsapp']) : '628123456789';
+                    // use the pre-computed whatsapp number from kontak_toko/settings
                     $wa_msg = rawurlencode("Saya mau beli produk {$p['nama_produk']} - apakah masih tersedia? Mohon info harga dan estimasi kirim.");
                 ?>
                     <div class="col-6 col-lg-2 g-3">
                         <div class="card shadow h-100">
                             <div class="card-body m-0 p-0">
                                 <div class="ratio ratio-1x1 position-relative">
-                                    <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="object-fit-cover" />   
+                                    <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($p['nama_produk']) ?>" class="object-fit-cover" />
                                 </div>
                             </div>
                             <div class="card-footer py-3">
