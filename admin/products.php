@@ -1,3 +1,18 @@
+<?php if (function_exists('get_session_message')): ?>
+    <?php $__msg = get_session_message(); if ($__msg): ?>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: '<?= htmlspecialchars($__msg['type'] === 'success' ? 'success' : ($__msg['type'] === 'error' ? 'error' : 'info')) ?>',
+                    title: '<?= htmlspecialchars($__msg['type'] === 'success' ? 'Berhasil' : ($__msg['type'] === 'error' ? 'Gagal' : 'Informasi')) ?>',
+                    text: '<?= htmlspecialchars($__msg['text']) ?>',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    <?php endif; ?>
+<?php endif; ?>
 <?php
 require __DIR__ . '/config.php';
 require_admin();

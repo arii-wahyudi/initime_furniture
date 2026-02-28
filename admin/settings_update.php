@@ -67,7 +67,10 @@ foreach ($img_keys as $k) {
     $file_input = $k . '_file';
     if (!empty($_FILES[$file_input]) && $_FILES[$file_input]['error'] === UPLOAD_ERR_OK) {
         $filename = handle_file_upload($_FILES[$file_input], $settings_dir, ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'], $k);
-        if ($filename) db_upsert_setting($conn, $k, 'uploads/settings/' . $filename);
+        if ($filename) {
+            db_upsert_setting($conn, $k, 'uploads/settings/' . $filename);
+            $changed[] = $labels[$k] ?? $k; // Anggap upload file sebagai perubahan
+        }
     }
 }
 
@@ -120,6 +123,9 @@ if ($need_contact) {
 // Redirect with message listing changed fields (if any)
 if (!empty($changed)) {
     redirect_with_message('settings.php', 'success', 'Berhasil mengubah: ' . implode(', ', array_unique($changed)));
+} elseif ($need_contact) {
+    // Jika form kontak di-submit tapi tidak ada perubahan, tetap beri pesan sukses jika query update dijalankan
+    redirect_with_message('settings.php', 'success', 'Pengaturan kontak berhasil disimpan.');
 } else {
     redirect_with_message('settings.php', 'info', 'Tidak ada perubahan.');
 }

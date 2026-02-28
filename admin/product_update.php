@@ -16,6 +16,18 @@ $deskripsi = get_post_string('deskripsi');
 $removebg = get_post_bool('removebg');
 $preview_ai = get_post_string('preview_ai_data');
 
+// detect whether any basic field changed before performing upload/update
+$orig = db_fetch_one($conn, "SELECT id_kategori,nama_produk,deskripsi,harga,gambar FROM produk WHERE id=? LIMIT 1", [$id], 'i');
+$changed = false;
+if ($orig) {
+    if ($orig['id_kategori'] != $id_kategori) $changed = true;
+    if ($orig['nama_produk'] !== $nama) $changed = true;
+    if ($orig['deskripsi'] !== $deskripsi) $changed = true;
+    if ((float)$orig['harga'] != (float)$harga) $changed = true;
+} else {
+    $changed = true;
+}
+
 $row = db_fetch_one($conn, "SELECT gambar FROM produk WHERE id = ? LIMIT 1", [$id], 'i');
 $oldfile = $row['gambar'] ?? '';
 $final_filename = $oldfile;
@@ -23,13 +35,15 @@ $used_images0_as_main = false;
 
 if (!empty($preview_ai) && $removebg) {
     $final_filename = handle_base64_image($preview_ai, $PRODUCTS_UPLOAD_DIR, '-nobg');
-    if (!$final_filename) die('Preview AI format invalid');
+    if (!$final_filename) die('Preview AIformat invalid');
     if ($oldfile) delete_file($PRODUCTS_UPLOAD_DIR . '/' . $oldfile);
+    if ($final_filename !== $oldfile) $changed = true;
 } elseif (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
     $filename = handle_file_upload($_FILES['gambar'], $PRODUCTS_UPLOAD_DIR, ['image/jpeg', 'image/png', 'image/webp']);
     if (!$filename) die('Gagal menyimpan file');
     $final_filename = $filename;
     if ($oldfile) delete_file($PRODUCTS_UPLOAD_DIR . '/' . $oldfile);
+    if ($final_filename !== $oldfile) $changed = true;
 } elseif (isset($_FILES['images']) && is_array($_FILES['images']['tmp_name']) && !empty($_FILES['images']['tmp_name'][0]) && $_FILES['images']['error'][0] === UPLOAD_ERR_OK) {
     // Support images[] as first-slot main image when editing from admin UI.
     $tmp_file = $_FILES['images']['tmp_name'][0];
@@ -48,6 +62,7 @@ if (!empty($preview_ai) && $removebg) {
     $final_filename = $filename;
     $used_images0_as_main = true;
     if ($oldfile) delete_file($PRODUCTS_UPLOAD_DIR . '/' . $oldfile);
+    if ($final_filename !== $oldfile) $changed = true;
 }
 
 db_update(
@@ -109,10 +124,12 @@ if ($filesArr && is_array($filesArr['tmp_name'])) {
                     mysqli_query($conn, "UPDATE produk_gambar SET gambar = '" . mysqli_real_escape_string($conn, $filename) . "' WHERE id = $existingId");
                     log_debug("Edit slot {$i} - replaced existing image", ['old_id' => $existingId, 'new_file' => $filename]);
                     if ($oldG) delete_file($PRODUCTS_UPLOAD_DIR . '/' . $oldG);
+                    $changed = true;
                 } else {
                     // add as new image with urutan equal to slot index when sensible
                     $result = add_product_image($id, $filename, $conn, $i);
                     log_debug("Edit slot {$i} - added new image", ['filename' => $filename, 'urutan' => $i]);
+                    $changed = true;
                 }
             } else {
                 log_error("Failed to save edit image slot {$i}", ['filename' => $file_name]);
@@ -125,4 +142,12 @@ if ($filesArr && is_array($filesArr['tmp_name'])) {
     log_debug('No additional images to process on edit', []);
 }
 
+// Redirect with feedback only if something actually changed
+require_once __DIR__ . '/utilities/response.php';
+if (!empty($changed)) {
+    $_SESSION['message'] = [
+        'type' => 'success',
+        'text' => 'Produk berhasil diupdate.'
+    ];
+}
 redirect('products.php');

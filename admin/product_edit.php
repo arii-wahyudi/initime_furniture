@@ -1,9 +1,27 @@
+
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 require __DIR__ . '/config.php';
 require_admin();
+
+// prevent caching so back/forward navigation reloads page
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+
+// SweetAlert feedback jika ada session message
+if (function_exists('get_session_message')) {
+    $__msg = get_session_message();
+    if ($__msg) {
+        echo '<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>';
+        $s_type = $__msg['type'] ?? 'info';
+        $s_text = $__msg['text'] ?? '';
+        $s_title = $s_type === 'success' ? 'Berhasil' : ($s_type === 'error' ? 'Gagal' : 'Informasi');
+        $s_icon = $s_type === 'success' ? 'success' : ($s_type === 'error' ? 'error' : 'info');
+        echo "<script>document.addEventListener('DOMContentLoaded',function(){Swal.fire({icon:'$s_icon',title:'$s_title',text:'$s_text',confirmButtonText:'OK'});});</script>";
+    }
+}
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if (!$id) {
@@ -151,9 +169,11 @@ include __DIR__ . '/partials/header.php';
                                                             <span class="text-muted small">Slot <?= $i + 1 ?></span>
                                                         <?php endif; ?>
                                                     </div>
-                                                    <button type="button" class="btn btn-sm btn-danger btn-clear-file" data-index="<?= $i ?>" title="Hapus file" style="padding:4px 8px;">
+                                                    <?php if ($existingId || $previewSrc): ?>
+                                                    <button type="button" class="btn btn-sm btn-danger btn-delete-existing" data-index="<?= $i ?>" data-imgid="<?= $existingId ?>" data-product="<?= (int)$id ?>" title="Hapus file" style="padding:4px 8px;" onclick="removeImage(<?= (int)$existingId ?>, <?= (int)$id ?>)">
                                                         <i class="fas fa-trash" style="font-size:0.85rem;"></i>
                                                     </button>
+                                                    <?php endif; ?>
                                                 </div>
 
                                                 <div class="image-preview-wrapper mb-2" data-index-wrapper="<?= $i ?>">
@@ -161,9 +181,6 @@ include __DIR__ . '/partials/header.php';
                                                     <div class="placeholder text-center text-muted" data-index="<?= $i ?>" <?= $previewSrc ? 'style="display:none"' : '' ?>>
                                                         <i class="fas fa-image"></i>
                                                         <div class="mt-1 small">Klik untuk pilih gambar</div>
-                                                    </div>
-                                                    <div class="overlay-clear" style="display:<?= $previewSrc ? 'block' : 'none' ?>;position:absolute;top:6px;right:6px;">
-                                                        <button type="button" class="btn btn-sm btn-danger btn-clear-file" data-index="<?= $i ?>" title="Hapus file"><i class="fas fa-trash"></i></button>
                                                     </div>
                                                 </div>
 
@@ -320,13 +337,16 @@ include __DIR__ . '/partials/header.php';
                 });
             });
 
+            // clear buttons no longer handle deletes; header-trash uses onclick removeImage
             clears.forEach(btn => {
                 const idx = btn.dataset.index;
                 const input = document.querySelector('.image-input-edit[data-index="' + idx + '"]');
                 const preview = getPreview(idx);
                 const placeholder = getPlaceholder(idx);
+                const hidden = getHidden(idx);
+
                 btn.addEventListener('click', () => {
-                    // clear file input
+                    // clear only local selection and hidden id
                     if (input) input.value = '';
                     if (preview) {
                         preview.src = '';
@@ -335,7 +355,6 @@ include __DIR__ . '/partials/header.php';
                     if (placeholder) placeholder.style.display = 'block';
                     const meta = getMeta(idx);
                     if (meta) meta.style.display = 'none';
-                    const hidden = getHidden(idx);
                     if (hidden) hidden.value = '';
                 });
             });
@@ -447,9 +466,14 @@ include __DIR__ . '/partials/header.php';
             width: 100%;
         }
 
-        .image-slot-card .btn-clear-file {
-            opacity: 0.85;
+.image-slot-card .btn-clear-file,
+     .image-slot-card .btn-delete-existing {
+            opacity: 0.95;
             padding: 6px 10px;
+            z-index: 20;
+            position: relative;
+            pointer-events: auto;
+            cursor: pointer;
         }
 
         .overlay-clear {

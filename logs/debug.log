@@ -131,3 +131,206 @@
 [2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
 [2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
 [2026-02-27 16:40:08] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:06:04] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:06:50] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:09:14] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:11:23] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:11:28] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:12:53] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:14:15] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:15:05] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Processing edit image slot 3 | Context: {"filename":"ktp mitoha 2.jpg","type":"image\/jpeg","size":104985}
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Edit slot 3 - added new image | Context: {"filename":"f13e652751e31e11.jpg","urutan":3}
+[2026-02-28 15:16:20] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:16:29] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:18:17] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:21:52] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:22:50] POST /desadroid/initime_furniture/initime_furniture/admin/product_store.php
+  POST: {"nama_produk":"ytukyuk","id_kategori":"4","harga":"243342","deskripsi":"asdasd"}
+  FILES: {"images":{"name":["ktp mitoha 2.jpg","ktp mitoha.jpg","akta bini.jpg","",""],"size":[104985,474005,302225,0,0],"error":[0,0,0,4,4]}}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Product store input data | Context: {"nama":"ytukyuk","id_kategori":4,"harga":243342,"removebg":false,"has_preview_ai":false,"has_gambar_file":false}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Used first images[] as main | Context: {"filename":"7bdd1c00dbd03955.jpg"}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Creating product with slug | Context: {"slug":"ytukyuk-ee04b047","nama":"ytukyuk"}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Product created successfully | Context: {"product_id":16}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Using images[] array for multi-upload
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Processing all images | Context: {"count":5,"used_first_as_main":true}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Skipping slot 0 - already used as main product image
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Processing image slot 1 | Context: {"filename":"ktp mitoha.jpg","size":474005,"type":"image\/jpeg"}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Image slot 1 saved to database | Context: {"filename":"8a603c2c8b998e49.jpg","urutan":1}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Processing image slot 2 | Context: {"filename":"akta bini.jpg","size":302225,"type":"image\/jpeg"}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Image slot 2 saved to database | Context: {"filename":"c478afab4c0657a3.jpg","urutan":2}
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Skipping image slot 3 - upload error code: 4
+[2026-02-28 15:22:50] [DEBUG] [IP: ::1] Skipping image slot 4 - upload error code: 4
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:24:14] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:24:29] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:25:05] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Processing edit image slot 1 | Context: {"filename":"ktp mitoha.jpg","type":"image\/jpeg","size":474005}
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Edit slot 1 - added new image | Context: {"filename":"a976d9bc1085d7fa.jpg","urutan":1}
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:25:38] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:25:46] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:28:05] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:28:19] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Processing edit image slot 1 | Context: {"filename":"202243500261.jpg","type":"image\/jpeg","size":2311561}
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Edit slot 1 - added new image | Context: {"filename":"2eb5d58979cc7381.jpg","urutan":1}
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:28:49] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:29:01] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Processing edit image slot 1 | Context: {"filename":"ktp mitoha.jpg","type":"image\/jpeg","size":474005}
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Edit slot 1 - added new image | Context: {"filename":"88a95b72ef870843.jpg","urutan":1}
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:29:48] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:31:00] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Skipping edit image slot 1 - upload error: 4
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:31:08] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4
+[2026-02-28 15:36:23] [DEBUG] [IP: ::1] Using images[] array for edit multi-upload
+[2026-02-28 15:36:23] [DEBUG] [IP: ::1] Processing images for edit | Context: {"count":5,"used_slot_0_as_main":false}
+[2026-02-28 15:36:23] [DEBUG] [IP: ::1] Skipping edit image slot 0 - upload error: 4
+[2026-02-28 15:36:23] [DEBUG] [IP: ::1] Processing edit image slot 1 | Context: {"filename":"ktp mitoha 2.jpg","type":"image\/jpeg","size":104985}
+[2026-02-28 15:36:24] [DEBUG] [IP: ::1] Edit slot 1 - added new image | Context: {"filename":"ae30cbe05532a7fd.jpg","urutan":1}
+[2026-02-28 15:36:24] [DEBUG] [IP: ::1] Skipping edit image slot 2 - upload error: 4
+[2026-02-28 15:36:24] [DEBUG] [IP: ::1] Skipping edit image slot 3 - upload error: 4
+[2026-02-28 15:36:24] [DEBUG] [IP: ::1] Skipping edit image slot 4 - upload error: 4

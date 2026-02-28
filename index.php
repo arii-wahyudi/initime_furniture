@@ -353,6 +353,15 @@ include 'partials/header.php';
   </div>
   <!-- TESTIMONIALS SECTION END -->
 
+  <?php
+  // show flash message from send_message.php if any
+  if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+  if (!empty($_SESSION['message'])) {
+      $msg = $_SESSION['message'];
+      unset($_SESSION['message']);
+      echo '<div class="container-lg mt-3"><div class="alert alert-' . ($msg['type']=='success'?'success':'danger') . ' alert-dismissible fade show" role="alert">' . htmlspecialchars($msg['text']) . '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div></div>';
+  }
+  ?>
   <!-- CONTACT SECTION START -->
   <div class="container-lg mb-5" data-aos="fade-up">
     <div class="d-flex align-items-center justify-content-center pt-5">
@@ -364,6 +373,26 @@ include 'partials/header.php';
     <div class="row">
       <div class="col-md-6">
         <div class="card">
+          <div class="card-body p-3">
+            <form method="post" action="send_message.php">
+              <div class="mb-3">
+                <label class="form-label">Nama</label>
+                <input type="text" name="name" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Pesan</label>
+                <textarea name="message" rows="4" class="form-control" required></textarea>
+              </div>
+              <button class="btn btn-primary">Kirim Pesan</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card mt-4">
           <div class="card-body m-0 p-0">
             <div class="row g-0">
               <div
