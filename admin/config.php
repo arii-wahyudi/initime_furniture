@@ -16,6 +16,15 @@ if (empty($_SESSION['csrf_token'])) {
 // Security settings
 @ini_set('session.use_strict_mode', '1');
 @ini_set('session.cookie_httponly', '1');
+
+// SMTP settings for contact form (Hostinger example)
+define('SMTP_HOST', 'smtp.hostinger.com');
+define('SMTP_PORT', 465);
+define('SMTP_USER', 'sale@intimefurniture.store');
+define('SMTP_PASS', 'Intime123*'); // update with real password
+
+define('SMTP_SECURE', 'ssl'); // or 'tls' for STARTTLS
+
 $secureCookie = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
 if ($secureCookie) @ini_set('session.cookie_secure', '1');
 

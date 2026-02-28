@@ -19,14 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($name && $email && $message) {
         $mail = new PHPMailer(true);
         try {
-            // SMTP configuration - adjust to your environment
+            // SMTP configuration - Hostinger example
+            // Replace username/password with mailbox credentials (e.g. sale@intimefurniture.store)
             $mail->isSMTP();
-            $mail->Host = 'smtp.example.com';
+            $mail->Host = SMTP_HOST;
             $mail->SMTPAuth = true;
-            $mail->Username = 'username';
-            $mail->Password = 'password';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Username = SMTP_USER;
+            $mail->Password = SMTP_PASS;
+            // choose encryption: PHPMailer::ENCRYPTION_SMTPS (ssl) or PHPMailer::ENCRYPTION_STARTTLS
+            $mail->SMTPSecure = SMTP_SECURE === 'ssl' ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = SMTP_PORT;
 
             // sender/recipient
             $mail->setFrom('no-reply@yourdomain.com', 'INTIME Furniture');
