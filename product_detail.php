@@ -332,6 +332,29 @@ include 'partials/header.php';
         }).catch(function() {});
       } catch (e) {}
     })();
+
+    // Toggle product description between short/long versions
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('btnToggleDesc');
+      if (!btn) return;
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var shortDiv = document.getElementById('descShort');
+        var fullDiv  = document.getElementById('descFull');
+        if (!fullDiv || !shortDiv) return;
+
+        if (fullDiv.style.display === 'none') {
+          fullDiv.style.display = '';
+          shortDiv.style.display = 'none';
+          btn.textContent = 'Sembunyikan';
+        } else {
+          fullDiv.style.display = 'none';
+          shortDiv.style.display = '';
+          btn.textContent = 'Tampilkan selengkapnya';
+        }
+      });
+    });
   </script>
 
 </body>

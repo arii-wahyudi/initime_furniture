@@ -44,12 +44,12 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 
 // Database connection
 $db_host = 'localhost';
-// $db_user = 'root';
-// $db_pass = '';
-// $db_name = 'initime_x8y2';
-$db_user = 'u580769791_intime';
-$db_pass = 'Intime_db_1890';
-$db_name = 'u580769791_initime_x8y2';
+$db_user = 'root';
+$db_pass = '';
+$db_name = 'initime_x8y2';
+// $db_user = 'u580769791_intime';
+// $db_pass = 'Intime_db_1890';
+// $db_name = 'u580769791_initime_x8y2';
 
 $conn = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 if (!$conn) {
