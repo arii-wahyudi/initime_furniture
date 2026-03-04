@@ -90,14 +90,21 @@ if ($q !== '' && empty($products)) {
 if ($q !== '') {
     // record search interest per returned product (helps determine which products were searched)
     if (!empty($products)) {
-        // Try to insert with search query if column exists; otherwise fallback to existing behavior.
         $ev = 'search';
         $count = 0;
         $safe_q = mb_substr($q, 0, 250); // limit length
 
-        // Preferred: store id_produk, tipe_event, search_query
-        $stmt = @mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event, search_query) VALUES (?, ?, ?)");
-        $use_query_col = (bool)$stmt;
+        // attempt to prepare statement including search_query; catch exception if column missing
+        $use_query_col = false;
+        try {
+            $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event, search_query) VALUES (?, ?, ?)");
+            if ($stmt) {
+                $use_query_col = true;
+            }
+        } catch (mysqli_sql_exception $e) {
+            // no search_query column, fall back
+            $use_query_col = false;
+        }
 
         if ($use_query_col) {
             foreach ($products as $pr) {
@@ -111,7 +118,11 @@ if ($q !== '') {
             mysqli_stmt_close($stmt);
         } else {
             // fallback older schema: only id_produk and tipe_event
-            $stmt2 = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event) VALUES (?, ?)");
+            try {
+                $stmt2 = mysqli_prepare($conn, "INSERT INTO produk_statistik (id_produk, tipe_event) VALUES (?, ?)");
+            } catch (mysqli_sql_exception $e) {
+                $stmt2 = false;
+            }
             if ($stmt2) {
                 foreach ($products as $pr) {
                     if (!isset($pr['id'])) continue;
@@ -128,14 +139,26 @@ if ($q !== '') {
         // fallback: record generic search event
         // prefer to also record the query text when no products found
         $safe_q = mb_substr($q, 0, 250);
-        $stmt = @mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event, search_query) VALUES (?, ?) ");
-        if ($stmt) {
+        $use_query_col = false;
+        try {
+            $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event, search_query) VALUES (?, ?)");
+            if ($stmt) {
+                $use_query_col = true;
+            }
+        } catch (mysqli_sql_exception $e) {
+            $use_query_col = false;
+        }
+        if ($use_query_col && $stmt) {
             $ev = 'search';
             mysqli_stmt_bind_param($stmt, 'ss', $ev, $safe_q);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
         } else {
-            $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
+            try {
+                $stmt = mysqli_prepare($conn, "INSERT INTO produk_statistik (tipe_event) VALUES (?)");
+            } catch (mysqli_sql_exception $e) {
+                $stmt = false;
+            }
             if ($stmt) {
                 $ev = 'search';
                 mysqli_stmt_bind_param($stmt, 's', $ev);
