@@ -357,9 +357,9 @@ include 'partials/header.php';
   // show flash message from send_message.php if any
   if (session_status() !== PHP_SESSION_ACTIVE) session_start();
   if (!empty($_SESSION['message'])) {
-      $msg = $_SESSION['message'];
-      unset($_SESSION['message']);
-      echo '<div class="container-lg mt-3"><div class="alert alert-' . ($msg['type']=='success'?'success':'danger') . ' alert-dismissible fade show" role="alert">' . htmlspecialchars($msg['text']) . '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div></div>';
+    $msg = $_SESSION['message'];
+    unset($_SESSION['message']);
+    echo '<div class="container-lg mt-3"><div class="alert alert-' . ($msg['type'] == 'success' ? 'success' : 'danger') . ' alert-dismissible fade show" role="alert">' . htmlspecialchars($msg['text']) . '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div></div>';
   }
   ?>
   <!-- CONTACT SECTION START -->
@@ -372,7 +372,7 @@ include 'partials/header.php';
 
     <div class="row">
       <div class="col-md-6">
-        <div class="card">
+        <!-- <div class="card">
           <div class="card-body p-3">
             <form method="post" action="send_message.php">
               <div class="mb-3">
@@ -390,9 +390,9 @@ include 'partials/header.php';
               <button class="btn btn-primary">Kirim Pesan</button>
             </form>
           </div>
-        </div>
+        </div> -->
 
-        <div class="card mt-4">
+        <div class="card">
           <div class="card-body m-0 p-0">
             <div class="row g-0">
               <div
