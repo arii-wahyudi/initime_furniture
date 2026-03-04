@@ -62,6 +62,30 @@ if ($res) {
     mysqli_free_result($res);
 }
 
+// jika tidak ada produk ditemukan dan ada query, coba cari berdasarkan setiap kata
+if ($q !== '' && empty($products)) {
+    $terms = preg_split('/\s+/', trim($q));
+    $parts = [];
+    foreach ($terms as $t) {
+        $t = mysqli_real_escape_string($conn, $t);
+        if ($t === '') continue;
+        $parts[] = "(p.nama_produk LIKE '%$t%' OR p.deskripsi LIKE '%$t%')";
+    }
+    if (!empty($parts)) {
+        $sql2 = "SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori_produk k ON p.id_kategori = k.id WHERE p.status = 'aktif'";
+        if ($cat) {
+            $sql2 .= " AND p.id_kategori = " . $cat;
+        }
+        $sql2 .= " AND (" . implode(' OR ', $parts) . ")";
+        $sql2 .= " ORDER BY p.created_at DESC";
+        $res2 = mysqli_query($conn, $sql2);
+        if ($res2) {
+            while ($r = mysqli_fetch_assoc($res2)) $products[] = $r;
+            mysqli_free_result($res2);
+        }
+    }
+}
+
 // Log searches to statistik (server-side) when query present
 if ($q !== '') {
     // record search interest per returned product (helps determine which products were searched)
