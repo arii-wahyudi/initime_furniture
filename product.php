@@ -45,6 +45,16 @@ if ($wa_number === '') {
 // handle filters: search query and category
 $q = trim((string)($_GET['q'] ?? ''));
 $cat = (int)($_GET['cat'] ?? 0);
+$cat_slug = trim((string)($_GET['cat_slug'] ?? ''));
+
+if ($cat_slug !== '') {
+    $cs = mysqli_real_escape_string($conn, $cat_slug);
+    $cres = mysqli_query($conn, "SELECT id FROM kategori_produk WHERE slug = '$cs' LIMIT 1");
+    if ($cres && mysqli_num_rows($cres) > 0) {
+        $cr = mysqli_fetch_assoc($cres);
+        $cat = (int)$cr['id'];
+    }
+}
 
 $products = [];
 $sql = "SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori_produk k ON p.id_kategori = k.id WHERE p.status = 'aktif'";
@@ -195,7 +205,7 @@ include 'partials/header.php';
                     if (empty($img)) $img = $default_cat_images[$i % count($default_cat_images)];
             ?>
                     <div class="col-6 col-md-4">
-                        <a href="product.php?cat=<?= (int)$cat['id'] ?>" class="text-decoration-none text-dark category-link" data-cat-id="<?= (int)$cat['id'] ?>">
+                        <a href="kategori/<?= htmlspecialchars($cat['slug'] ?? $cat['id']) ?>#product" class="text-decoration-none text-dark category-link" data-cat-id="<?= (int)$cat['id'] ?>">
                             <div class="card card-category shadow bg-card-category">
                                 <img src="<?= htmlspecialchars($img) ?>" class="card-img object-fit-cover opacity-50" alt="<?= htmlspecialchars($cat['nama_kategori']) ?>" />
                                 <div class="card-img-overlay d-flex justify-content-center align-items-center p-4">
@@ -229,7 +239,7 @@ include 'partials/header.php';
         <div class="container-lg mt-3">
             <div class="row justify-content-center" data-aos="fade-up">
                 <div class="col-12 g-1">
-                    <form method="get" action="product.php">
+                    <form method="get" action="produk#product">
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-white border-end-0">
                                 <i class="fas fa-search text-muted"></i>
@@ -286,7 +296,7 @@ include 'partials/header.php';
                                 <p class="my-2">Rp <?= $price ?></p>
 
                                 <div class="d-grid">
-                                    <a href="product_detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
+                                    <a href="produk/<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
                                     <a href="https://wa.me/<?= $wa_number ?>?text=<?= $wa_msg ?>" class="btn btn-success mt-2 wa-link" data-product-id="<?= $pid ?>">Pesan via WhatsApp</a>
                                 </div>
                             </div>

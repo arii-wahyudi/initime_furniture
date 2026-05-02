@@ -60,6 +60,23 @@ if (!$conn) {
 $ADMIN_USERNAME = 'admin';
 $ADMIN_PASSWORD = 'admin123';
 
+// Compute base URL for the application
+$scriptDir = isset($_SERVER['SCRIPT_NAME']) ? dirname($_SERVER['SCRIPT_NAME']) : '';
+$appBase = '';
+if ($scriptDir) {
+    if (preg_match('#/admin$#', $scriptDir)) {
+        $appBase = dirname($scriptDir);
+    } else {
+        $appBase = $scriptDir;
+    }
+    if ($appBase === '/' || $appBase === '\\' || $appBase === '.') $appBase = '';
+}
+define('APP_BASE_PATH', $appBase ? rtrim($appBase, '/') . '/' : '/');
+
+function base_url($path = '') {
+    return APP_BASE_PATH . ltrim($path, '/');
+}
+
 // Load utility functions
 require __DIR__ . '/utilities/logger.php';
 require __DIR__ . '/utilities/database.php';

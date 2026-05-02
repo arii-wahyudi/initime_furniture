@@ -142,8 +142,8 @@ include 'partials/header.php';
   <div class="container-lg mt-3 mb-5" data-aos="fade-up">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb bg-transparent p-0 mb-4">
-        <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-        <?php if ($category): ?><li class="breadcrumb-item"><a href="product.php#product"><?= $category ?></a></li><?php endif; ?>
+        <li class="breadcrumb-item"><a href="./">Beranda</a></li>
+        <?php if ($category): ?><li class="breadcrumb-item"><a href="produk#product"><?= $category ?></a></li><?php endif; ?>
         <li class="breadcrumb-item active" aria-current="page"><?= $title ?></li>
       </ol>
     </nav>
@@ -210,7 +210,7 @@ include 'partials/header.php';
                 $rprice = isset($rp['harga']) ? number_format((float)$rp['harga'], 0, ',', '.') : '-';
               ?>
                 <div class="col-6 col-md-3">
-                  <a href="product_detail.php?slug=<?= urlencode($rp['slug']) ?>" class="text-decoration-none text-dark">
+                  <a href="produk/<?= urlencode($rp['slug']) ?>" class="text-decoration-none text-dark">
                     <div class="card h-100 shadow-sm">
                       <img src="<?= htmlspecialchars(public_image_url($rimg ?? '')) ?>" class="card-img-top object-fit-cover" style="height:120px;" alt="<?= htmlspecialchars($rp['nama_produk']) ?>">
                       <div class="card-body p-2">

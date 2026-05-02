@@ -15,7 +15,7 @@ if ($res = mysqli_query($conn, $sql)) {
 
 // Load categories
 $categories = [];
-$sql = "SELECT id, nama_kategori, image FROM kategori_produk ORDER BY id";
+$sql = "SELECT id, nama_kategori, image, slug FROM kategori_produk ORDER BY id";
 if ($res = mysqli_query($conn, $sql)) {
   while ($row = mysqli_fetch_assoc($res)) {
     $categories[] = $row;
@@ -215,7 +215,7 @@ include 'partials/header.php';
                 </div>
               </div>
 
-              <a href="about_us.php" class="btn btn-outline-secondary text-dark fw-bold">Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
+              <a href="tentang-kami" class="btn btn-outline-secondary text-dark fw-bold">Lihat Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
             </div>
           </div>
         </div>
@@ -259,7 +259,8 @@ include 'partials/header.php';
           $name = htmlspecialchars($cat['nama_kategori']);
           $cid = (int)$cat['id'];
           echo "<div class=\"col-6 col-md-4\">";
-          echo "<a href=\"product.php?cat=$cid\" class=\"text-decoration-none\">";
+          $slug_cat = htmlspecialchars($cat['slug'] ?? $cid);
+          echo "<a href=\"kategori/$slug_cat#product\" class=\"text-decoration-none\">";
           echo "<div class=\"card card-category shadow bg-card-category\">";
           echo "<img src=\"$img\" class=\"card-img object-fit-cover opacity-50\" alt=\"$name\" />";
           echo "<div class=\"card-img-overlay d-flex justify-content-center align-items-center p-4\">";
@@ -271,7 +272,7 @@ include 'partials/header.php';
     </div>
 
     <div class="d-flex justify-content-center align-items-center mt-4" data-aos="fade-up">
-      <a href="product.php" class="btn btn-outline-secondary text-dark w-auto px-4">Lihat Semua Kategori</a>
+      <a href="produk" class="btn btn-outline-secondary text-dark w-auto px-4">Lihat Semua Kategori</a>
     </div>
   </div>
   <!-- CATEGORY SECTION END -->
@@ -309,7 +310,7 @@ include 'partials/header.php';
                 <h4><?= htmlspecialchars($p['nama_produk']) ?></h4>
                 <span class="badge text-bg-secondary"><?= $category ?></span>
                 <p class="my-2">Rp <?= $price ?></p>
-                <a href="product_detail.php?slug=<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark mt-3 w-100 btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
+                <a href="produk/<?= urlencode($slug) ?>" class="btn btn-outline-secondary text-dark mt-3 w-100 btn-view-detail" data-product-id="<?= $pid ?>">Lihat Detail</a>
               </div>
             </div>
           </div>
@@ -318,7 +319,7 @@ include 'partials/header.php';
     </div>
 
     <div class="d-flex justify-content-center align-items-center" data-aos="fade-up">
-      <a href="product.php" class="btn btn-outline-secondary text-dark w-auto mt-4 px-4">Lihat Semua Produk</a>
+      <a href="produk" class="btn btn-outline-secondary text-dark w-auto mt-4 px-4">Lihat Semua Produk</a>
     </div>
 
     <!-- Product detail moved to separate page -->

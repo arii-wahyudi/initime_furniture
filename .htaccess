@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Allow direct access to existing files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# SEO Friendly URLs
+RewriteRule ^tentang-kami/?$ about_us.php [L,QSA]
+RewriteRule ^produk/?$ product.php [L,QSA]
+RewriteRule ^kategori/([^/]+)/?$ product.php?cat_slug=$1 [L,QSA]
+RewriteRule ^produk/([^/]+)/?$ product_detail.php?slug=$1 [L,QSA]

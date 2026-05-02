@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><?= $title ?></title>
+    <base href="<?= base_url() ?>">
     <link rel="icon" type="image/x-icon" href="assets/img/logo.ico">
 
     <!-- Animated On Scroll CDN -->

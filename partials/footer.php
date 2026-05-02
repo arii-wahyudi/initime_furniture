@@ -5,7 +5,7 @@ $settings = [];
 if (file_exists(__DIR__ . '/../admin/config.php')) {
   @include_once __DIR__ . '/../admin/config.php';
   if (!empty($conn)) {
-    $r = mysqli_query($conn, "SELECT id, nama_kategori FROM kategori_produk ORDER BY nama_kategori LIMIT 8");
+    $r = mysqli_query($conn, "SELECT id, nama_kategori, slug FROM kategori_produk ORDER BY nama_kategori LIMIT 8");
     if ($r) {
       while ($row = mysqli_fetch_assoc($r)) $cats[] = $row;
       mysqli_free_result($r);
@@ -73,15 +73,15 @@ $phone_display = $phone ?? ($settings['whatsapp'] ?? '+62 812 3456 7890');
     </div>
     <div class="col-lg-2 mt-5 mt-lg-0">
       <h4 class="fw-bold mb-3">Navigation</h4>
-      <a href="/" class="nav-link mb-2">Dashboard</a>
-      <a href="product.php" class="nav-link mb-2">Produk</a>
-      <a href="about_us.php" class="nav-link mb-2">Tentang Kami</a>
-      <a href="admin/index.php" class="nav-link">Admin</a>
+      <a href="./" class="nav-link mb-2">Dashboard</a>
+      <a href="produk" class="nav-link mb-2">Produk</a>
+      <a href="tentang-kami" class="nav-link mb-2">Tentang Kami</a>
+      <a href="admin/" class="nav-link">Admin</a>
     </div>
     <div class="col-lg-3 mt-5 mt-lg-0">
       <h4 class="fw-bold mb-3">Kategori</h4>
       <?php if (!empty($cats)): foreach ($cats as $c): ?>
-          <a href="product.php?cat=<?= (int)$c['id'] ?>" class="nav-link mb-2"><?= htmlspecialchars($c['nama_kategori']) ?></a>
+          <a href="kategori/<?= htmlspecialchars($c['slug'] ?? $c['id']) ?>#product" class="nav-link mb-2"><?= htmlspecialchars($c['nama_kategori']) ?></a>
         <?php endforeach;
       else: ?>
         <a href="#" class="nav-link mb-2">Furniture Ruang Keluarga</a>
