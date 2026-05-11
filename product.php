@@ -204,8 +204,7 @@ include 'partials/header.php';
                     if (empty($img)) $img = public_image_url($settings['about_image'] ?? '', 'settings');
                     if (empty($img)) $img = $default_cat_images[$i % count($default_cat_images)];
             ?>
-                    <div class="col-6 col-md-4">
-                        <a href="kategori/<?= htmlspecialchars($cat['slug'] ?? $cat['id']) ?>#product" class="text-decoration-none text-dark category-link" data-cat-id="<?= (int)$cat['id'] ?>">
+                    <div class="col-6 col-md-4">                        <a href="produk?cat=<?= (int)$cat['id'] ?>#product" class="text-decoration-none text-dark category-link" data-cat-id="<?= (int)$cat['id'] ?>">
                             <div class="card card-category shadow bg-card-category">
                                 <img src="<?= htmlspecialchars($img) ?>" class="card-img object-fit-cover opacity-50" alt="<?= htmlspecialchars($cat['nama_kategori']) ?>" />
                                 <div class="card-img-overlay d-flex justify-content-center align-items-center p-4">
@@ -318,6 +317,20 @@ include 'partials/header.php';
 
     <!-- SCRIPT -->
     <?php include 'partials/scripts.php'; ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var productEl = document.getElementById('product');
+            if (!productEl) return;
+            // try to account for fixed navbar height if present
+            var nav = document.querySelector('.navbar') || document.querySelector('nav');
+            var offset = nav ? nav.offsetHeight : 0;
+            var rect = productEl.getBoundingClientRect();
+            var target = window.pageYOffset + rect.top - offset - 8;
+            if (target < 0) target = 0;
+            window.scrollTo(0, target);
+        });
+    </script>
 
 </body>
 
